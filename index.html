@@ -10,7 +10,7 @@
 :root{--bg:#091225;--surface:rgba(16,30,57,.72);--surface2:#142544;--ink:#eff5ff;--muted:#9babca;--line:rgba(167,190,231,.14);--primary:#6f8cff;--accent:#35d8bd;--danger:#ff627d;--warning:#ffbf5b;--shadow:0 20px 55px #02071366}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;background:radial-gradient(circle at 8% 0%,#263d7d 0,transparent 30rem),radial-gradient(circle at 100% 15%,#0c665e 0,transparent 26rem),var(--bg);color:var(--ink);font:14px 'DM Sans',ui-sans-serif,system-ui,sans-serif}
-.app{max-width:1580px;margin:auto;padding:28px;position:relative}
+.app{max-width:1580px;margin:auto;padding:28px;position:relative;padding-bottom:60px}
 .app:before{content:'';position:fixed;inset:auto -8vw -12vw auto;width:42vw;height:42vw;border-radius:50%;background:#6f8cff12;filter:blur(55px);pointer-events:none;z-index:-1}
 .top{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:28px}
 .brand{display:flex;align-items:center;gap:13px}
@@ -19,26 +19,41 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 8% 0%,#263d7
 .brand span{color:var(--muted);font-size:12px}
 .top>div:last-child{display:flex;gap:10px;align-items:center}
 .tabs{display:flex;background:#0b1932a8;border:1px solid var(--line);border-radius:13px;padding:4px;gap:3px;backdrop-filter:blur(12px)}
-.tab{border:0;background:transparent;padding:9px 15px;color:#aebbd3;border-radius:9px;font-weight:700;cursor:pointer;transition:.22s}
+.tab{border:0;background:transparent;padding:9px 15px;color:#aebbd3;border-radius:9px;font-weight:700;cursor:pointer;transition:.22s;position:relative}
 .tab.active{background:#253b69;color:#fff;box-shadow:0 4px 12px #03091d55}
+
+/* === TAB BADGE (notifiche) === */
+.tab-badge{display:none;position:absolute;top:2px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:linear-gradient(135deg,#ff627d,#e63b58);color:#fff;font:800 10px 'DM Sans',sans-serif;line-height:18px;text-align:center;box-shadow:0 3px 8px #ff627d55,0 0 0 2px #0b1932;letter-spacing:0;animation:badgePulse 2.5s ease-in-out infinite}
+.tab-badge.visible{display:inline-block}
+@keyframes badgePulse{0%,100%{transform:scale(1);box-shadow:0 3px 8px #ff627d55,0 0 0 2px #0b1932}50%{transform:scale(1.12);box-shadow:0 3px 12px #ff627d99,0 0 0 2px #0b1932}}
+.tab.active .tab-badge{box-shadow:0 3px 8px #ff627d55,0 0 0 2px #253b69}
+.tab.active .tab-badge{animation:none}
+
 .button{border:1px solid #91a4ff40;border-radius:10px;background:linear-gradient(135deg,#748dff,#5d6cef);color:#fff;padding:10px 14px;font-weight:750;cursor:pointer;box-shadow:0 8px 18px #334ecf42;transition:transform .2s,filter .2s}
 .button:hover{filter:brightness(1.08);transform:translateY(-2px)}
 .button.secondary{background:#1b3158;color:#c5d2ff;border-color:#536d9e60;box-shadow:none}
 .button.danger{background:#43213a;color:#ff9aab;box-shadow:none}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+
+/* === STATS (5 cards, responsive) === */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:20px}
 .card,.panel{background:linear-gradient(145deg,rgba(31,52,93,.86),rgba(11,24,47,.78));border:1px solid var(--line);box-shadow:var(--shadow);border-radius:17px;backdrop-filter:blur(14px)}
 .stat{padding:18px;position:relative;overflow:hidden;isolation:isolate;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
 .stat:hover{transform:translateY(-4px);border-color:#8ba1ff60;box-shadow:0 24px 50px #02071380}
 .stat:after{content:'';position:absolute;width:85px;height:85px;right:-28px;top:-30px;border-radius:50%;background:#8298ff18}
 .stat .label{color:var(--muted);font-size:12px;font-weight:650}
 .stat .value{font:800 30px Outfit,sans-serif;letter-spacing:-1px;margin:6px 0}
+.stat .value small{font-size:14px;color:#9babca;font-weight:600;margin-left:4px}
+.stat.clickable{cursor:pointer}
+.stat.clickable:active{transform:translateY(-2px)}
 .trend{font-size:11px;color:var(--accent);font-weight:700}
 .charts{display:grid;grid-template-columns:1.18fr .82fr;gap:16px;margin-bottom:24px}
 .panel{padding:19px}
 .panel h2{font:700 15px Outfit,sans-serif;margin:0 0 16px}
 .bar-row{display:grid;grid-template-columns:108px 1fr 28px;align-items:center;gap:10px;margin:11px 0;color:#b7c4da;font-size:12px}
 .bar{height:8px;background:#07142b;border-radius:9px;overflow:hidden}
-.bar i{height:100%;display:block;border-radius:9px;box-shadow:0 0 12px currentColor;transition:width .5s ease}.donut-wrap{display:flex;align-items:center;gap:22px}.donut{width:126px;height:126px;border-radius:50%;background:conic-gradient(#758eff 0 var(--wait),#35d8bd var(--wait) var(--delivery),#ffbf5b var(--delivery) var(--other),#1a2b4b var(--other));position:relative;box-shadow:0 0 25px #6e86ff28}
+.bar i{height:100%;display:block;border-radius:9px;box-shadow:0 0 12px currentColor;transition:width .5s ease}
+.donut-wrap{display:flex;align-items:center;gap:22px}
+.donut{width:126px;height:126px;border-radius:50%;background:conic-gradient(#758eff 0 var(--wait),#35d8bd var(--wait) var(--delivery),#ffbf5b var(--delivery) var(--other),#1a2b4b var(--other));position:relative;box-shadow:0 0 25px #6e86ff28}
 .donut:after{content:attr(data-total);position:absolute;inset:24px;background:#142543;border:1px solid #ffffff12;border-radius:50%;display:grid;place-items:center;font:800 23px Outfit,sans-serif}
 .legend{display:grid;gap:10px;font-size:12px;color:#b9c6da}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;box-shadow:0 0 8px currentColor}
@@ -83,11 +98,21 @@ input[type=date]{width:116px;color-scheme:dark}
 .fc .badge{font:700 11px 'DM Sans';background:#502037;color:#ffafbd;padding:5px 9px;border-radius:20px}
 .empty{padding:30px 15px;color:#8595b2;text-align:center;font-size:12px}
 .hub-grid{display:grid;grid-template-columns:1fr;gap:16px}
-.hub-card{transition:transform .2s,border-color .2s}.hub-card .hub-head{padding:15px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-wrap:wrap}.type-pill{font-size:10px;text-transform:uppercase;font-weight:800;letter-spacing:.5px;border-radius:5px;padding:4px 7px;background:#233a6c;color:#b8c9ff}
+.hub-card{transition:transform .2s,border-color .2s}
+.hub-card .hub-head{padding:15px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.type-pill{font-size:10px;text-transform:uppercase;font-weight:800;letter-spacing:.5px;border-radius:5px;padding:4px 7px;background:#233a6c;color:#b8c9ff}
 .type-pill.hub{background:#16494b;color:#75eee0}
 .hub-name{border:0;background:transparent;font:700 15px Outfit,sans-serif;color:var(--ink);outline:none;width:auto;min-width:100px;text-align:left;margin-left:0;flex:1}
-.hub-reschedule{display:flex;align-items:center;gap:7px;color:#aebcda;font-size:11px;font-weight:700;white-space:nowrap}
-.hub-reschedule input{width:118px}
+.hub-reschedule{display:flex;align-items:center;gap:8px;margin-left:auto;color:#aebcda;font-size:11px;font-weight:700;white-space:nowrap}
+.hub-reschedule .reschedule-label{font-size:12px;color:#cdd8ff;min-width:28px;text-align:right}
+.hub-reschedule input[type=date]{width:28px;height:28px;padding:0;border:1px solid #ffffff18;background:#0b1a34;border-radius:8px;color:transparent;cursor:pointer;position:relative}
+.hub-reschedule input[type=date]::-webkit-calendar-picker-indicator{opacity:1;cursor:pointer;position:absolute;left:0;top:0;width:100%;height:100%;margin:0;padding:0}
+.hub-reschedule input[type=date]::-webkit-datetime-edit,
+.hub-reschedule input[type=date]::-webkit-datetime-edit-fields-wrapper,
+.hub-reschedule input[type=date]::-webkit-datetime-edit-text,
+.hub-reschedule input[type=date]::-webkit-datetime-edit-month-field,
+.hub-reschedule input[type=date]::-webkit-datetime-edit-day-field,
+.hub-reschedule input[type=date]::-webkit-datetime-edit-year-field{display:none;color:transparent}
 .modal{position:fixed;inset:0;background:#030916a8;display:none;align-items:center;justify-content:center;padding:15px;z-index:5;backdrop-filter:blur(6px)}
 .modal.open{display:flex}
 .modal-box{width:min(460px,100%);background:linear-gradient(145deg,#1a3159,#0e1d38);border:1px solid #a0b6ff2b;border-radius:18px;padding:23px;box-shadow:0 25px 70px #000b;max-height:90vh;overflow-y:auto}
@@ -101,27 +126,64 @@ input[type=date]{width:116px;color-scheme:dark}
 .sync-badge{position:fixed;bottom:16px;right:16px;background:#0b1a34cc;border:1px solid var(--line);padding:8px 12px;border-radius:20px;font-size:11px;color:#9babca;backdrop-filter:blur(10px);z-index:10;display:flex;align-items:center;gap:6px}
 .sync-badge .dot-live{width:8px;height:8px;border-radius:50%;background:#35d8bd;box-shadow:0 0 8px #35d8bd;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-@media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}.charts{grid-template-columns:1fr}.hub-grid{grid-template-columns:1fr}}
-@media(max-width:650px){.app{padding:16px}.app:before{width:90vw;height:90vw}.top{align-items:flex-start;flex-direction:column}.top>div:last-child{width:100%;justify-content:space-between;flex-wrap:wrap}.stats,.day-grid{grid-template-columns:1fr}.toolbar{align-items:flex-start;flex-direction:column}.search{width:100%}.tabs{flex:1}.tab{padding:9px 10px}.actions{width:100%}.actions .button{flex:1}.donut-wrap{justify-content:center}.top .button.secondary{font-size:0;padding:11px}.top .button.secondary:first-letter{font-size:16px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}.status-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;cursor:pointer;box-shadow:0 0 8px currentColor;position:relative}
+.status-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;cursor:pointer;box-shadow:0 0 8px currentColor;position:relative}
 .status-dot:hover{transform:scale(1.15)}
 .status-menu{display:none;position:absolute;top:100%;left:0;z-index:20;margin-top:6px;background:#0e1d38;border:1px solid var(--line);border-radius:10px;padding:6px;box-shadow:0 12px 30px #0008;min-width:130px}
 .status-menu.open{display:block}
 .status-menu button{display:block;width:100%;text-align:left;border:0;background:transparent;color:#cdd8ff;padding:7px 10px;border-radius:7px;cursor:pointer;font:600 12px 'DM Sans',sans-serif}
 .status-menu button:hover{background:#1a2d50}
 .status-wrap{position:relative;display:inline-flex;align-items:center}
-.hub-reschedule{display:flex;align-items:center;gap:8px;margin-left:auto;color:#aebcda;font-size:11px;font-weight:700;white-space:nowrap}
-.hub-reschedule .reschedule-label{font-size:12px;color:#cdd8ff;min-width:28px;text-align:right}
-.hub-reschedule input[type=date]{width:28px;height:28px;padding:0;border:1px solid #ffffff18;background:#0b1a34;border-radius:8px;color:transparent;cursor:pointer;position:relative}.hub-reschedule input[type=date]::-webkit-calendar-picker-indicator{opacity:1;cursor:pointer;position:absolute;left:0;top:0;width:100%;height:100%;margin:0;padding:0}
-.hub-reschedule input[type=date]::-webkit-datetime-edit,
-.hub-reschedule input[type=date]::-webkit-datetime-edit-fields-wrapper,
-.hub-reschedule input[type=date]::-webkit-datetime-edit-text,
-.hub-reschedule input[type=date]::-webkit-datetime-edit-month-field,
-.hub-reschedule input[type=date]::-webkit-datetime-edit-day-field,
-.hub-reschedule input[type=date]::-webkit-datetime-edit-year-field{display:none;color:transparent}
 .track-table tr.has-alt-address{background:#43213a22;box-shadow:inset 3px 0 0 #ff9aab}
 .track-table input[type=checkbox]{width:16px;height:16px;accent-color:#6f8cff;cursor:pointer}
 .hub-head{position:relative}
+
+/* === HUB SUMMARY CARDS === */
+.hub-summary{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:20px}
+.hub-summary-card{background:linear-gradient(145deg,rgba(31,52,93,.86),rgba(11,24,47,.78));border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative;overflow:hidden}
+.hub-summary-card:hover{transform:translateY(-3px);border-color:#8ba1ff70;box-shadow:0 15px 35px #02071380}
+.hub-summary-card:active{transform:translateY(-1px)}
+.hub-summary-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.hub-summary-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;box-shadow:0 0 6px currentColor}
+.hub-summary-name{font:700 13px Outfit,sans-serif;color:var(--ink);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hub-summary-pill{font-size:9px;text-transform:uppercase;font-weight:800;letter-spacing:.5px;border-radius:4px;padding:2px 5px;background:#233a6c;color:#b8c9ff}
+.hub-summary-pill.hub{background:#16494b;color:#75eee0}
+.hub-summary-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.hub-summary-stat{background:#0b1a34aa;border-radius:8px;padding:8px 10px}
+.hub-summary-stat .val{font:800 20px Outfit,sans-serif;line-height:1;letter-spacing:-.5px}
+.hub-summary-stat .lbl{font-size:9px;color:#8999b8;text-transform:uppercase;margin-top:3px;font-weight:700;letter-spacing:.4px}
+.hub-summary-stat.fc .val{color:#ff9aab}
+.hub-summary-stat.fc{background:#43213a55}
+.hub-summary-resched{font-size:10px;color:#aebcda;margin-top:8px;padding-top:8px;border-top:1px solid #ffffff10}
+.hub-summary-resched b{color:#ffd070;font-weight:700}
+
+@keyframes hubHighlight{0%,100%{box-shadow:0 25px 60px #02071388}30%,70%{box-shadow:0 0 0 3px #6f8cff,0 25px 60px #02071388}}
+.hub-card.highlight{animation:hubHighlight 1.8s ease}
+
+/* === FOOTER === */
+.app-footer{position:fixed;bottom:16px;left:16px;font-size:11px;color:#7d8caa;background:#0b1a34cc;border:1px solid var(--line);padding:7px 12px;border-radius:20px;backdrop-filter:blur(10px);z-index:10;font-weight:600;letter-spacing:.2px;pointer-events:none;user-select:none}
+.app-footer b{color:#c5d2ff;font-weight:700}
+
+@media(max-width:1050px){.charts{grid-template-columns:1fr}.hub-grid{grid-template-columns:1fr}}
+@media(max-width:650px){
+  .app{padding:16px;padding-bottom:70px}
+  .app:before{width:90vw;height:90vw}
+  .top{align-items:flex-start;flex-direction:column}
+  .top>div:last-child{width:100%;justify-content:space-between;flex-wrap:wrap}
+  .day-grid{grid-template-columns:1fr}
+  .toolbar{align-items:flex-start;flex-direction:column}
+  .search{width:100%}
+  .tabs{flex:1}
+  .tab{padding:9px 10px}
+  .actions{width:100%}
+  .actions .button{flex:1}
+  .donut-wrap{justify-content:center}
+  .top .button.secondary{font-size:0;padding:11px}
+  .top .button.secondary:first-letter{font-size:16px}
+  .hub-summary{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+  .hub-summary-card{padding:11px}
+  .app-footer{font-size:10px;padding:6px 10px;left:10px;bottom:10px}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
@@ -137,7 +199,7 @@ input[type=date]{width:116px;color-scheme:dark}
       <button class="button secondary" onclick="openCleanupModal()" title="Pulizia database">🧹 Pulizia</button>
       <nav class="tabs">
         <button class="tab active" data-page="home">HELD</button>
-        <button class="tab" data-page="locker">Locker/Hub</button>
+        <button class="tab" data-page="locker">Locker/Hub<span id="hubTabBadge" class="tab-badge" title=""></span></button>
       </nav>
     </div>
   </header>
@@ -182,6 +244,7 @@ input[type=date]{width:116px;color-scheme:dark}
       </div>
       <button class="button" onclick="openHubModal()">+ Inserisci Locker o Hub</button>
     </div>
+    <div id="hubsSummary" class="hub-summary"></div>
     <div id="hubs" class="hub-grid"></div>
   </section>
 </main>
@@ -277,14 +340,13 @@ input[type=date]{width:116px;color-scheme:dark}
   </div>
 </div>
 
-<!-- ═══════════ SLACK MODAL ═══════════ -->
 <div id="slackModal" class="modal">
   <div class="modal-box" style="width:min(520px,100%)">
     <h3>🔔 Notifiche Slack</h3>
 
     <div class="field">
       <label>Slack Webhook URL</label>
-      <input id="slackWebhook" placeholder="https://hooks.slack.com/...">
+      <input id="slackWebhook" placeholder="https://hooks.slack.com/services/...">
     </div>
 
     <div class="field">
@@ -333,7 +395,6 @@ input[type=date]{width:116px;color-scheme:dark}
   </div>
 </div>
 
-<!-- ═══════════ CLEANUP MODAL ═══════════ -->
 <div id="cleanupModal" class="modal">
   <div class="modal-box">
     <h3>🧹 Pulizia database</h3>
@@ -379,6 +440,7 @@ input[type=date]{width:116px;color-scheme:dark}
   <button class="button secondary" onclick="clearSelection()" style="padding:8px 14px;font-size:12px">Annulla</button>
 </div>
 
+<div class="app-footer">RTSCage <b>v2.3</b> · by <b>effracas</b></div>
 <div class="sync-badge"><span class="dot-live"></span><span id="syncStatus">Sync attivo</span></div>
 
 <script>
@@ -400,7 +462,6 @@ let retentionDays = 90;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const setSync = (txt) => { const el=document.getElementById('syncStatus'); if(el) el.textContent = txt; };
 
-// === DATA LOAD ===
 async function loadData(){
   setSync('Caricamento...');
   const [{data: hubs, error: e1}, {data: tracks, error: e2}] = await Promise.all([
@@ -544,15 +605,32 @@ function renderHome(){
   renderStats();
 }
 
+// === STATS (5 card, con conteggio Locker/Hub) ===
 function renderStats(){
   const a = allTracks();
   const counts = Object.fromEntries(STATUSES.map(s => [s, a.filter(t => t.status === s).length]));
   const alerts = a.filter(fc).length, noted = a.filter(t => t.note).length;
+
+  // Conteggio Locker/Hub
+  const lockerCount = data.hubs.filter(h => h.type === 'Locker').length;
+  const hubCount = data.hubs.filter(h => h.type === 'Hub').length;
+  const totalPoints = lockerCount + hubCount;
+  const offlineCount = data.hubs.filter(h => (h.status||'online') !== 'online').length;
+  const trendPoints = offlineCount
+    ? `<span style="color:#ffbf5b">${offlineCount} non operativi</span>`
+    : `<span style="color:#35d8bd">Tutti operativi</span>`;
+
   document.getElementById('stats').innerHTML = `
     <div class="card stat"><div class="label">Pacchi totali</div><div class="value">${a.length}</div><div class="trend">In gestione ora</div></div>
     <div class="card stat"><div class="label">In attesa</div><div class="value">${counts['In attesa']}</div><div class="trend">Da monitorare</div></div>
     <div class="card stat"><div class="label">Alert / Mandare FC</div><div class="value">${alerts}</div><div class="trend" style="color:${alerts?'#ef5466':'#13b8a6'}">${alerts?'Richiede intervento':'Nessuna criticità'}</div></div>
-    <div class="card stat"><div class="label">Note attive</div><div class="value">${noted}</div><div class="trend">Promemoria operativi</div></div>`;
+    <div class="card stat"><div class="label">Note attive</div><div class="value">${noted}</div><div class="trend">Promemoria operativi</div></div>
+    <div class="card stat clickable" onclick="goToLockerTab()" title="Vai a Locker/Hub">
+      <div class="label">Locker / Hub</div>
+      <div class="value">${totalPoints}<small>totali</small></div>
+      <div class="trend">🔒 ${lockerCount} Locker · 🏢 ${hubCount} Hub · ${trendPoints}</div>
+    </div>`;
+
   const max = Math.max(1, ...Object.values(counts));
   document.getElementById('bars').innerHTML = STATUSES.map((s,i) =>
     `<div class="bar-row"><span>${s}</span><div class="bar"><i style="width:${counts[s]/max*100}%;background:${['#2764e7','#ef5466','#ad5de8','#13b8a6','#f3a941','#5d82bf','#64748b'][i]}"></i></div><b>${counts[s]}</b></div>`
@@ -568,6 +646,92 @@ function renderStats(){
     <span><i class="dot" style="background:#2764e7"></i>In attesa: <b>${w}</b></span>
     <span><i class="dot" style="background:#13b8a6"></i>In consegna: <b>${d}</b></span>
     <span><i class="dot" style="background:#f3a941"></i>Altri stati: <b>${o}</b></span>`;
+}
+
+// === TAB BADGE NOTIFICHE HUB ===
+function updateHubTabBadge(){
+  const badge = document.getElementById('hubTabBadge');
+  if(!badge) return;
+
+  // Hub problematici: NON online OPPURE con almeno un tracking in "Mandare FC"
+  const problematicHubs = data.hubs.filter(h => {
+    const isNotOnline = (h.status || 'online') !== 'online' && (h.status || 'online') !== 'ferie';
+    const hasFC = h.tracks.some(fc);
+    const isOffline = (h.status || 'online') === 'offline' || (h.status || 'online') === 'dismesso';
+    return isOffline || hasFC;
+  });
+
+  const count = problematicHubs.length;
+
+  if(count > 0){
+    badge.textContent = count > 99 ? '99+' : count;
+    badge.classList.add('visible');
+    // Tooltip con dettaglio
+    const offlineNames = data.hubs.filter(h => (h.status||'online') === 'offline' || (h.status||'online') === 'dismesso').map(h => h.name);
+    const fcNames = data.hubs.filter(h => h.tracks.some(fc)).map(h => `${h.name} (${h.tracks.filter(fc).length} FC)`);
+    const parts = [];
+    if(offlineNames.length) parts.push(`Offline: ${offlineNames.join(', ')}`);
+    if(fcNames.length) parts.push(`Con FC: ${fcNames.join(', ')}`);
+    badge.title = parts.join(' · ') || `${count} hub richiedono attenzione`;
+  } else {
+    badge.classList.remove('visible');
+    badge.title = '';
+  }
+}
+
+function goToLockerTab(){
+  const tab = document.querySelector('.tab[data-page="locker"]');
+  if(tab) tab.click();
+}
+
+// === HUB SUMMARY CARDS ===
+function renderHubsSummary(){
+  const container = document.getElementById('hubsSummary');
+  if(!container) return;
+  if(!data.hubs.length){ container.innerHTML = ''; return; }
+
+  container.innerHTML = data.hubs.map(h => {
+    const st = h.status || 'online';
+    const color = statusColor(st);
+    const total = h.tracks.length;
+    const fcCount = h.tracks.filter(fc).length;
+    const dm = fmtDayMonth(h.rescheduled);
+    const reschedHtml = dm
+      ? `<div class="hub-summary-resched">📅 Rischedulati al <b>${dm}</b></div>`
+      : '';
+
+    return `<div class="hub-summary-card" onclick="scrollToHub('${h.id}')" title="Vai a ${esc(h.name)}">
+      <div class="hub-summary-head">
+        <span class="hub-summary-dot" style="background:${color};color:${color}" title="Stato: ${st}"></span>
+        <span class="hub-summary-name" style="color:${color}">${esc(h.name)}</span>
+        <span class="hub-summary-pill ${h.type==='Hub'?'hub':''}">${h.type}</span>
+      </div>
+      <div class="hub-summary-stats">
+        <div class="hub-summary-stat">
+          <div class="val">${total}</div>
+          <div class="lbl">Tracking</div>
+        </div>
+        <div class="hub-summary-stat fc">
+          <div class="val">${fcCount}</div>
+          <div class="lbl">Mandare FC</div>
+        </div>
+      </div>
+      ${reschedHtml}
+    </div>`;
+  }).join('');
+}
+
+function scrollToHub(hubId){
+  goToLockerTab();
+  setTimeout(() => {
+    const el = document.querySelector(`.hub-card[data-id="${hubId}"]`);
+    if(!el){ return; }
+    el.scrollIntoView({behavior:'smooth', block:'start'});
+    el.classList.remove('highlight');
+    void el.offsetWidth;
+    el.classList.add('highlight');
+    setTimeout(() => el.classList.remove('highlight'), 2000);
+  }, 100);
 }
 
 function renderHubs(){
@@ -629,7 +793,13 @@ async function updateHubSchedule(id, v){
   render();
 }
 
-function render(){ renderHome(); renderHubs(); updateBulkBar(); }
+function render(){
+  renderHome();
+  renderHubsSummary();
+  renderHubs();
+  updateHubTabBadge();
+  updateBulkBar();
+}
 
 function findT(id){
   for(const list of [data.main, ...data.hubs.map(h => h.tracks)]){
@@ -766,9 +936,7 @@ function copyHubTrackings(hubId){
   copyTrackings(hub.tracks.map(t => t.code), `copyHub${hubId}Btn`);
 }
 
-// ═══════════════════════════════════════════════════════════════════
 // === SLACK NOTIFICATIONS ===
-// ═══════════════════════════════════════════════════════════════════
 const SLACK_STATUSES = [
   {key:'mandare_fc', label:'🚨 Mandare FC'},
   {key:'Rifiutato', label:'❌ Rifiutato'},
@@ -807,9 +975,11 @@ async function saveSlackSettings(){
   const times = document.getElementById('slackTimes').value
     .split('\n').map(x => x.trim()).filter(x => /^\d{2}:\d{2}$/.test(x));
   const statuses = Array.from(document.querySelectorAll('.slack-st:checked')).map(x => x.value);
+  const webhookRaw = document.getElementById('slackWebhook').value.trim();
 
   const payload = {
-    slack_webhook_url: document.getElementById('slackWebhook').value.trim() || null,
+    id: 1,
+    slack_webhook_url: webhookRaw || null,
     schedule_times: times,
     include_statuses: statuses,
     enabled: document.getElementById('slackEnabled').checked,
@@ -818,16 +988,29 @@ async function saveSlackSettings(){
     updated_at: new Date().toISOString()
   };
 
-  const {error} = await sb.from('notification_settings').update(payload).eq('id',1);
-  if(error){ alert('Errore: '+error.message); return; }
-  alert('✓ Impostazioni salvate.');
+  const {data: saved, error} = await sb.from('notification_settings')
+    .upsert(payload, {onConflict: 'id'})
+    .select();
+
+  if(error){
+    console.error('Errore save:', error);
+    alert('❌ Errore salvataggio: ' + error.message);
+    return;
+  }
+
+  if(webhookRaw && (!saved || !saved.length || !saved[0].slack_webhook_url)){
+    alert('⚠ ATTENZIONE: salvataggio riuscito ma il webhook URL non risulta scritto nel DB.\nProbabile RLS: esegui SQL fix.');
+    return;
+  }
+
+  alert('✓ Impostazioni salvate correttamente.');
   closeModal('slackModal');
 }
 
 async function testSlackNow(){
   if(!confirm('Inviare un recap di test ora su Slack?')) return;
   const {data: res, error} = await sb.functions.invoke('slack-recap', {
-    body: { mode: 'recap' },
+    body: { mode: 'recap', force: true },
     headers: {'x-trigger': 'manual'}
   });
   if(error){ alert('Errore invocazione: '+error.message); return; }
@@ -841,7 +1024,7 @@ async function testAlertNow(){
   const {error: e1} = await sb.from('trackings').update({fc_notified_at: null}).not('fc_notified_at','is',null);
   if(e1){ alert('Errore reset: '+e1.message); return; }
   const {data: res, error} = await sb.functions.invoke('slack-recap', {
-    body: { mode: 'alert_fc' },
+    body: { mode: 'alert_fc', force: true },
     headers: {'x-trigger': 'manual'}
   });
   if(error){ alert('Errore invocazione: '+error.message); return; }
@@ -856,7 +1039,7 @@ async function sendHubSlackRecap(hubId){
   if(!confirm(`Inviare recap Slack per "${hub.name}" (${hub.tracks.length} tracking)?`)) return;
 
   const {data: res, error} = await sb.functions.invoke('slack-recap', {
-    body: { mode: 'hub_recap', hub_id: hubId },
+    body: { mode: 'hub_recap', hub_id: hubId, force: true },
     headers: {'x-trigger': 'manual'}
   });
   if(error){ alert('Errore: '+error.message); return; }
@@ -865,22 +1048,17 @@ async function sendHubSlackRecap(hubId){
     : `⚠ Invio non riuscito. Response: ${JSON.stringify(res)}`);
 }
 
-// ═══════════════════════════════════════════════════════════════════
 // === CLEANUP DATABASE ===
-// ═══════════════════════════════════════════════════════════════════
 async function openCleanupModal(){
   document.getElementById('cleanupModal').classList.add('open');
   document.getElementById('cleanupInfo').innerHTML = '<div style="color:#9babca">Caricamento info...</div>';
-
   await loadRetention();
   document.getElementById('retentionSelect').value = String(retentionDays);
-
   await refreshCleanupInfo();
 }
 
 async function refreshCleanupInfo(){
   const {data: log, error} = await sb.from('cleanup_log').select('*').order('run_at',{ascending:false}).limit(1);
-
   const cutoff = Date.now() - (retentionDays * 24 * 3600 * 1000);
   const eligible = allTracks().filter(t => t.created < cutoff).length;
   const total = allTracks().length;
@@ -947,9 +1125,7 @@ async function runManualCleanup(){
   render();
 }
 
-// ═══════════════════════════════════════════════════════════════════
 // === MODALS & CRUD ===
-// ═══════════════════════════════════════════════════════════════════
 function openBulkTrackingModal(target = 'main'){
   currentTarget = target;
   document.getElementById('bulkTrackingList').value = '';
