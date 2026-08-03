@@ -1,0 +1,1128 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RTSCage — Tracking Control</title>
+<script src="https://d1hilrkz3ka39e.cloudfront.net/npm/@supabase/supabase-js@2"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap');
+:root{--bg:#091225;--surface:rgba(16,30,57,.72);--surface2:#142544;--ink:#eff5ff;--muted:#9babca;--line:rgba(167,190,231,.14);--primary:#6f8cff;--accent:#35d8bd;--danger:#ff627d;--warning:#ffbf5b;--shadow:0 20px 55px #02071366}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 8% 0%,#263d7d 0,transparent 30rem),radial-gradient(circle at 100% 15%,#0c665e 0,transparent 26rem),var(--bg);color:var(--ink);font:14px 'DM Sans',ui-sans-serif,system-ui,sans-serif}
+.app{max-width:1580px;margin:auto;padding:28px;position:relative}
+.app:before{content:'';position:fixed;inset:auto -8vw -12vw auto;width:42vw;height:42vw;border-radius:50%;background:#6f8cff12;filter:blur(55px);pointer-events:none;z-index:-1}
+.top{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:13px}
+.logo{height:45px;width:45px;border-radius:15px;background:linear-gradient(135deg,#91a8ff,#596bf6 48%,#2ce0c3);display:grid;place-items:center;color:#fff;font-weight:900;letter-spacing:-1px;box-shadow:0 10px 28px #617dff55}
+.brand h1{font:800 24px Outfit,sans-serif;margin:0;letter-spacing:-.8px}
+.brand span{color:var(--muted);font-size:12px}
+.top>div:last-child{display:flex;gap:10px;align-items:center}
+.tabs{display:flex;background:#0b1932a8;border:1px solid var(--line);border-radius:13px;padding:4px;gap:3px;backdrop-filter:blur(12px)}
+.tab{border:0;background:transparent;padding:9px 15px;color:#aebbd3;border-radius:9px;font-weight:700;cursor:pointer;transition:.22s}
+.tab.active{background:#253b69;color:#fff;box-shadow:0 4px 12px #03091d55}
+.button{border:1px solid #91a4ff40;border-radius:10px;background:linear-gradient(135deg,#748dff,#5d6cef);color:#fff;padding:10px 14px;font-weight:750;cursor:pointer;box-shadow:0 8px 18px #334ecf42;transition:transform .2s,filter .2s}
+.button:hover{filter:brightness(1.08);transform:translateY(-2px)}
+.button.secondary{background:#1b3158;color:#c5d2ff;border-color:#536d9e60;box-shadow:none}
+.button.danger{background:#43213a;color:#ff9aab;box-shadow:none}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.card,.panel{background:linear-gradient(145deg,rgba(31,52,93,.86),rgba(11,24,47,.78));border:1px solid var(--line);box-shadow:var(--shadow);border-radius:17px;backdrop-filter:blur(14px)}
+.stat{padding:18px;position:relative;overflow:hidden;isolation:isolate;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.stat:hover{transform:translateY(-4px);border-color:#8ba1ff60;box-shadow:0 24px 50px #02071380}
+.stat:after{content:'';position:absolute;width:85px;height:85px;right:-28px;top:-30px;border-radius:50%;background:#8298ff18}
+.stat .label{color:var(--muted);font-size:12px;font-weight:650}
+.stat .value{font:800 30px Outfit,sans-serif;letter-spacing:-1px;margin:6px 0}
+.trend{font-size:11px;color:var(--accent);font-weight:700}
+.charts{display:grid;grid-template-columns:1.18fr .82fr;gap:16px;margin-bottom:24px}
+.panel{padding:19px}
+.panel h2{font:700 15px Outfit,sans-serif;margin:0 0 16px}
+.bar-row{display:grid;grid-template-columns:108px 1fr 28px;align-items:center;gap:10px;margin:11px 0;color:#b7c4da;font-size:12px}
+.bar{height:8px;background:#07142b;border-radius:9px;overflow:hidden}
+.bar i{height:100%;display:block;border-radius:9px;box-shadow:0 0 12px currentColor;transition:width .5s ease}.donut-wrap{display:flex;align-items:center;gap:22px}.donut{width:126px;height:126px;border-radius:50%;background:conic-gradient(#758eff 0 var(--wait),#35d8bd var(--wait) var(--delivery),#ffbf5b var(--delivery) var(--other),#1a2b4b var(--other));position:relative;box-shadow:0 0 25px #6e86ff28}
+.donut:after{content:attr(data-total);position:absolute;inset:24px;background:#142543;border:1px solid #ffffff12;border-radius:50%;display:grid;place-items:center;font:800 23px Outfit,sans-serif}
+.legend{display:grid;gap:10px;font-size:12px;color:#b9c6da}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;box-shadow:0 0 8px currentColor}
+.page{display:none;animation:rise .3s ease}
+.page.active{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:0 0 15px}
+.toolbar h2{margin:0;font:700 18px Outfit,sans-serif}
+.sub{font-size:12px;color:var(--muted);margin-top:4px}
+.actions{display:flex;gap:8px;align-items:center}
+.search{border:1px solid var(--line);background:#0c1b35cc;color:var(--ink);border-radius:10px;padding:10px 12px;width:220px;outline:none;transition:.2s}
+.search::placeholder{color:#8292af}
+.search:focus{border-color:#8198ff;box-shadow:0 0 0 3px #718bff1b}
+.day-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.day{container-type:inline-size;min-height:260px;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.day.drop-ready{border-color:#7f96ff;box-shadow:0 0 0 3px #718bff2b,0 24px 55px #02071399}
+.track-table tr[draggable=true]{cursor:grab}
+.track-table tr[draggable=true]:active{cursor:grabbing}
+.track-table tr.dragging{opacity:.38}
+.drag-handle{color:#7e91b6;font-size:16px;cursor:grab;padding-right:7px;user-select:none}
+.day:hover,.hub-card:hover{transform:translateY(-4px);border-color:#859cff70;box-shadow:0 25px 60px #02071388}
+.day-head{padding:15px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.day-head h3{margin:0;font:700 15px Outfit,sans-serif}
+.counter{background:#253b68;color:#cdd8ff;border-radius:20px;padding:4px 9px;font-size:11px;font-weight:750}
+.table-wrap{overflow-x:auto}
+.track-table{width:100%;border-collapse:collapse;min-width:620px}
+.track-table thead{position:sticky;top:0;z-index:1}
+.track-table th{text-align:left;color:#8999b8;font-size:10px;text-transform:uppercase;letter-spacing:.6px;padding:12px 13px;background:#09183155;border-bottom:1px solid var(--line)}
+.track-table td{padding:10px 13px;border-bottom:1px solid #b9caff0d;vertical-align:middle}
+.track-table tr{transition:background .15s}
+.track-table tr:hover{background:#839cff0b}
+.track-table tr:last-child td{border-bottom:0}
+.tracking{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:750;color:#d7e1ff;white-space:nowrap}
+.age{font-size:10px;color:#8495b3;margin-top:3px}
+select,input[type=date]{border:1px solid #ffffff18;background:#0b1a34;color:#d9e4ff;border-radius:8px;padding:7px 8px;font:inherit;max-width:125px}
+input[type=date]{width:116px;color-scheme:dark}
+.icon-btn{border:1px solid #ffffff0f;background:#1a2d50;color:#b7c7e8;cursor:pointer;border-radius:8px;width:31px;height:31px;font-size:15px;transition:.18s}
+.icon-btn:hover{background:#2c4777;transform:scale(1.06)}
+.icon-btn.has-note{background:#573f18;color:#ffd070;border-color:#ffbf5b33}
+.fc{margin-top:20px;border-left:4px solid var(--danger)}
+.fc h2{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.fc .badge{font:700 11px 'DM Sans';background:#502037;color:#ffafbd;padding:5px 9px;border-radius:20px}
+.empty{padding:30px 15px;color:#8595b2;text-align:center;font-size:12px}
+.hub-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.hub-card{transition:transform .2s,border-color .2s}.hub-card .hub-head{padding:15px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-wrap:wrap}.type-pill{font-size:10px;text-transform:uppercase;font-weight:800;letter-spacing:.5px;border-radius:5px;padding:4px 7px;background:#233a6c;color:#b8c9ff}
+.type-pill.hub{background:#16494b;color:#75eee0}
+.hub-name{border:0;background:transparent;font:700 15px Outfit,sans-serif;color:var(--ink);outline:none;width:auto;min-width:100px;text-align:left;margin-left:0;flex:1}
+.hub-reschedule{display:flex;align-items:center;gap:7px;color:#aebcda;font-size:11px;font-weight:700;white-space:nowrap}
+.hub-reschedule input{width:118px}
+.modal{position:fixed;inset:0;background:#030916a8;display:none;align-items:center;justify-content:center;padding:15px;z-index:5;backdrop-filter:blur(6px)}
+.modal.open{display:flex}
+.modal-box{width:min(460px,100%);background:linear-gradient(145deg,#1a3159,#0e1d38);border:1px solid #a0b6ff2b;border-radius:18px;padding:23px;box-shadow:0 25px 70px #000b;max-height:90vh;overflow-y:auto}
+.modal-box h3{font:700 19px Outfit,sans-serif;margin:0 0 16px}
+.field{display:grid;gap:6px;margin:12px 0}
+.field label{font-size:12px;font-weight:700;color:#aebcda}
+.field input,.field select,.field textarea{width:100%;border:1px solid #ffffff1d;background:#09182f;color:#e3ebff;border-radius:9px;padding:10px;font:inherit;max-width:none}
+.field textarea{resize:vertical;min-height:120px}
+.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px;flex-wrap:wrap}
+.hint{color:var(--muted);font-size:11px;margin:0 0 10px}
+.sync-badge{position:fixed;bottom:16px;right:16px;background:#0b1a34cc;border:1px solid var(--line);padding:8px 12px;border-radius:20px;font-size:11px;color:#9babca;backdrop-filter:blur(10px);z-index:10;display:flex;align-items:center;gap:6px}
+.sync-badge .dot-live{width:8px;height:8px;border-radius:50%;background:#35d8bd;box-shadow:0 0 8px #35d8bd;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}.charts{grid-template-columns:1fr}.hub-grid{grid-template-columns:1fr}}
+@media(max-width:650px){.app{padding:16px}.app:before{width:90vw;height:90vw}.top{align-items:flex-start;flex-direction:column}.top>div:last-child{width:100%;justify-content:space-between;flex-wrap:wrap}.stats,.day-grid{grid-template-columns:1fr}.toolbar{align-items:flex-start;flex-direction:column}.search{width:100%}.tabs{flex:1}.tab{padding:9px 10px}.actions{width:100%}.actions .button{flex:1}.donut-wrap{justify-content:center}.top .button.secondary{font-size:0;padding:11px}.top .button.secondary:first-letter{font-size:16px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}.status-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;cursor:pointer;box-shadow:0 0 8px currentColor;position:relative}
+.status-dot:hover{transform:scale(1.15)}
+.status-menu{display:none;position:absolute;top:100%;left:0;z-index:20;margin-top:6px;background:#0e1d38;border:1px solid var(--line);border-radius:10px;padding:6px;box-shadow:0 12px 30px #0008;min-width:130px}
+.status-menu.open{display:block}
+.status-menu button{display:block;width:100%;text-align:left;border:0;background:transparent;color:#cdd8ff;padding:7px 10px;border-radius:7px;cursor:pointer;font:600 12px 'DM Sans',sans-serif}
+.status-menu button:hover{background:#1a2d50}
+.status-wrap{position:relative;display:inline-flex;align-items:center}
+.hub-reschedule{display:flex;align-items:center;gap:8px;margin-left:auto;color:#aebcda;font-size:11px;font-weight:700;white-space:nowrap}
+.hub-reschedule .reschedule-label{font-size:12px;color:#cdd8ff;min-width:28px;text-align:right}
+.hub-reschedule input[type=date]{width:28px;height:28px;padding:0;border:1px solid #ffffff18;background:#0b1a34;border-radius:8px;color:transparent;cursor:pointer;position:relative}.hub-reschedule input[type=date]::-webkit-calendar-picker-indicator{opacity:1;cursor:pointer;position:absolute;left:0;top:0;width:100%;height:100%;margin:0;padding:0}
+.hub-reschedule input[type=date]::-webkit-datetime-edit,
+.hub-reschedule input[type=date]::-webkit-datetime-edit-fields-wrapper,
+.hub-reschedule input[type=date]::-webkit-datetime-edit-text,
+.hub-reschedule input[type=date]::-webkit-datetime-edit-month-field,
+.hub-reschedule input[type=date]::-webkit-datetime-edit-day-field,
+.hub-reschedule input[type=date]::-webkit-datetime-edit-year-field{display:none;color:transparent}
+.track-table tr.has-alt-address{background:#43213a22;box-shadow:inset 3px 0 0 #ff9aab}
+.track-table input[type=checkbox]{width:16px;height:16px;accent-color:#6f8cff;cursor:pointer}
+.hub-head{position:relative}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">RT</div>
+      <div><h1>RTSCage</h1><span>Tracking & Locker Control</span></div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button class="button secondary" onclick="exportCSV()">⇩ Esporta CSV</button>
+      <button class="button secondary" onclick="openSlackModal()" title="Notifiche Slack">🔔 Slack</button>
+      <button class="button secondary" onclick="openCleanupModal()" title="Pulizia database">🧹 Pulizia</button>
+      <nav class="tabs">
+        <button class="tab active" data-page="home">HELD</button>
+        <button class="tab" data-page="locker">Locker/Hub</button>
+      </nav>
+    </div>
+  </header>
+
+  <section id="home" class="page active">
+    <div id="stats" class="stats"></div>
+    <div class="charts">
+      <section class="panel"><h2>Stati spedizioni</h2><div id="bars"></div></section>
+      <section class="panel">
+        <h2>Distribuzione operativa</h2>
+        <div class="donut-wrap">
+          <div id="donut" class="donut" data-total="0"></div>
+          <div id="legend" class="legend"></div>
+        </div>
+      </section>
+    </div>
+    <div class="toolbar">
+      <div>
+        <h2>Gestione tracking</h2>
+        <div class="sub">I tracking avanzano automaticamente ogni 24 ore dall'inserimento.</div>
+      </div>
+      <div class="actions">
+        <input id="searchHome" class="search" placeholder="Cerca tracking...">
+        <button class="button" onclick="openBulkTrackingModal('main')">Aggiungi</button>
+      </div>
+    </div>
+    <div id="days" class="day-grid"></div>
+    <section class="panel fc">
+      <h2>
+        <span>Mandare FC <span id="fcCount" class="badge">0 tracking</span></span>
+        <button id="copyFCBtn" class="button secondary" onclick="copyFCTrackings()" style="font-size:12px;padding:8px 12px">📋 Copia tutti</button>
+      </h2>
+      <div id="fcTable"></div>
+    </section>
+  </section>
+
+  <section id="locker" class="page">
+    <div class="toolbar">
+      <div>
+        <h2>Locker / Hub</h2>
+        <div class="sub">Gestisci tracking e appuntamenti per ogni punto operativo.</div>
+      </div>
+      <button class="button" onclick="openHubModal()">+ Inserisci Locker o Hub</button>
+    </div>
+    <div id="hubs" class="hub-grid"></div>
+  </section>
+</main>
+
+<!-- ═══════════ MODALS ═══════════ -->
+
+<div id="trackingModal" class="modal">
+  <div class="modal-box">
+    <h3>Nuovo tracking</h3>
+    <p id="trackingTarget" class="hint"></p>
+    <div class="field">
+      <label>Tracking ID</label>
+      <input id="newTracking" placeholder="Es. 1Z999AA10123456784" autocomplete="off">
+    </div>
+    <div class="modal-actions">
+      <button class="button secondary" onclick="closeModal('trackingModal')">Annulla</button>
+      <button class="button" onclick="addTracking()">Inserisci</button>
+    </div>
+  </div>
+</div>
+
+<div id="bulkTrackingModal" class="modal">
+  <div class="modal-box">
+    <h3>Aggiungi tracking</h3>
+    <p id="bulkTrackingTarget" class="hint"></p>
+    <div class="field">
+      <label>Tracking ID</label>
+      <textarea id="bulkTrackingList" placeholder="Un tracking per riga, oppure separati da virgola, punto e virgola o spazio"></textarea>
+    </div>
+    <p class="hint">I tracking già presenti o duplicati nell'elenco vengono ignorati.</p>
+    <div class="modal-actions">
+      <button class="button secondary" onclick="closeModal('bulkTrackingModal')">Annulla</button>
+      <button class="button" onclick="addBulkTracking()">Inserisci tutti</button>
+    </div>
+  </div>
+</div>
+
+<div id="noteModal" class="modal">
+  <div class="modal-box">
+    <h3>Dati cliente / Nota tracking</h3>
+    <div class="field"><label id="noteTracking"></label></div>
+    <div class="field">
+      <label>Nome e cognome cliente</label>
+      <input id="noteName" placeholder="Es. Mario Rossi" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Telefono</label>
+      <input id="notePhone" placeholder="Es. +39..." autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Indirizzo</label>
+      <textarea id="noteAddress" placeholder="Indirizzo principale cliente"></textarea>
+    </div>
+    <div class="field">
+      <label>Indirizzo alternativo</label>
+      <textarea id="noteAltAddress" placeholder="Se diverso dal principale"></textarea>
+    </div>
+    <div class="field">
+      <label>Nota operativa</label>
+      <textarea id="noteText" placeholder="Inserisci una nota riservata..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="button secondary" onclick="closeModal('noteModal')">Annulla</button>
+      <button class="button" onclick="saveNote()">Salva dati</button>
+    </div>
+  </div>
+</div>
+
+<div id="hubModal" class="modal">
+  <div class="modal-box">
+    <h3>Nuovo punto operativo</h3>
+    <div class="field">
+      <label>Tipo</label>
+      <select id="hubType"><option>Locker</option><option>Hub</option></select>
+    </div>
+    <div class="field">
+      <label>Nome</label>
+      <input id="hubName" placeholder="Es. Locker Centro Bologna">
+    </div>
+    <div class="field">
+      <label>Stato</label>
+      <select id="hubStatus">
+        <option value="online">Online</option>
+        <option value="offline">Offline</option>
+        <option value="ferie">Ferie</option>
+        <option value="dismesso">Dismesso</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="button secondary" onclick="closeModal('hubModal')">Annulla</button>
+      <button class="button" onclick="addHub()">Crea</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLACK MODAL ═══════════ -->
+<div id="slackModal" class="modal">
+  <div class="modal-box" style="width:min(520px,100%)">
+    <h3>🔔 Notifiche Slack</h3>
+
+    <div class="field">
+      <label>Slack Webhook URL</label>
+      <input id="slackWebhook" placeholder="https://hooks.slack.com/...">
+    </div>
+
+    <div class="field">
+      <label>📅 Orari recap (uno per riga, formato HH:MM)</label>
+      <textarea id="slackTimes" placeholder="09:00&#10;14:00&#10;18:00" style="min-height:80px"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Stati da includere nel recap</label>
+      <div id="slackStatuses" style="display:grid;gap:6px;font-size:13px"></div>
+    </div>
+
+    <div class="field">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="slackEnabled" style="width:16px;height:16px">
+        <span><b>Attiva recap schedulati</b></span>
+      </label>
+    </div>
+
+    <div class="field" style="border-top:1px solid #ffffff18;padding-top:14px;margin-top:14px">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:8px">
+        <input type="checkbox" id="slackAlertEnabled" style="width:16px;height:16px">
+        <span><b>🚨 Alert immediato oltre soglia</b></span>
+      </label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label style="font-size:11px;color:#aebcda">Soglia (ore)</label>
+          <input id="slackAlertThreshold" type="number" min="1" max="720" value="72">
+        </div>
+        <div>
+          <label style="font-size:11px;color:#aebcda">Check ogni (min)</label>
+          <input id="slackAlertInterval" type="number" value="15" disabled title="Modificabile dal cron SQL">
+        </div>
+      </div>
+      <p class="hint" style="margin-top:6px">Notifica una sola volta per tracking. Reset via SQL: <code>UPDATE trackings SET fc_notified_at = NULL</code></p>
+    </div>
+
+    <div id="slackLastSent" class="hint"></div>
+
+    <div class="modal-actions">
+      <button class="button secondary" onclick="closeModal('slackModal')">Chiudi</button>
+      <button class="button secondary" onclick="testAlertNow()">🚨 Test alert</button>
+      <button class="button secondary" onclick="testSlackNow()">🧪 Test recap</button>
+      <button class="button" onclick="saveSlackSettings()">Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CLEANUP MODAL ═══════════ -->
+<div id="cleanupModal" class="modal">
+  <div class="modal-box">
+    <h3>🧹 Pulizia database</h3>
+    <div class="field">
+      <label>Periodo di ritenzione</label>
+      <select id="retentionSelect" onchange="onRetentionChange()">
+        <option value="30">30 giorni</option>
+        <option value="60">60 giorni</option>
+        <option value="90" selected>90 giorni</option>
+        <option value="180">180 giorni</option>
+        <option value="365">365 giorni</option>
+      </select>
+      <div class="hint" style="margin-top:4px">I tracking più vecchi di questo periodo verranno eliminati.</div>
+    </div>
+    <div id="cleanupInfo" style="background:#0b1a34;border:1px solid #ffffff1d;border-radius:10px;padding:14px;margin:10px 0;font-size:12px;line-height:1.6">
+      <div style="color:#9babca">Caricamento info...</div>
+    </div>
+    <p class="hint" style="color:#ffbf5b">⚠ La tabella <b>Locker/Hub</b> non viene mai toccata: solo i tracking scaduti.</p>
+    <p class="hint">🤖 <b>Pulizia automatica:</b> ogni notte alle 03:00 UTC (pg_cron su Supabase).</p>
+    <div class="modal-actions">
+      <button class="button secondary" onclick="closeModal('cleanupModal')">Chiudi</button>
+      <button class="button danger" onclick="runManualCleanup()" style="background:#ff627d;color:#fff">Esegui pulizia ora</button>
+    </div>
+  </div>
+</div>
+
+<div id="bulkBar" style="display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a3159,#0e1d38);border:1px solid #a0b6ff40;padding:10px 16px;border-radius:14px;box-shadow:0 15px 40px #000a;z-index:9;align-items:center;gap:12px;backdrop-filter:blur(10px);flex-wrap:wrap;max-width:calc(100vw - 32px)">
+  <span style="color:#cdd8ff;font-weight:700;font-size:13px"><span id="bulkCount">0</span> selezionati</span>
+  <div style="display:flex;align-items:center;gap:6px">
+    <select id="bulkStatusSelect" style="max-width:150px;font-size:12px;padding:8px">
+      <option value="">Cambia stato in...</option>
+      <option>In attesa</option>
+      <option>Rifiutato</option>
+      <option>Rimborsato</option>
+      <option>Consegnato</option>
+      <option>In consegna</option>
+      <option>Reindirizzo</option>
+      <option>Rischedulato</option>
+    </select>
+    <button class="button" onclick="bulkUpdateStatus()" style="padding:8px 12px;font-size:12px">✓ Applica</button>
+  </div>
+  <button class="button danger" onclick="deleteSelected()" style="padding:8px 14px;font-size:12px">🗑 Elimina</button>
+  <button class="button secondary" onclick="clearSelection()" style="padding:8px 14px;font-size:12px">Annulla</button>
+</div>
+
+<div class="sync-badge"><span class="dot-live"></span><span id="syncStatus">Sync attivo</span></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// 🔑 CREDENZIALI SUPABASE
+// ═══════════════════════════════════════════════════════════════════
+const SUPABASE_URL = 'https://ycymlvyoabnrdpndwxat.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_VIzmKHLRsDN3p1Jzdekn5A_HiE3XeYf';
+// ═══════════════════════════════════════════════════════════════════
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const STATUSES = ['In attesa','Rifiutato','Rimborsato','Consegnato','In consegna','Reindirizzo','Rischedulato'];
+
+let data = {main:[], hubs:[]};
+let currentTarget = 'main', noteTarget = null;
+let selectedIds = new Set();
+let retentionDays = 90;
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const setSync = (txt) => { const el=document.getElementById('syncStatus'); if(el) el.textContent = txt; };
+
+// === DATA LOAD ===
+async function loadData(){
+  setSync('Caricamento...');
+  const [{data: hubs, error: e1}, {data: tracks, error: e2}] = await Promise.all([
+    sb.from('hubs').select('*').order('created_at',{ascending:true}),
+    sb.from('trackings').select('*').order('created',{ascending:false})
+  ]);
+  if(e1||e2){ console.error(e1||e2); setSync('Errore'); alert('Errore caricamento dati: '+(e1?.message||e2?.message)); return; }
+  data.main = (tracks||[]).filter(t => !t.hub_id);
+  data.hubs = (hubs||[]).map(h => ({
+    ...h,
+    status: h.status || 'online',
+    rescheduled: h.rescheduled || '',
+    tracks: (tracks||[]).filter(t => t.hub_id === h.id)
+  }));
+  setSync('Sync attivo');
+}
+
+async function loadRetention(){
+  const {data: s, error} = await sb.from('app_settings').select('*').eq('key','retention_days').maybeSingle();
+  if(!error && s && s.value){
+    retentionDays = parseInt(s.value, 10) || 90;
+  }
+}
+
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function now(){return Date.now()}
+function ageHours(t){return Math.max(0,(now()-t.created)/36e5)}
+function dayOf(t){return Math.min(4,Math.floor(ageHours(t)/24)+1)}
+function fc(t){return ageHours(t)>=72||['Rifiutato','Rimborsato','Consegnato'].includes(t.status)}
+function fmtAge(t){let h=Math.floor(ageHours(t));return h<24?`${h}h fa`:`${Math.floor(h/24)}g fa`}
+function opts(list,value){return list.map(x=>`<option ${x==value?'selected':''}>${x}</option>`).join('')}
+
+function parseNote(note){
+  if(!note) return {};
+  try { return JSON.parse(note); } catch(e){ return { text: note }; }
+}
+function hasAltAddress(t){
+  const d = parseNote(t.note);
+  return !!(d.altAddress && String(d.altAddress).trim());
+}
+function fmtDayMonth(value){
+  if(!value) return '';
+  const m = String(value).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if(m){
+    const day = parseInt(m[3], 10);
+    const month = parseInt(m[2], 10);
+    return day + '/' + month;
+  }
+  const d = new Date(value);
+  if(Number.isNaN(d.getTime())) return '';
+  return d.getDate() + '/' + (d.getMonth()+1);
+}
+function statusColor(status){
+  if(status === 'offline') return '#ffbf5b';
+  if(status === 'ferie') return '#6f8cff';
+  if(status === 'dismesso') return '#ff627d';
+  return '#35d8bd';
+}
+function closeAllStatusMenus(){
+  document.querySelectorAll('.status-menu.open').forEach(el => el.classList.remove('open'));
+}
+function openHubStatusMenu(id, ev){
+  if(ev){ ev.stopPropagation(); }
+  const menu = document.getElementById('status-menu-' + id);
+  if(!menu) return;
+  const wasOpen = menu.classList.contains('open');
+  closeAllStatusMenus();
+  if(!wasOpen) menu.classList.add('open');
+}
+document.addEventListener('click', () => closeAllStatusMenus());
+
+function trackingRow(t, container, compact=false){
+  const id = esc(t.id);
+  const scheduleControl = t.status==='Rischedulato'
+    ? `<div class="age" style="margin-top:4px">Rischedulato al
+        <input type="date" value="${t.scheduled||''}" onchange="updateT('${id}','scheduled',this.value)" title="Data rischedulazione">
+      </div>`
+    : '';
+  const swaChecked = (t.swa === true || t.swa === '1' || t.swa === 1) ? 'checked' : '';
+  const noteData = parseNote(t.note);
+  const hasNote = !!(noteData.text || noteData.name || noteData.phone || noteData.address || noteData.altAddress || (typeof t.note === 'string' && t.note && !t.note.startsWith('{')));
+  const altClass = hasAltAddress(t) ? ' has-alt-address' : '';
+  const selChecked = selectedIds.has(t.id) ? 'checked' : '';
+  return `<tr class="${altClass.trim()}" draggable="true" ondragstart="dragStart(event,'${id}')" ondragend="dragEnd(event)">
+    <td><input type="checkbox" class="row-select" ${selChecked} onchange="toggleSelect('${id}',this.checked)" onclick="event.stopPropagation()" title="Seleziona"></td>
+    <td><span class="drag-handle" title="Trascina in un altro Day">⠿</span>
+      <span class="tracking">${esc(t.code)}</span>
+      <div class="age">${fmtAge(t)} · Day ${dayOf(t)}</div>${scheduleControl}</td>
+    <td><select onchange="updateT('${id}','status',this.value)">${opts(STATUSES,t.status)}</select></td>
+    <td><select onchange="updateT('${id}','contacted',this.value)">${opts(['0','1','2','3','4'],t.contacted)}</select></td>
+    <td><input type="checkbox" ${swaChecked} onchange="updateT('${id}','swa',this.checked?'1':'0')" title="SWA"></td>
+    <td><button title="${hasNote?'Visualizza/modifica nota':'Inserisci nota'}" class="icon-btn ${hasNote?'has-note':''}" onclick="openNote('${id}')">${hasNote?'⚠':'📝'}</button></td>
+    ${compact?'':`<td><button title="Elimina" class="icon-btn" onclick="deleteT('${id}')">×</button></td>`}
+  </tr>`;
+}
+
+function table(items, container, compact=false){
+  if(!items.length) return '<div class="empty">Trascina qui un tracking o aggiungine uno.</div>';
+  const allIds = items.map(x => x.id);
+  const allSelected = allIds.length && allIds.every(id => selectedIds.has(id));
+  const headCheck = `<input type="checkbox" ${allSelected?'checked':''} onchange="toggleSelectAll(this.checked, ${JSON.stringify(allIds).replace(/"/g,'&quot;')})" title="Seleziona tutti">`;
+  return `<div class="table-wrap"><table class="track-table"><thead><tr><th style="width:32px">${headCheck}</th><th>Tracking</th><th>Stato</th><th>Contattato</th><th>SWA</th><th>Nota</th>${compact?'':'<th></th>'}</tr></thead><tbody>${items.map(t=>trackingRow(t,container,compact)).join('')}</tbody></table></div>`;
+}
+
+// === DRAG & DROP ===
+function dragStart(e,id){e.dataTransfer.setData('text/plain',id);e.dataTransfer.effectAllowed='move';e.currentTarget.classList.add('dragging')}
+function dragEnd(e){e.currentTarget.classList.remove('dragging');document.querySelectorAll('.drop-ready').forEach(x=>x.classList.remove('drop-ready'))}
+function dragOver(e){e.preventDefault();e.dataTransfer.dropEffect='move';e.currentTarget.classList.add('drop-ready')}
+function dragLeave(e){if(!e.currentTarget.contains(e.relatedTarget))e.currentTarget.classList.remove('drop-ready')}
+
+async function dropTracking(e, day){
+  e.preventDefault();
+  e.currentTarget.classList.remove('drop-ready');
+  const id = e.dataTransfer.getData('text/plain');
+  const t = findT(id);
+  if(!t) return;
+  const newCreated = now() - (day-1)*864e5;
+  const {error} = await sb.from('trackings').update({created: newCreated}).eq('id', id);
+  if(error){ alert('Errore aggiornamento'); return; }
+  t.created = newCreated;
+  render();
+}
+
+function allTracks(){return [...data.main, ...data.hubs.flatMap(h=>h.tracks)]}
+
+function renderHome(){
+  const q = document.getElementById('searchHome').value.toLowerCase();
+  const list = data.main.filter(t => t.code.toLowerCase().includes(q));
+  document.getElementById('days').innerHTML = [1,2,3].map(d => {
+    const x = list.filter(t => dayOf(t) === d);
+    const copyBtn = x.length
+      ? `<button id="copyDay${d}Btn" class="button secondary" onclick="copyDayTrackings(${d})" style="font-size:11px;padding:6px 10px">📋 Copia</button>`
+      : '';
+    return `<section class="card day" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropTracking(event,${d})">
+      <div class="day-head"><h3>Day ${d} <span style="font:500 11px 'DM Sans';color:#8999b8">— rilascia qui</span></h3>
+      <div style="display:flex;align-items:center;gap:8px">${copyBtn}<span class="counter">${x.length}</span></div></div>${table(x,'main')}</section>`;
+  }).join('');
+  const fcList = allTracks().filter(fc).filter(t => !q || t.code.toLowerCase().includes(q));
+  document.getElementById('fcTable').innerHTML = table(fcList, 'main', true);
+  document.getElementById('fcCount').textContent = `${fcList.length} tracking`;
+  renderStats();
+}
+
+function renderStats(){
+  const a = allTracks();
+  const counts = Object.fromEntries(STATUSES.map(s => [s, a.filter(t => t.status === s).length]));
+  const alerts = a.filter(fc).length, noted = a.filter(t => t.note).length;
+  document.getElementById('stats').innerHTML = `
+    <div class="card stat"><div class="label">Pacchi totali</div><div class="value">${a.length}</div><div class="trend">In gestione ora</div></div>
+    <div class="card stat"><div class="label">In attesa</div><div class="value">${counts['In attesa']}</div><div class="trend">Da monitorare</div></div>
+    <div class="card stat"><div class="label">Alert / Mandare FC</div><div class="value">${alerts}</div><div class="trend" style="color:${alerts?'#ef5466':'#13b8a6'}">${alerts?'Richiede intervento':'Nessuna criticità'}</div></div>
+    <div class="card stat"><div class="label">Note attive</div><div class="value">${noted}</div><div class="trend">Promemoria operativi</div></div>`;
+  const max = Math.max(1, ...Object.values(counts));
+  document.getElementById('bars').innerHTML = STATUSES.map((s,i) =>
+    `<div class="bar-row"><span>${s}</span><div class="bar"><i style="width:${counts[s]/max*100}%;background:${['#2764e7','#ef5466','#ad5de8','#13b8a6','#f3a941','#5d82bf','#64748b'][i]}"></i></div><b>${counts[s]}</b></div>`
+  ).join('');
+  const w = counts['In attesa'], d = counts['In consegna'], o = a.length - w - d;
+  const p1 = a.length ? w/a.length*100 : 0, p2 = a.length ? (w+d)/a.length*100 : 0;
+  const donut = document.getElementById('donut');
+  donut.style.setProperty('--wait', p1+'%');
+  donut.style.setProperty('--delivery', p2+'%');
+  donut.style.setProperty('--other', '100%');
+  donut.dataset.total = a.length;
+  document.getElementById('legend').innerHTML = `
+    <span><i class="dot" style="background:#2764e7"></i>In attesa: <b>${w}</b></span>
+    <span><i class="dot" style="background:#13b8a6"></i>In consegna: <b>${d}</b></span>
+    <span><i class="dot" style="background:#f3a941"></i>Altri stati: <b>${o}</b></span>`;
+}
+
+function renderHubs(){
+  document.getElementById('hubs').innerHTML = data.hubs.length ? data.hubs.map(h => {
+    const st = h.status || 'online';
+    const color = statusColor(st);
+    const dm = fmtDayMonth(h.rescheduled);
+    const copyBtn = h.tracks.length
+      ? `<button id="copyHub${h.id}Btn" class="button secondary" onclick="copyHubTrackings('${h.id}')" style="font-size:11px;padding:6px 10px">📋 Copia</button>`
+      : '';
+    const slackBtn = h.tracks.length
+      ? `<button class="button secondary" onclick="sendHubSlackRecap('${h.id}')" style="font-size:11px;padding:6px 10px" title="Invia recap Slack di questo hub">📤 Slack</button>`
+      : '';
+    return `
+    <section class="card hub-card" data-id="${h.id}">
+      <div class="hub-head">
+        <span class="status-wrap">
+          <span class="status-dot" title="Stato: ${st}" onclick="openHubStatusMenu('${h.id}', event)" style="background:${color};color:${color}"></span>
+          <div class="status-menu" id="status-menu-${h.id}" onclick="event.stopPropagation()">
+            <button type="button" onclick="updateHubStatus('${h.id}','online')">● Online</button>
+            <button type="button" onclick="updateHubStatus('${h.id}','offline')">● Offline</button>
+            <button type="button" onclick="updateHubStatus('${h.id}','ferie')">● Ferie</button>
+            <button type="button" onclick="updateHubStatus('${h.id}','dismesso')">● Dismesso</button>
+          </div>
+        </span>
+        <span class="type-pill ${h.type==='Hub'?'hub':''}">${h.type}</span>
+        <input class="hub-name" value="${esc(h.name)}" onchange="renameHub('${h.id}',this.value)" style="color:${color};text-align:left;margin-left:0;width:auto;min-width:120px;flex:1">
+        <span class="hub-reschedule">
+          <span>Rischedulati al</span>
+          <span class="reschedule-label">${dm || '—'}</span>
+          <input type="date" value="${h.rescheduled||''}" onchange="updateHubSchedule('${h.id}',this.value)" title="Seleziona data">
+        </span>
+        ${copyBtn}
+        ${slackBtn}
+        <button class="icon-btn" title="Elimina ${h.type}" onclick="deleteHub('${h.id}')">×</button>
+      </div>
+      <div class="panel" style="border:0;box-shadow:none;padding:0">
+        <div style="padding:12px 15px 0"><button class="button secondary" onclick="openBulkTrackingModal('${h.id}')">Aggiungi</button></div>
+        ${table(h.tracks, h.id)}
+      </div>
+    </section>`;
+  }).join('') : '<div class="panel empty">Nessun Locker o Hub inserito. Usa il pulsante in alto per creare il primo punto.</div>';
+}
+
+async function updateHubStatus(id, v){
+  const {error} = await sb.from('hubs').update({status: v}).eq('id', id);
+  if(error){ alert('Errore aggiornamento stato'); return; }
+  const h = data.hubs.find(x => x.id === id);
+  if(h) h.status = v;
+  closeAllStatusMenus();
+  render();
+}
+
+async function updateHubSchedule(id, v){
+  const {error} = await sb.from('hubs').update({rescheduled: v||null}).eq('id', id);
+  if(error){ alert('Errore'); return; }
+  const h = data.hubs.find(x => x.id === id);
+  if(h) h.rescheduled = v || '';
+  render();
+}
+
+function render(){ renderHome(); renderHubs(); updateBulkBar(); }
+
+function findT(id){
+  for(const list of [data.main, ...data.hubs.map(h => h.tracks)]){
+    const t = list.find(x => x.id === id);
+    if(t) return t;
+  }
+}
+
+async function updateT(id, key, v){
+  const {error} = await sb.from('trackings').update({[key]: v}).eq('id', id);
+  if(error){ alert('Errore aggiornamento'); return; }
+  findT(id)[key] = v;
+  render();
+}
+
+async function deleteT(id){
+  if(!confirm('Eliminare questo tracking?')) return;
+  const {error} = await sb.from('trackings').delete().eq('id', id);
+  if(error){ alert('Errore eliminazione'); return; }
+  for(const list of [data.main, ...data.hubs.map(h => h.tracks)]){
+    const i = list.findIndex(x => x.id === id);
+    if(i > -1) list.splice(i, 1);
+  }
+  selectedIds.delete(id);
+  render();
+}
+
+// === BULK SELECTION ===
+function toggleSelect(id, checked){
+  if(checked) selectedIds.add(id);
+  else selectedIds.delete(id);
+  updateBulkBar();
+  document.querySelectorAll('.track-table thead input[type=checkbox]').forEach(cb => {
+    const tbody = cb.closest('table').querySelector('tbody');
+    const rows = tbody.querySelectorAll('input.row-select');
+    if(!rows.length) return;
+    cb.checked = Array.from(rows).every(r => r.checked);
+  });
+}
+
+function toggleSelectAll(checked, ids){
+  ids.forEach(id => { if(checked) selectedIds.add(id); else selectedIds.delete(id); });
+  render();
+}
+
+function clearSelection(){
+  selectedIds.clear();
+  render();
+}
+
+async function deleteSelected(){
+  if(!selectedIds.size) return;
+  if(!confirm(`Eliminare ${selectedIds.size} tracking selezionati?`)) return;
+  const ids = Array.from(selectedIds);
+  const {error} = await sb.from('trackings').delete().in('id', ids);
+  if(error){ alert('Errore eliminazione multipla: '+error.message); return; }
+  for(const list of [data.main, ...data.hubs.map(h => h.tracks)]){
+    for(let i = list.length - 1; i >= 0; i--){
+      if(selectedIds.has(list[i].id)) list.splice(i,1);
+    }
+  }
+  selectedIds.clear();
+  render();
+}
+
+async function bulkUpdateStatus(){
+  const newStatus = document.getElementById('bulkStatusSelect').value;
+  if(!newStatus){ alert('Seleziona uno stato.'); return; }
+  if(!selectedIds.size) return;
+  if(!confirm(`Cambiare stato di ${selectedIds.size} tracking in "${newStatus}"?`)) return;
+  const ids = Array.from(selectedIds);
+  const {error} = await sb.from('trackings').update({status: newStatus}).in('id', ids);
+  if(error){ alert('Errore aggiornamento massivo: '+error.message); return; }
+  for(const list of [data.main, ...data.hubs.map(h => h.tracks)]){
+    list.forEach(t => { if(selectedIds.has(t.id)) t.status = newStatus; });
+  }
+  document.getElementById('bulkStatusSelect').value = '';
+  render();
+}
+
+function updateBulkBar(){
+  const bar = document.getElementById('bulkBar');
+  if(!bar) return;
+  if(selectedIds.size){
+    bar.style.display = 'flex';
+    document.getElementById('bulkCount').textContent = selectedIds.size;
+  } else {
+    bar.style.display = 'none';
+  }
+}
+
+// === COPIA TRACKING ===
+function copyTrackings(codes, btnId){
+  if(!codes || !codes.length){ alert('Nessun tracking da copiare.'); return; }
+  const text = codes.join('\n');
+  const done = () => {
+    const btn = document.getElementById(btnId);
+    if(btn){
+      const orig = btn.dataset.origText || btn.textContent;
+      btn.dataset.origText = orig;
+      btn.textContent = `✓ Copiati ${codes.length}`;
+      setTimeout(() => { btn.textContent = orig; }, 1800);
+    }
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+  } else {
+    fallbackCopy(text, done);
+  }
+}
+
+function fallbackCopy(text, done){
+  const ta = document.createElement('textarea');
+  ta.value = text; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); done(); } catch(e){ alert('Copia non riuscita'); }
+  document.body.removeChild(ta);
+}
+
+function copyFCTrackings(){
+  const q = document.getElementById('searchHome').value.toLowerCase();
+  const fcList = allTracks().filter(fc).filter(t => !q || t.code.toLowerCase().includes(q));
+  copyTrackings(fcList.map(t => t.code), 'copyFCBtn');
+}
+
+function copyDayTrackings(day){
+  const q = document.getElementById('searchHome').value.toLowerCase();
+  const list = data.main.filter(t => t.code.toLowerCase().includes(q)).filter(t => dayOf(t) === day);
+  copyTrackings(list.map(t => t.code), `copyDay${day}Btn`);
+}
+
+function copyHubTrackings(hubId){
+  const hub = data.hubs.find(h => h.id === hubId);
+  if(!hub) return;
+  copyTrackings(hub.tracks.map(t => t.code), `copyHub${hubId}Btn`);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// === SLACK NOTIFICATIONS ===
+// ═══════════════════════════════════════════════════════════════════
+const SLACK_STATUSES = [
+  {key:'mandare_fc', label:'🚨 Mandare FC'},
+  {key:'Rifiutato', label:'❌ Rifiutato'},
+  {key:'Rimborsato', label:'💰 Rimborsato'},
+  {key:'Consegnato', label:'✅ Consegnato'},
+  {key:'Reindirizzo', label:'↪️ Reindirizzo'},
+  {key:'Rischedulato', label:'📅 Rischedulato'}
+];
+
+async function openSlackModal(){
+  const {data: s, error} = await sb.from('notification_settings').select('*').eq('id',1).maybeSingle();
+  if(error){ alert('Errore caricamento settings: '+error.message); return; }
+
+  document.getElementById('slackWebhook').value = s?.slack_webhook_url || '';
+  document.getElementById('slackTimes').value = (s?.schedule_times||['09:00','14:00','18:00']).join('\n');
+  document.getElementById('slackEnabled').checked = !!s?.enabled;
+  document.getElementById('slackAlertEnabled').checked = !!s?.alert_fc_enabled;
+  document.getElementById('slackAlertThreshold').value = s?.alert_fc_threshold_hours || 72;
+  document.getElementById('slackAlertInterval').value = s?.alert_check_interval_min || 15;
+
+  const included = new Set(s?.include_statuses || SLACK_STATUSES.map(x => x.key));
+  document.getElementById('slackStatuses').innerHTML = SLACK_STATUSES.map(st => `
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+      <input type="checkbox" class="slack-st" value="${st.key}" ${included.has(st.key)?'checked':''} style="width:16px;height:16px">
+      <span>${st.label}</span>
+    </label>`).join('');
+
+  document.getElementById('slackLastSent').textContent = s?.last_sent_at
+    ? '📤 Ultimo invio: ' + new Date(s.last_sent_at).toLocaleString('it-IT')
+    : 'Nessun invio finora.';
+
+  document.getElementById('slackModal').classList.add('open');
+}
+
+async function saveSlackSettings(){
+  const times = document.getElementById('slackTimes').value
+    .split('\n').map(x => x.trim()).filter(x => /^\d{2}:\d{2}$/.test(x));
+  const statuses = Array.from(document.querySelectorAll('.slack-st:checked')).map(x => x.value);
+
+  const payload = {
+    slack_webhook_url: document.getElementById('slackWebhook').value.trim() || null,
+    schedule_times: times,
+    include_statuses: statuses,
+    enabled: document.getElementById('slackEnabled').checked,
+    alert_fc_enabled: document.getElementById('slackAlertEnabled').checked,
+    alert_fc_threshold_hours: parseInt(document.getElementById('slackAlertThreshold').value, 10) || 72,
+    updated_at: new Date().toISOString()
+  };
+
+  const {error} = await sb.from('notification_settings').update(payload).eq('id',1);
+  if(error){ alert('Errore: '+error.message); return; }
+  alert('✓ Impostazioni salvate.');
+  closeModal('slackModal');
+}
+
+async function testSlackNow(){
+  if(!confirm('Inviare un recap di test ora su Slack?')) return;
+  const {data: res, error} = await sb.functions.invoke('slack-recap', {
+    body: { mode: 'recap' },
+    headers: {'x-trigger': 'manual'}
+  });
+  if(error){ alert('Errore invocazione: '+error.message); return; }
+  alert(res?.success
+    ? `✓ Test recap inviato (${res.totalCount} tracking).`
+    : `⚠ Invio non riuscito. Response: ${JSON.stringify(res)}`);
+}
+
+async function testAlertNow(){
+  if(!confirm('Forza invio alert per tutti i tracking oltre soglia?\n\nATTENZIONE: resetta fc_notified_at per il test.')) return;
+  const {error: e1} = await sb.from('trackings').update({fc_notified_at: null}).not('fc_notified_at','is',null);
+  if(e1){ alert('Errore reset: '+e1.message); return; }
+  const {data: res, error} = await sb.functions.invoke('slack-recap', {
+    body: { mode: 'alert_fc' },
+    headers: {'x-trigger': 'manual'}
+  });
+  if(error){ alert('Errore invocazione: '+error.message); return; }
+  alert(res?.new_alerts
+    ? `✓ Alert inviato per ${res.new_alerts} tracking.`
+    : 'Nessun tracking oltre soglia.');
+}
+
+async function sendHubSlackRecap(hubId){
+  const hub = data.hubs.find(h => h.id === hubId);
+  if(!hub) return;
+  if(!confirm(`Inviare recap Slack per "${hub.name}" (${hub.tracks.length} tracking)?`)) return;
+
+  const {data: res, error} = await sb.functions.invoke('slack-recap', {
+    body: { mode: 'hub_recap', hub_id: hubId },
+    headers: {'x-trigger': 'manual'}
+  });
+  if(error){ alert('Errore: '+error.message); return; }
+  alert(res?.success
+    ? `✓ Recap inviato (${res.totalCount} tracking).`
+    : `⚠ Invio non riuscito. Response: ${JSON.stringify(res)}`);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// === CLEANUP DATABASE ===
+// ═══════════════════════════════════════════════════════════════════
+async function openCleanupModal(){
+  document.getElementById('cleanupModal').classList.add('open');
+  document.getElementById('cleanupInfo').innerHTML = '<div style="color:#9babca">Caricamento info...</div>';
+
+  await loadRetention();
+  document.getElementById('retentionSelect').value = String(retentionDays);
+
+  await refreshCleanupInfo();
+}
+
+async function refreshCleanupInfo(){
+  const {data: log, error} = await sb.from('cleanup_log').select('*').order('run_at',{ascending:false}).limit(1);
+
+  const cutoff = Date.now() - (retentionDays * 24 * 3600 * 1000);
+  const eligible = allTracks().filter(t => t.created < cutoff).length;
+  const total = allTracks().length;
+
+  let lastRunHtml = '';
+  if(error){
+    lastRunHtml = '<div style="color:#ffbf5b">⚠ Tabella cleanup_log non trovata. Esegui lo script SQL su Supabase.</div>';
+  } else if(log && log.length){
+    const last = log[0];
+    const d = new Date(last.run_at);
+    const ret = last.retention_days ? ` (${last.retention_days}gg)` : '';
+    lastRunHtml = `
+      <div><b>Ultima pulizia:</b> ${d.toLocaleString('it-IT')}${ret}</div>
+      <div><b>Record eliminati:</b> ${last.deleted_count} (${last.triggered_by === 'auto' ? 'automatica' : 'manuale'})</div>`;
+  } else {
+    lastRunHtml = '<div style="color:#9babca">Nessuna pulizia eseguita finora.</div>';
+  }
+
+  document.getElementById('cleanupInfo').innerHTML = `
+    ${lastRunHtml}
+    <hr style="border:0;border-top:1px solid #ffffff18;margin:10px 0">
+    <div><b>Periodo attuale:</b> ${retentionDays} giorni</div>
+    <div><b>Tracking totali:</b> ${total}</div>
+    <div style="color:${eligible?'#ff9aab':'#35d8bd'}"><b>Eliminabili ora:</b> ${eligible}</div>
+  `;
+}
+
+async function onRetentionChange(){
+  const newValue = parseInt(document.getElementById('retentionSelect').value, 10);
+  if(!newValue) return;
+  retentionDays = newValue;
+  const {error} = await sb.from('app_settings').upsert({
+    key: 'retention_days',
+    value: String(newValue),
+    updated_at: new Date().toISOString()
+  }, {onConflict: 'key'});
+  if(error){ alert('Errore salvataggio setting: '+error.message); return; }
+  await refreshCleanupInfo();
+}
+
+async function runManualCleanup(){
+  const cutoff = Date.now() - (retentionDays * 24 * 3600 * 1000);
+  const eligible = allTracks().filter(t => t.created < cutoff);
+  if(!eligible.length){
+    alert(`Nessun tracking da eliminare (nessuno supera i ${retentionDays} giorni).`);
+    return;
+  }
+  if(!confirm(`Eliminare ${eligible.length} tracking più vecchi di ${retentionDays} giorni?\n\nI Locker/Hub NON verranno toccati.`)) return;
+  const ids = eligible.map(t => t.id);
+  const {error: delErr} = await sb.from('trackings').delete().in('id', ids);
+  if(delErr){ alert('Errore eliminazione: '+delErr.message); return; }
+  await sb.from('cleanup_log').insert({
+    deleted_count: eligible.length,
+    retention_days: retentionDays,
+    triggered_by: 'manual'
+  });
+  for(const list of [data.main, ...data.hubs.map(h => h.tracks)]){
+    for(let i = list.length - 1; i >= 0; i--){
+      if(ids.includes(list[i].id)) list.splice(i,1);
+    }
+  }
+  alert(`✓ ${eligible.length} tracking eliminati correttamente.`);
+  closeModal('cleanupModal');
+  render();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// === MODALS & CRUD ===
+// ═══════════════════════════════════════════════════════════════════
+function openBulkTrackingModal(target = 'main'){
+  currentTarget = target;
+  document.getElementById('bulkTrackingList').value = '';
+  document.getElementById('bulkTrackingTarget').textContent = target === 'main'
+    ? 'I tracking verranno aggiunti alla gestione principale (HELD).'
+    : `I tracking verranno aggiunti a ${data.hubs.find(h => h.id === target)?.name || 'punto operativo'}.`;
+  document.getElementById('bulkTrackingModal').classList.add('open');
+  setTimeout(() => document.getElementById('bulkTrackingList').focus(), 50);
+}
+
+async function addBulkTracking(){
+  const raw = document.getElementById('bulkTrackingList').value.trim();
+  if(!raw) return alert('Inserisci almeno un Tracking ID.');
+  const existing = new Set(allTracks().map(t => String(t.code).trim().toUpperCase()));
+  const seen = new Set();
+  const codes = raw.split(/[\s,;]+/).map(x => x.trim()).filter(Boolean).filter(code => {
+    const key = code.toUpperCase();
+    if(existing.has(key) || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  if(!codes.length) return alert('Nessun nuovo Tracking ID da inserire.');
+  const timestamp = now();
+  const payload = codes.map((code, index) => ({
+    code,
+    status: 'In attesa',
+    contacted: '0',
+    scheduled: '',
+    swa: '0',
+    note: '',
+    created: timestamp - index,
+    hub_id: currentTarget === 'main' ? null : currentTarget
+  }));
+  const { data: inserted, error } = await sb.from('trackings').insert(payload).select();
+  if(error) return alert('Errore inserimento: ' + error.message);
+  if(currentTarget === 'main') data.main.unshift(...inserted);
+  else {
+    const hub = data.hubs.find(h => h.id === currentTarget);
+    if(hub) hub.tracks.unshift(...inserted);
+  }
+  closeModal('bulkTrackingModal');
+  render();
+  alert(inserted.length + ' tracking inseriti correttamente.');
+}
+
+function openTrackingModal(target){
+  currentTarget = target;
+  document.getElementById('newTracking').value = '';
+  document.getElementById('trackingTarget').textContent = target === 'main'
+    ? 'Il tracking verrà aggiunto alla gestione principale.'
+    : `Il tracking verrà aggiunto a ${data.hubs.find(h => h.id === target).name}.`;
+  document.getElementById('trackingModal').classList.add('open');
+  setTimeout(() => document.getElementById('newTracking').focus(), 50);
+}
+
+async function addTracking(){
+  const code = document.getElementById('newTracking').value.trim();
+  if(!code) return alert('Inserisci un Tracking ID.');
+  const payload = {
+    code, status: 'In attesa', contacted: '0', scheduled: '', swa: '0', note: '',
+    created: now(),
+    hub_id: currentTarget === 'main' ? null : currentTarget
+  };
+  const {data: inserted, error} = await sb.from('trackings').insert(payload).select().single();
+  if(error){ alert('Errore inserimento: '+error.message); return; }
+  if(currentTarget === 'main') data.main.unshift(inserted);
+  else data.hubs.find(h => h.id === currentTarget).tracks.unshift(inserted);
+  closeModal('trackingModal');
+  render();
+}
+
+function openNote(id){
+  const t = findT(id);
+  noteTarget = id;
+  document.getElementById('noteTracking').textContent = t.code;
+  const d = parseNote(t.note);
+  document.getElementById('noteName').value = d.name || '';
+  document.getElementById('notePhone').value = d.phone || '';
+  document.getElementById('noteAddress').value = d.address || '';
+  document.getElementById('noteAltAddress').value = d.altAddress || '';
+  document.getElementById('noteText').value = d.text || '';
+  document.getElementById('noteModal').classList.add('open');
+}
+
+async function saveNote(){
+  const payload = {
+    name: document.getElementById('noteName').value.trim(),
+    phone: document.getElementById('notePhone').value.trim(),
+    address: document.getElementById('noteAddress').value.trim(),
+    altAddress: document.getElementById('noteAltAddress').value.trim(),
+    text: document.getElementById('noteText').value.trim()
+  };
+  const note = JSON.stringify(payload);
+  const {error} = await sb.from('trackings').update({note}).eq('id', noteTarget);
+  if(error){ alert('Errore'); return; }
+  findT(noteTarget).note = note;
+  closeModal('noteModal');
+  render();
+}
+
+function openHubModal(){
+  document.getElementById('hubName').value = '';
+  document.getElementById('hubStatus').value = 'online';
+  document.getElementById('hubModal').classList.add('open');
+}
+
+async function addHub(){
+  const name = document.getElementById('hubName').value.trim();
+  if(!name) return alert('Inserisci un nome.');
+  const payload = {
+    type: document.getElementById('hubType').value,
+    name,
+    status: document.getElementById('hubStatus').value || 'online'
+  };
+  const {data: inserted, error} = await sb.from('hubs').insert(payload).select().single();
+  if(error){ alert('Errore: '+error.message); return; }
+  data.hubs.push({...inserted, status: inserted.status||'online', rescheduled: inserted.rescheduled||'', tracks: []});
+  closeModal('hubModal');
+  render();
+}
+
+async function renameHub(id, v){
+  const name = v.trim() || 'Senza nome';
+  const {error} = await sb.from('hubs').update({name}).eq('id', id);
+  if(error){ alert('Errore'); return; }
+  data.hubs.find(h => h.id === id).name = name;
+}
+
+async function deleteHub(id){
+  if(!confirm('Eliminare Locker/Hub e tutti i suoi tracking?')) return;
+  const {error} = await sb.from('hubs').delete().eq('id', id);
+  if(error){ alert('Errore'); return; }
+  data.hubs = data.hubs.filter(h => h.id !== id);
+  render();
+}
+
+function csvCell(v){return '"'+String(v??'').replaceAll('"','""')+'"'}
+
+function exportCSV(){
+  const rows = [['Tracking','Area','Tipo punto','Punto operativo','Day attuale','Inserito il','Stato','Contattato','Nota']];
+  data.main.forEach(t => rows.push([t.code,'Home','','',dayOf(t),new Date(t.created).toLocaleString('it-IT'),t.status,t.contacted,t.note]));
+  data.hubs.forEach(h => h.tracks.forEach(t => rows.push([t.code,'Locker/Hub',h.type,h.name,dayOf(t),new Date(t.created).toLocaleString('it-IT'),t.status,t.contacted,t.note])));
+  const csv = '\ufeff'+rows.map(r => r.map(csvCell).join(';')).join('\r\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'RTSCage_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 500);
+}
+
+// === TABS ===
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tab,.page').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  document.getElementById(b.dataset.page).classList.add('active');
+});
+document.getElementById('searchHome').oninput = renderHome;
+
+// === REALTIME SYNC ===
+sb.channel('rtscage-sync')
+  .on('postgres_changes', {event:'*', schema:'public', table:'trackings'}, async () => { await loadData(); render(); })
+  .on('postgres_changes', {event:'*', schema:'public', table:'hubs'}, async () => { await loadData(); render(); })
+  .subscribe();
+
+// === BOOT ===
+(async () => {
+  await loadData();
+  await loadRetention();
+  render();
+  setInterval(render, 60000);
+})();
+</script>
+</body>
+</html>
