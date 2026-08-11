@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RTSCage — by: effracas</title>
+<title>RTSCage — Tracking Control</title>
 <script src="https://d1hilrkz3ka39e.cloudfront.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap');
@@ -137,6 +137,37 @@ input[type=date]{width:116px;color-scheme:dark}
 .track-table tr.has-alt-address{background:#43213a22;box-shadow:inset 3px 0 0 #ff9aab}
 .track-table input[type=checkbox]{width:16px;height:16px;accent-color:#6f8cff;cursor:pointer}
 .hub-head{position:relative}
+
+/* === LEGENDA FILTRI === */
+.status-legend{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px;padding:12px 16px;background:linear-gradient(145deg,rgba(31,52,93,.6),rgba(11,24,47,.5));border:1px solid var(--line);border-radius:12px;align-items:center}
+.status-legend-title{font-size:11px;font-weight:700;color:#8999b8;text-transform:uppercase;letter-spacing:.6px;margin-right:6px;user-select:none}
+.status-legend-group{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding-right:10px;position:relative}
+.status-legend-group + .status-legend-group{border-left:1px solid #ffffff10;padding-left:10px}
+.status-legend-item{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;background:#0b1a34aa;border:1.5px solid transparent;cursor:pointer;transition:transform .18s,border-color .18s,background .18s;user-select:none}
+.status-legend-item:hover{transform:translateY(-1px);background:#0b1a34}
+.status-legend-item.active{border-color:currentColor;background:#0b1a34;box-shadow:0 0 0 3px currentColor22,0 6px 16px #02071366}
+.status-legend-item[data-color]{color:var(--item-color)}
+.status-legend-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;box-shadow:0 0 8px currentColor}
+.status-legend-icon{font-size:13px;line-height:1;filter:drop-shadow(0 0 4px currentColor)}
+.status-legend-label{font-size:12px;font-weight:650;color:#d7e1ff}
+.status-legend-item.active .status-legend-label{color:#fff}
+.status-legend-count{font:800 11px Outfit,sans-serif;color:#cdd8ff;background:#233a6c;padding:2px 7px;border-radius:10px;min-width:22px;text-align:center;letter-spacing:-.3px}
+.status-legend-item.active .status-legend-count{background:currentColor;color:#0b1a34;filter:brightness(1.3)}
+.status-legend-info{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:11px;color:#aebcda;font-weight:600}
+.status-legend-info b{color:#fff}
+.status-legend-reset{border:1px solid #ff627d40;background:#43213a;color:#ff9aab;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;transition:.18s}
+.status-legend-reset:hover{background:#5c2c47;border-color:#ff627d80}
+@media(max-width:650px){
+  .status-legend{padding:10px 12px;gap:6px}
+  .status-legend-title{width:100%;margin-bottom:4px;margin-right:0}
+  .status-legend-group{padding-right:0}
+  .status-legend-group + .status-legend-group{border-left:0;padding-left:0;border-top:1px solid #ffffff10;padding-top:6px;width:100%}
+  .status-legend-item{padding:4px 8px}
+  .status-legend-label{font-size:11px}
+  .status-legend-info{width:100%;justify-content:space-between;margin-top:4px}
+}
+
+/* === HUB SUMMARY === */
 .hub-summary{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:20px}
 .hub-summary-card{background:linear-gradient(145deg,rgba(31,52,93,.86),rgba(11,24,47,.78));border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative;overflow:hidden}
 .hub-summary-card:hover{transform:translateY(-3px);border-color:#8ba1ff70;box-shadow:0 15px 35px #02071380}
@@ -242,6 +273,7 @@ input[type=date]{width:116px;color-scheme:dark}
       </div>
       <button class="button" onclick="openHubModal()">+ Inserisci Locker o Hub</button>
     </div>
+    <div id="statusLegend" class="status-legend"></div>
     <div id="hubsSummary" class="hub-summary"></div>
     <div id="hubs" class="hub-grid"></div>
   </section>
@@ -475,7 +507,7 @@ input[type=date]{width:116px;color-scheme:dark}
   <button class="button secondary" onclick="clearSelection()" style="padding:8px 14px;font-size:12px">Annulla</button>
 </div>
 
-<div class="app-footer">RTSCage <b>v2.6</b> · by <b>effracas</b></div>
+<div class="app-footer">RTSCage <b>v2.7</b> · by <b>effracas</b></div>
 <div class="sync-badge"><span class="dot-live"></span><span id="syncStatus">Sync attivo</span></div>
 
 <script>
@@ -493,6 +525,9 @@ let data = {main:[], hubs:[]};
 let currentTarget = 'main', noteTarget = null;
 let selectedIds = new Set();
 let retentionDays = 90;
+
+// ✅ Stato dei filtri della pagina Locker/Hub
+let hubFilters = { status: null, type: null };
 
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const setSync = (txt) => { const el=document.getElementById('syncStatus'); if(el) el.textContent = txt; };
@@ -526,7 +561,6 @@ function closeModal(id){document.getElementById(id).classList.remove('open')}
 function now(){return Date.now()}
 function ageHours(t){return Math.max(0,(now()-t.created)/36e5)}
 function dayOf(t){return Math.min(4,Math.floor(ageHours(t)/24)+1)}
-// ✅ FC: solo stati speciali (Rifiutato/Rimborsato/Consegnato) — cross-position
 function fc(t){return ['Rifiutato','Rimborsato','Consegnato'].includes(t.status)}
 function fmtAge(t){let h=Math.floor(ageHours(t));return h<24?`${h}h fa`:`${Math.floor(h/24)}g fa`}
 function opts(list,value){return list.map(x=>`<option ${x==value?'selected':''}>${x}</option>`).join('')}
@@ -570,6 +604,101 @@ function openHubStatusMenu(id, ev){
 }
 document.addEventListener('click', () => closeAllStatusMenus());
 
+// ═══════════════════════════════════════════════════════════════════
+// FILTRI HUB
+// ═══════════════════════════════════════════════════════════════════
+function getFilteredHubs(){
+  return data.hubs.filter(h => {
+    if(hubFilters.status && (h.status||'online') !== hubFilters.status) return false;
+    if(hubFilters.type && h.type !== hubFilters.type) return false;
+    return true;
+  });
+}
+
+function toggleStatusFilter(key){
+  hubFilters.status = hubFilters.status === key ? null : key;
+  render();
+}
+
+function toggleTypeFilter(key){
+  hubFilters.type = hubFilters.type === key ? null : key;
+  render();
+}
+
+function resetHubFilters(){
+  hubFilters = { status: null, type: null };
+  render();
+}
+
+function renderStatusLegend(){
+  const container = document.getElementById('statusLegend');
+  if(!container) return;
+
+  const statusList = [
+    { key: 'online',   label: 'Online',   color: '#35d8bd', desc: 'Operativo, funzionante' },
+    { key: 'offline',  label: 'Offline',  color: '#ffbf5b', desc: 'Non operativo temporaneamente' },
+    { key: 'ferie',    label: 'Ferie',    color: '#6f8cff', desc: 'Chiuso per ferie' },
+    { key: 'dismesso', label: 'Dismesso', color: '#ff627d', desc: 'Chiuso definitivamente' }
+  ];
+
+  const typeList = [
+    { key: 'Locker', label: 'Locker', icon: '🔒', color: '#b8c9ff', desc: 'Punto di ritiro automatico' },
+    { key: 'Hub',    label: 'Hub',    icon: '🏢', color: '#75eee0', desc: 'Centro operativo' }
+  ];
+
+  const statusCounts = {};
+  statusList.forEach(s => {
+    statusCounts[s.key] = data.hubs.filter(h => (h.status||'online') === s.key).length;
+  });
+  const typeCounts = {};
+  typeList.forEach(t => {
+    typeCounts[t.key] = data.hubs.filter(h => h.type === t.key).length;
+  });
+
+  const total = data.hubs.length;
+  const filtered = getFilteredHubs().length;
+  const hasFilter = !!(hubFilters.status || hubFilters.type);
+
+  const statusItems = statusList.map(s => `
+    <div class="status-legend-item ${hubFilters.status===s.key?'active':''}"
+         data-color="${s.color}"
+         style="--item-color:${s.color};color:${s.color}"
+         title="${s.desc} — click per filtrare"
+         onclick="toggleStatusFilter('${s.key}')">
+      <span class="status-legend-dot" style="background:${s.color};color:${s.color}"></span>
+      <span class="status-legend-label">${s.label}</span>
+      <span class="status-legend-count">${statusCounts[s.key]}</span>
+    </div>
+  `).join('');
+
+  const typeItems = typeList.map(t => `
+    <div class="status-legend-item ${hubFilters.type===t.key?'active':''}"
+         data-color="${t.color}"
+         style="--item-color:${t.color};color:${t.color}"
+         title="${t.desc} — click per filtrare"
+         onclick="toggleTypeFilter('${t.key}')">
+      <span class="status-legend-icon">${t.icon}</span>
+      <span class="status-legend-label">${t.label}</span>
+      <span class="status-legend-count">${typeCounts[t.key]}</span>
+    </div>
+  `).join('');
+
+  const info = hasFilter
+    ? `<span class="status-legend-info">
+         <span>Mostrando <b>${filtered}</b> di <b>${total}</b></span>
+         <button class="status-legend-reset" onclick="resetHubFilters()">✕ Reset filtri</button>
+       </span>`
+    : `<span class="status-legend-info"><span>Totale: <b>${total}</b> punti</span></span>`;
+
+  container.innerHTML = `
+    <span class="status-legend-title">Stato</span>
+    <div class="status-legend-group">${statusItems}</div>
+    <span class="status-legend-title">Tipo</span>
+    <div class="status-legend-group">${typeItems}</div>
+    ${info}
+  `;
+}
+
 function trackingRow(t, container, compact=false){
   const id = esc(t.id);
   const scheduleControl = t.status==='Rischedulato'
@@ -583,7 +712,6 @@ function trackingRow(t, container, compact=false){
   const altClass = hasAltAddress(t) ? ' has-alt-address' : '';
   const selChecked = selectedIds.has(t.id) ? 'checked' : '';
 
-  // ✅ Badge origine (solo in modalità compact / sezione FC)
   let originBadge = '';
   if(compact){
     if(t.hub_id){
@@ -652,7 +780,6 @@ function renderHome(){
       <div class="day-head"><h3>Day ${d} <span style="font:500 11px 'DM Sans';color:#8999b8">— rilascia qui</span></h3>
       <div style="display:flex;align-items:center;gap:8px">${copyBtn}<span class="counter">${x.length}</span></div></div>${table(x,'main')}</section>`;
   }).join('');
-  // ✅ FC: TUTTI (main + hub) con stati Rifiutato/Rimborsato/Consegnato
   const fcList = allTracks().filter(fc).filter(t => !q || t.code.toLowerCase().includes(q));
   document.getElementById('fcTable').innerHTML = table(fcList, 'main', true);
   document.getElementById('fcCount').textContent = `${fcList.length} tracking`;
@@ -662,7 +789,6 @@ function renderHome(){
 function renderStats(){
   const a = allTracks();
   const counts = Object.fromEntries(STATUSES.map(s => [s, a.filter(t => t.status === s).length]));
-  // ✅ Mandare FC: TUTTI (main + hub) con stati speciali
   const alerts = allTracks().filter(fc).length;
   const noted = a.filter(t => t.note).length;
 
@@ -734,8 +860,13 @@ function goToLockerTab(){
 function renderHubsSummary(){
   const container = document.getElementById('hubsSummary');
   if(!container) return;
-  if(!data.hubs.length){ container.innerHTML = ''; return; }
-  container.innerHTML = data.hubs.map(h => {
+  const filteredHubs = getFilteredHubs();
+  if(!filteredHubs.length){
+    if(!data.hubs.length){ container.innerHTML = ''; return; }
+    container.innerHTML = `<div class="panel empty" style="grid-column:1/-1">Nessun hub corrisponde ai filtri applicati. <a href="#" onclick="resetHubFilters();return false;" style="color:#6f8cff;text-decoration:underline">Reset filtri</a></div>`;
+    return;
+  }
+  container.innerHTML = filteredHubs.map(h => {
     const st = h.status || 'online';
     const color = statusColor(st);
     const total = h.tracks.length;
@@ -779,7 +910,19 @@ function scrollToHub(hubId){
 }
 
 function renderHubs(){
-  document.getElementById('hubs').innerHTML = data.hubs.length ? data.hubs.map(h => {
+  const container = document.getElementById('hubs');
+  const filteredHubs = getFilteredHubs();
+
+  if(!data.hubs.length){
+    container.innerHTML = '<div class="panel empty">Nessun Locker o Hub inserito. Usa il pulsante in alto per creare il primo punto.</div>';
+    return;
+  }
+  if(!filteredHubs.length){
+    container.innerHTML = `<div class="panel empty">Nessun hub corrisponde ai filtri applicati. <a href="#" onclick="resetHubFilters();return false;" style="color:#6f8cff;text-decoration:underline">Reset filtri</a></div>`;
+    return;
+  }
+
+  container.innerHTML = filteredHubs.map(h => {
     const st = h.status || 'online';
     const color = statusColor(st);
     const dm = fmtDayMonth(h.rescheduled);
@@ -818,7 +961,7 @@ function renderHubs(){
         ${table(h.tracks, h.id)}
       </div>
     </section>`;
-  }).join('') : '<div class="panel empty">Nessun Locker o Hub inserito. Usa il pulsante in alto per creare il primo punto.</div>';
+  }).join('');
 }
 
 async function updateHubStatus(id, v){
@@ -849,6 +992,7 @@ async function updateHubChannel(id, channel){
 
 function render(){
   renderHome();
+  renderStatusLegend();
   renderHubsSummary();
   renderHubs();
   updateHubTabBadge();
@@ -881,7 +1025,6 @@ async function deleteT(id){
   render();
 }
 
-// === BULK SELECTION ===
 function toggleSelect(id, checked){
   if(checked) selectedIds.add(id);
   else selectedIds.delete(id);
@@ -945,7 +1088,6 @@ function updateBulkBar(){
   }
 }
 
-// === COPIA TRACKING ===
 function copyTrackings(codes, btnId){
   if(!codes || !codes.length){ alert('Nessun tracking da copiare.'); return; }
   const text = codes.join('\n');
@@ -974,7 +1116,6 @@ function fallbackCopy(text, done){
 
 function copyFCTrackings(){
   const q = document.getElementById('searchHome').value.toLowerCase();
-  // ✅ Coerente con renderHome: TUTTI (main + hub) con stati FC
   const fcList = allTracks().filter(fc).filter(t => !q || t.code.toLowerCase().includes(q));
   copyTrackings(fcList.map(t => t.code), 'copyFCBtn');
 }
