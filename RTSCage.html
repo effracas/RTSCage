@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RTSCage — Tracking Control</title>
+<title>RTSCage — by: effracas</title>
 <script src="https://d1hilrkz3ka39e.cloudfront.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap');
@@ -21,20 +21,14 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 8% 0%,#263d7
 .tabs{display:flex;background:#0b1932a8;border:1px solid var(--line);border-radius:13px;padding:4px;gap:3px;backdrop-filter:blur(12px)}
 .tab{border:0;background:transparent;padding:9px 15px;color:#aebbd3;border-radius:9px;font-weight:700;cursor:pointer;transition:.22s;position:relative}
 .tab.active{background:#253b69;color:#fff;box-shadow:0 4px 12px #03091d55}
-
-/* === TAB BADGE (notifiche) === */
 .tab-badge{display:none;position:absolute;top:2px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:linear-gradient(135deg,#ff627d,#e63b58);color:#fff;font:800 10px 'DM Sans',sans-serif;line-height:18px;text-align:center;box-shadow:0 3px 8px #ff627d55,0 0 0 2px #0b1932;letter-spacing:0;animation:badgePulse 2.5s ease-in-out infinite}
 .tab-badge.visible{display:inline-block}
 @keyframes badgePulse{0%,100%{transform:scale(1);box-shadow:0 3px 8px #ff627d55,0 0 0 2px #0b1932}50%{transform:scale(1.12);box-shadow:0 3px 12px #ff627d99,0 0 0 2px #0b1932}}
-.tab.active .tab-badge{box-shadow:0 3px 8px #ff627d55,0 0 0 2px #253b69}
-.tab.active .tab-badge{animation:none}
-
+.tab.active .tab-badge{box-shadow:0 3px 8px #ff627d55,0 0 0 2px #253b69;animation:none}
 .button{border:1px solid #91a4ff40;border-radius:10px;background:linear-gradient(135deg,#748dff,#5d6cef);color:#fff;padding:10px 14px;font-weight:750;cursor:pointer;box-shadow:0 8px 18px #334ecf42;transition:transform .2s,filter .2s}
 .button:hover{filter:brightness(1.08);transform:translateY(-2px)}
 .button.secondary{background:#1b3158;color:#c5d2ff;border-color:#536d9e60;box-shadow:none}
 .button.danger{background:#43213a;color:#ff9aab;box-shadow:none}
-
-/* === STATS (5 cards, responsive) === */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:20px}
 .card,.panel{background:linear-gradient(145deg,rgba(31,52,93,.86),rgba(11,24,47,.78));border:1px solid var(--line);box-shadow:var(--shadow);border-radius:17px;backdrop-filter:blur(14px)}
 .stat{padding:18px;position:relative;overflow:hidden;isolation:isolate;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
@@ -96,6 +90,10 @@ input[type=date]{width:116px;color-scheme:dark}
 .fc{margin-top:20px;border-left:4px solid var(--danger)}
 .fc h2{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .fc .badge{font:700 11px 'DM Sans';background:#502037;color:#ffafbd;padding:5px 9px;border-radius:20px}
+.origin-badge{display:inline-block;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:2px 6px;border-radius:4px;margin-top:4px}
+.origin-badge.held{background:#1b3158;color:#c5d2ff}
+.origin-badge.hub{background:#16494b;color:#75eee0}
+.origin-badge.locker{background:#233a6c;color:#b8c9ff}
 .empty{padding:30px 15px;color:#8595b2;text-align:center;font-size:12px}
 .hub-grid{display:grid;grid-template-columns:1fr;gap:16px}
 .hub-card{transition:transform .2s,border-color .2s}
@@ -103,6 +101,9 @@ input[type=date]{width:116px;color-scheme:dark}
 .type-pill{font-size:10px;text-transform:uppercase;font-weight:800;letter-spacing:.5px;border-radius:5px;padding:4px 7px;background:#233a6c;color:#b8c9ff}
 .type-pill.hub{background:#16494b;color:#75eee0}
 .hub-name{border:0;background:transparent;font:700 15px Outfit,sans-serif;color:var(--ink);outline:none;width:auto;min-width:100px;text-align:left;margin-left:0;flex:1}
+.hub-channel{max-width:130px;font-size:11px;padding:6px 8px;background:#0b1a34;border:1px solid #ffffff18;color:#cdd8ff;border-radius:8px;outline:none;transition:.2s}
+.hub-channel:focus{border-color:#6f8cff;box-shadow:0 0 0 2px #6f8cff33}
+.hub-channel::placeholder{color:#5d6e8f}
 .hub-reschedule{display:flex;align-items:center;gap:8px;margin-left:auto;color:#aebcda;font-size:11px;font-weight:700;white-space:nowrap}
 .hub-reschedule .reschedule-label{font-size:12px;color:#cdd8ff;min-width:28px;text-align:right}
 .hub-reschedule input[type=date]{width:28px;height:28px;padding:0;border:1px solid #ffffff18;background:#0b1a34;border-radius:8px;color:transparent;cursor:pointer;position:relative}
@@ -136,8 +137,6 @@ input[type=date]{width:116px;color-scheme:dark}
 .track-table tr.has-alt-address{background:#43213a22;box-shadow:inset 3px 0 0 #ff9aab}
 .track-table input[type=checkbox]{width:16px;height:16px;accent-color:#6f8cff;cursor:pointer}
 .hub-head{position:relative}
-
-/* === HUB SUMMARY CARDS === */
 .hub-summary{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:20px}
 .hub-summary-card{background:linear-gradient(145deg,rgba(31,52,93,.86),rgba(11,24,47,.78));border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative;overflow:hidden}
 .hub-summary-card:hover{transform:translateY(-3px);border-color:#8ba1ff70;box-shadow:0 15px 35px #02071380}
@@ -155,14 +154,13 @@ input[type=date]{width:116px;color-scheme:dark}
 .hub-summary-stat.fc{background:#43213a55}
 .hub-summary-resched{font-size:10px;color:#aebcda;margin-top:8px;padding-top:8px;border-top:1px solid #ffffff10}
 .hub-summary-resched b{color:#ffd070;font-weight:700}
-
 @keyframes hubHighlight{0%,100%{box-shadow:0 25px 60px #02071388}30%,70%{box-shadow:0 0 0 3px #6f8cff,0 25px 60px #02071388}}
 .hub-card.highlight{animation:hubHighlight 1.8s ease}
-
-/* === FOOTER === */
+.slack-mode-toggle{background:#0b1a34;padding:12px;border-radius:10px;border:1px solid #ffffff18;margin-bottom:12px}
+.slack-mode-toggle label{display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:6px}
+.slack-mode-toggle .hint{margin:0}
 .app-footer{position:fixed;bottom:16px;left:16px;font-size:11px;color:#7d8caa;background:#0b1a34cc;border:1px solid var(--line);padding:7px 12px;border-radius:20px;backdrop-filter:blur(10px);z-index:10;font-weight:600;letter-spacing:.2px;pointer-events:none;user-select:none}
 .app-footer b{color:#c5d2ff;font-weight:700}
-
 @media(max-width:1050px){.charts{grid-template-columns:1fr}.hub-grid{grid-template-columns:1fr}}
 @media(max-width:650px){
   .app{padding:16px;padding-bottom:70px}
@@ -182,6 +180,7 @@ input[type=date]{width:116px;color-scheme:dark}
   .hub-summary{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
   .hub-summary-card{padding:11px}
   .app-footer{font-size:10px;padding:6px 10px;left:10px;bottom:10px}
+  .hub-channel{max-width:100px}
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
@@ -190,8 +189,8 @@ input[type=date]{width:116px;color-scheme:dark}
 <main class="app">
   <header class="top">
     <div class="brand">
-      <div class="logo">RT</div>
-      <div><h1>RTSCage</h1><span>Tracking & Locker Control</span></div>
+      <div class="logo">📦</div>
+      <div><h1>RTSCage</h1></div>
     </div>
     <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
       <button class="button secondary" onclick="exportCSV()">⇩ Esporta CSV</button>
@@ -240,7 +239,6 @@ input[type=date]{width:116px;color-scheme:dark}
     <div class="toolbar">
       <div>
         <h2>Locker / Hub</h2>
-        <div class="sub">Gestisci tracking e appuntamenti per ogni punto operativo.</div>
       </div>
       <button class="button" onclick="openHubModal()">+ Inserisci Locker o Hub</button>
     </div>
@@ -250,7 +248,6 @@ input[type=date]{width:116px;color-scheme:dark}
 </main>
 
 <!-- ═══════════ MODALS ═══════════ -->
-
 <div id="trackingModal" class="modal">
   <div class="modal-box">
     <h3>Nuovo tracking</h3>
@@ -333,6 +330,11 @@ input[type=date]{width:116px;color-scheme:dark}
         <option value="dismesso">Dismesso</option>
       </select>
     </div>
+    <div class="field">
+      <label>Canale Slack dedicato (opzionale)</label>
+      <input id="hubChannel" placeholder="#nome-canale o C0123ABCD">
+      <p class="hint">Se vuoto, userà il canale hub di default.</p>
+    </div>
     <div class="modal-actions">
       <button class="button secondary" onclick="closeModal('hubModal')">Annulla</button>
       <button class="button" onclick="addHub()">Crea</button>
@@ -341,17 +343,50 @@ input[type=date]{width:116px;color-scheme:dark}
 </div>
 
 <div id="slackModal" class="modal">
-  <div class="modal-box" style="width:min(520px,100%)">
+  <div class="modal-box" style="width:min(560px,100%)">
     <h3>🔔 Notifiche Slack</h3>
 
-    <div class="field">
-      <label>Slack Webhook URL</label>
-      <input id="slackWebhook" placeholder="https://hooks.slack.com/services/...">
+    <div class="slack-mode-toggle">
+      <label>
+        <input type="checkbox" id="slackUseBotApi" style="width:16px;height:16px" onchange="toggleSlackMode()">
+        <span><b>🤖 Usa Slack App (Bot API) — Multi-canale</b></span>
+      </label>
+      <p class="hint">Attiva per usare Bot Token con canali dedicati. Disattiva per usare il webhook legacy (single-channel).</p>
     </div>
+
+    <div id="slackBotSection" style="display:none">
+      <div class="field">
+        <label>🤖 Bot User OAuth Token</label>
+        <input id="slackBotToken" type="password" placeholder="xoxb-...">
+        <p class="hint">Da <b>OAuth & Permissions</b> della tua Slack App. Serve scope <code>chat:write</code> + <code>chat:write.public</code>.</p>
+      </div>
+      <div class="field">
+        <label>📢 Canale recap schedulati</label>
+        <input id="slackChannelRecap" placeholder="#logistica o C0123ABCD">
+      </div>
+      <div class="field">
+        <label>⏰ Canale aging alert</label>
+        <input id="slackChannelAlerts" placeholder="#urgenze">
+      </div>
+      <div class="field">
+        <label>🏢 Canale default recap hub</label>
+        <input id="slackChannelHubDefault" placeholder="#hub-recap">
+        <p class="hint">Override per singolo hub configurabile nella sua card.</p>
+      </div>
+    </div>
+
+    <div id="slackWebhookSection">
+      <div class="field">
+        <label>🔗 Webhook URL (legacy, single-channel)</label>
+        <input id="slackWebhook" placeholder="https://hooks.slack.com/services/...">
+      </div>
+    </div>
+
+    <hr style="border:0;border-top:1px solid #ffffff18;margin:16px 0">
 
     <div class="field">
       <label>📅 Orari recap (uno per riga, formato HH:MM)</label>
-      <textarea id="slackTimes" placeholder="09:00&#10;14:00&#10;18:00" style="min-height:80px"></textarea>
+      <textarea id="slackTimes" placeholder="09:00&#10;14:00&#10;18:00" style="min-height:70px"></textarea>
     </div>
 
     <div class="field">
@@ -369,7 +404,7 @@ input[type=date]{width:116px;color-scheme:dark}
     <div class="field" style="border-top:1px solid #ffffff18;padding-top:14px;margin-top:14px">
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:8px">
         <input type="checkbox" id="slackAlertEnabled" style="width:16px;height:16px">
-        <span><b>🚨 Alert immediato oltre soglia</b></span>
+        <span><b>⏰ Aging alert (oltre soglia)</b></span>
       </label>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
         <div>
@@ -381,14 +416,14 @@ input[type=date]{width:116px;color-scheme:dark}
           <input id="slackAlertInterval" type="number" value="15" disabled title="Modificabile dal cron SQL">
         </div>
       </div>
-      <p class="hint" style="margin-top:6px">Notifica una sola volta per tracking. Reset via SQL: <code>UPDATE trackings SET fc_notified_at = NULL</code></p>
+      <p class="hint" style="margin-top:6px">Notifica una sola volta per tracking oltre la soglia. Reset via SQL: <code>UPDATE trackings SET fc_notified_at = NULL</code></p>
     </div>
 
     <div id="slackLastSent" class="hint"></div>
 
     <div class="modal-actions">
       <button class="button secondary" onclick="closeModal('slackModal')">Chiudi</button>
-      <button class="button secondary" onclick="testAlertNow()">🚨 Test alert</button>
+      <button class="button secondary" onclick="testAlertNow()">⏰ Test aging</button>
       <button class="button secondary" onclick="testSlackNow()">🧪 Test recap</button>
       <button class="button" onclick="saveSlackSettings()">Salva</button>
     </div>
@@ -440,7 +475,7 @@ input[type=date]{width:116px;color-scheme:dark}
   <button class="button secondary" onclick="clearSelection()" style="padding:8px 14px;font-size:12px">Annulla</button>
 </div>
 
-<div class="app-footer">RTSCage <b>v2.3</b> · by <b>effracas</b></div>
+<div class="app-footer">RTSCage <b>v2.6</b> · by <b>effracas</b></div>
 <div class="sync-badge"><span class="dot-live"></span><span id="syncStatus">Sync attivo</span></div>
 
 <script>
@@ -474,6 +509,7 @@ async function loadData(){
     ...h,
     status: h.status || 'online',
     rescheduled: h.rescheduled || '',
+    slack_channel: h.slack_channel || '',
     tracks: (tracks||[]).filter(t => t.hub_id === h.id)
   }));
   setSync('Sync attivo');
@@ -490,7 +526,8 @@ function closeModal(id){document.getElementById(id).classList.remove('open')}
 function now(){return Date.now()}
 function ageHours(t){return Math.max(0,(now()-t.created)/36e5)}
 function dayOf(t){return Math.min(4,Math.floor(ageHours(t)/24)+1)}
-function fc(t){return ageHours(t)>=72||['Rifiutato','Rimborsato','Consegnato'].includes(t.status)}
+// ✅ FC: solo stati speciali (Rifiutato/Rimborsato/Consegnato) — cross-position
+function fc(t){return ['Rifiutato','Rimborsato','Consegnato'].includes(t.status)}
 function fmtAge(t){let h=Math.floor(ageHours(t));return h<24?`${h}h fa`:`${Math.floor(h/24)}g fa`}
 function opts(list,value){return list.map(x=>`<option ${x==value?'selected':''}>${x}</option>`).join('')}
 
@@ -545,11 +582,27 @@ function trackingRow(t, container, compact=false){
   const hasNote = !!(noteData.text || noteData.name || noteData.phone || noteData.address || noteData.altAddress || (typeof t.note === 'string' && t.note && !t.note.startsWith('{')));
   const altClass = hasAltAddress(t) ? ' has-alt-address' : '';
   const selChecked = selectedIds.has(t.id) ? 'checked' : '';
+
+  // ✅ Badge origine (solo in modalità compact / sezione FC)
+  let originBadge = '';
+  if(compact){
+    if(t.hub_id){
+      const hub = data.hubs.find(h => h.id === t.hub_id);
+      if(hub){
+        const cls = hub.type === 'Hub' ? 'hub' : 'locker';
+        const icon = hub.type === 'Hub' ? '🏢' : '🔒';
+        originBadge = `<div class="origin-badge ${cls}" title="Da ${esc(hub.name)}">${icon} ${esc(hub.name)}</div>`;
+      }
+    } else {
+      originBadge = `<div class="origin-badge held" title="HELD principale">🏠 HELD</div>`;
+    }
+  }
+
   return `<tr class="${altClass.trim()}" draggable="true" ondragstart="dragStart(event,'${id}')" ondragend="dragEnd(event)">
     <td><input type="checkbox" class="row-select" ${selChecked} onchange="toggleSelect('${id}',this.checked)" onclick="event.stopPropagation()" title="Seleziona"></td>
     <td><span class="drag-handle" title="Trascina in un altro Day">⠿</span>
       <span class="tracking">${esc(t.code)}</span>
-      <div class="age">${fmtAge(t)} · Day ${dayOf(t)}</div>${scheduleControl}</td>
+      <div class="age">${fmtAge(t)} · Day ${dayOf(t)}</div>${scheduleControl}${originBadge}</td>
     <td><select onchange="updateT('${id}','status',this.value)">${opts(STATUSES,t.status)}</select></td>
     <td><select onchange="updateT('${id}','contacted',this.value)">${opts(['0','1','2','3','4'],t.contacted)}</select></td>
     <td><input type="checkbox" ${swaChecked} onchange="updateT('${id}','swa',this.checked?'1':'0')" title="SWA"></td>
@@ -599,19 +652,20 @@ function renderHome(){
       <div class="day-head"><h3>Day ${d} <span style="font:500 11px 'DM Sans';color:#8999b8">— rilascia qui</span></h3>
       <div style="display:flex;align-items:center;gap:8px">${copyBtn}<span class="counter">${x.length}</span></div></div>${table(x,'main')}</section>`;
   }).join('');
+  // ✅ FC: TUTTI (main + hub) con stati Rifiutato/Rimborsato/Consegnato
   const fcList = allTracks().filter(fc).filter(t => !q || t.code.toLowerCase().includes(q));
   document.getElementById('fcTable').innerHTML = table(fcList, 'main', true);
   document.getElementById('fcCount').textContent = `${fcList.length} tracking`;
   renderStats();
 }
 
-// === STATS (5 card, con conteggio Locker/Hub) ===
 function renderStats(){
   const a = allTracks();
   const counts = Object.fromEntries(STATUSES.map(s => [s, a.filter(t => t.status === s).length]));
-  const alerts = a.filter(fc).length, noted = a.filter(t => t.note).length;
+  // ✅ Mandare FC: TUTTI (main + hub) con stati speciali
+  const alerts = allTracks().filter(fc).length;
+  const noted = a.filter(t => t.note).length;
 
-  // Conteggio Locker/Hub
   const lockerCount = data.hubs.filter(h => h.type === 'Locker').length;
   const hubCount = data.hubs.filter(h => h.type === 'Hub').length;
   const totalPoints = lockerCount + hubCount;
@@ -623,7 +677,7 @@ function renderStats(){
   document.getElementById('stats').innerHTML = `
     <div class="card stat"><div class="label">Pacchi totali</div><div class="value">${a.length}</div><div class="trend">In gestione ora</div></div>
     <div class="card stat"><div class="label">In attesa</div><div class="value">${counts['In attesa']}</div><div class="trend">Da monitorare</div></div>
-    <div class="card stat"><div class="label">Alert / Mandare FC</div><div class="value">${alerts}</div><div class="trend" style="color:${alerts?'#ef5466':'#13b8a6'}">${alerts?'Richiede intervento':'Nessuna criticità'}</div></div>
+    <div class="card stat"><div class="label">Mandare FC</div><div class="value">${alerts}</div><div class="trend" style="color:${alerts?'#ef5466':'#13b8a6'}">${alerts?'Richiede intervento':'Nessuna criticità'}</div></div>
     <div class="card stat"><div class="label">Note attive</div><div class="value">${noted}</div><div class="trend">Promemoria operativi</div></div>
     <div class="card stat clickable" onclick="goToLockerTab()" title="Vai a Locker/Hub">
       <div class="label">Locker / Hub</div>
@@ -648,25 +702,18 @@ function renderStats(){
     <span><i class="dot" style="background:#f3a941"></i>Altri stati: <b>${o}</b></span>`;
 }
 
-// === TAB BADGE NOTIFICHE HUB ===
 function updateHubTabBadge(){
   const badge = document.getElementById('hubTabBadge');
   if(!badge) return;
-
-  // Hub problematici: NON online OPPURE con almeno un tracking in "Mandare FC"
   const problematicHubs = data.hubs.filter(h => {
-    const isNotOnline = (h.status || 'online') !== 'online' && (h.status || 'online') !== 'ferie';
     const hasFC = h.tracks.some(fc);
     const isOffline = (h.status || 'online') === 'offline' || (h.status || 'online') === 'dismesso';
     return isOffline || hasFC;
   });
-
   const count = problematicHubs.length;
-
   if(count > 0){
     badge.textContent = count > 99 ? '99+' : count;
     badge.classList.add('visible');
-    // Tooltip con dettaglio
     const offlineNames = data.hubs.filter(h => (h.status||'online') === 'offline' || (h.status||'online') === 'dismesso').map(h => h.name);
     const fcNames = data.hubs.filter(h => h.tracks.some(fc)).map(h => `${h.name} (${h.tracks.filter(fc).length} FC)`);
     const parts = [];
@@ -684,22 +731,18 @@ function goToLockerTab(){
   if(tab) tab.click();
 }
 
-// === HUB SUMMARY CARDS ===
 function renderHubsSummary(){
   const container = document.getElementById('hubsSummary');
   if(!container) return;
   if(!data.hubs.length){ container.innerHTML = ''; return; }
-
   container.innerHTML = data.hubs.map(h => {
     const st = h.status || 'online';
     const color = statusColor(st);
     const total = h.tracks.length;
     const fcCount = h.tracks.filter(fc).length;
     const dm = fmtDayMonth(h.rescheduled);
-    const reschedHtml = dm
-      ? `<div class="hub-summary-resched">📅 Rischedulati al <b>${dm}</b></div>`
-      : '';
-
+    const reschedHtml = dm ? `<div class="hub-summary-resched">📅 Rischedulati al <b>${dm}</b></div>` : '';
+    const channelHtml = h.slack_channel ? `<div class="hub-summary-resched">📢 <b>${esc(h.slack_channel)}</b></div>` : '';
     return `<div class="hub-summary-card" onclick="scrollToHub('${h.id}')" title="Vai a ${esc(h.name)}">
       <div class="hub-summary-head">
         <span class="hub-summary-dot" style="background:${color};color:${color}" title="Stato: ${st}"></span>
@@ -717,6 +760,7 @@ function renderHubsSummary(){
         </div>
       </div>
       ${reschedHtml}
+      ${channelHtml}
     </div>`;
   }).join('');
 }
@@ -759,6 +803,7 @@ function renderHubs(){
         </span>
         <span class="type-pill ${h.type==='Hub'?'hub':''}">${h.type}</span>
         <input class="hub-name" value="${esc(h.name)}" onchange="renameHub('${h.id}',this.value)" style="color:${color};text-align:left;margin-left:0;width:auto;min-width:120px;flex:1">
+        <input class="hub-channel" type="text" placeholder="#canale" value="${esc(h.slack_channel||'')}" onchange="updateHubChannel('${h.id}',this.value)" title="Canale Slack dedicato (override default)">
         <span class="hub-reschedule">
           <span>Rischedulati al</span>
           <span class="reschedule-label">${dm || '—'}</span>
@@ -790,6 +835,15 @@ async function updateHubSchedule(id, v){
   if(error){ alert('Errore'); return; }
   const h = data.hubs.find(x => x.id === id);
   if(h) h.rescheduled = v || '';
+  render();
+}
+
+async function updateHubChannel(id, channel){
+  const val = channel.trim() || null;
+  const {error} = await sb.from('hubs').update({slack_channel: val}).eq('id', id);
+  if(error){ alert('Errore: '+error.message); return; }
+  const h = data.hubs.find(x => x.id === id);
+  if(h) h.slack_channel = val || '';
   render();
 }
 
@@ -920,6 +974,7 @@ function fallbackCopy(text, done){
 
 function copyFCTrackings(){
   const q = document.getElementById('searchHome').value.toLowerCase();
+  // ✅ Coerente con renderHome: TUTTI (main + hub) con stati FC
   const fcList = allTracks().filter(fc).filter(t => !q || t.code.toLowerCase().includes(q));
   copyTrackings(fcList.map(t => t.code), 'copyFCBtn');
 }
@@ -946,11 +1001,22 @@ const SLACK_STATUSES = [
   {key:'Rischedulato', label:'📅 Rischedulato'}
 ];
 
+function toggleSlackMode(){
+  const useBotApi = document.getElementById('slackUseBotApi').checked;
+  document.getElementById('slackBotSection').style.display = useBotApi ? 'block' : 'none';
+  document.getElementById('slackWebhookSection').style.display = useBotApi ? 'none' : 'block';
+}
+
 async function openSlackModal(){
   const {data: s, error} = await sb.from('notification_settings').select('*').eq('id',1).maybeSingle();
   if(error){ alert('Errore caricamento settings: '+error.message); return; }
 
   document.getElementById('slackWebhook').value = s?.slack_webhook_url || '';
+  document.getElementById('slackBotToken').value = s?.slack_bot_token || '';
+  document.getElementById('slackChannelRecap').value = s?.slack_channel_recap || '';
+  document.getElementById('slackChannelAlerts').value = s?.slack_channel_alerts || '';
+  document.getElementById('slackChannelHubDefault').value = s?.slack_channel_hub_default || '';
+  document.getElementById('slackUseBotApi').checked = !!s?.use_bot_api;
   document.getElementById('slackTimes').value = (s?.schedule_times||['09:00','14:00','18:00']).join('\n');
   document.getElementById('slackEnabled').checked = !!s?.enabled;
   document.getElementById('slackAlertEnabled').checked = !!s?.alert_fc_enabled;
@@ -968,6 +1034,7 @@ async function openSlackModal(){
     ? '📤 Ultimo invio: ' + new Date(s.last_sent_at).toLocaleString('it-IT')
     : 'Nessun invio finora.';
 
+  toggleSlackMode();
   document.getElementById('slackModal').classList.add('open');
 }
 
@@ -975,11 +1042,16 @@ async function saveSlackSettings(){
   const times = document.getElementById('slackTimes').value
     .split('\n').map(x => x.trim()).filter(x => /^\d{2}:\d{2}$/.test(x));
   const statuses = Array.from(document.querySelectorAll('.slack-st:checked')).map(x => x.value);
-  const webhookRaw = document.getElementById('slackWebhook').value.trim();
+  const useBotApi = document.getElementById('slackUseBotApi').checked;
 
   const payload = {
     id: 1,
-    slack_webhook_url: webhookRaw || null,
+    slack_webhook_url: document.getElementById('slackWebhook').value.trim() || null,
+    slack_bot_token: document.getElementById('slackBotToken').value.trim() || null,
+    slack_channel_recap: document.getElementById('slackChannelRecap').value.trim() || null,
+    slack_channel_alerts: document.getElementById('slackChannelAlerts').value.trim() || null,
+    slack_channel_hub_default: document.getElementById('slackChannelHubDefault').value.trim() || null,
+    use_bot_api: useBotApi,
     schedule_times: times,
     include_statuses: statuses,
     enabled: document.getElementById('slackEnabled').checked,
@@ -988,18 +1060,22 @@ async function saveSlackSettings(){
     updated_at: new Date().toISOString()
   };
 
+  if(useBotApi && !payload.slack_bot_token){
+    return alert('⚠ Bot Token richiesto quando "Usa Bot API" è attivo.');
+  }
+  if(useBotApi && !payload.slack_channel_recap){
+    return alert('⚠ Devi specificare almeno il canale recap.');
+  }
+  if(!useBotApi && !payload.slack_webhook_url){
+    return alert('⚠ Webhook URL richiesto quando Bot API è disattivo.');
+  }
+
   const {data: saved, error} = await sb.from('notification_settings')
-    .upsert(payload, {onConflict: 'id'})
-    .select();
+    .upsert(payload, {onConflict: 'id'}).select();
 
   if(error){
     console.error('Errore save:', error);
     alert('❌ Errore salvataggio: ' + error.message);
-    return;
-  }
-
-  if(webhookRaw && (!saved || !saved.length || !saved[0].slack_webhook_url)){
-    alert('⚠ ATTENZIONE: salvataggio riuscito ma il webhook URL non risulta scritto nel DB.\nProbabile RLS: esegui SQL fix.');
     return;
   }
 
@@ -1015,12 +1091,12 @@ async function testSlackNow(){
   });
   if(error){ alert('Errore invocazione: '+error.message); return; }
   alert(res?.success
-    ? `✓ Test recap inviato (${res.totalCount} tracking).`
-    : `⚠ Invio non riuscito. Response: ${JSON.stringify(res)}`);
+    ? `✓ Test recap inviato (${res.totalCount} tracking) → ${res.channel || 'webhook'}`
+    : `⚠ Invio non riuscito: ${res?.error || JSON.stringify(res)}`);
 }
 
 async function testAlertNow(){
-  if(!confirm('Forza invio alert per tutti i tracking oltre soglia?\n\nATTENZIONE: resetta fc_notified_at per il test.')) return;
+  if(!confirm('Forza invio aging alert per tutti i tracking oltre soglia?\n\nATTENZIONE: resetta fc_notified_at per il test.')) return;
   const {error: e1} = await sb.from('trackings').update({fc_notified_at: null}).not('fc_notified_at','is',null);
   if(e1){ alert('Errore reset: '+e1.message); return; }
   const {data: res, error} = await sb.functions.invoke('slack-recap', {
@@ -1029,7 +1105,7 @@ async function testAlertNow(){
   });
   if(error){ alert('Errore invocazione: '+error.message); return; }
   alert(res?.new_alerts
-    ? `✓ Alert inviato per ${res.new_alerts} tracking.`
+    ? `✓ Aging alert inviato per ${res.new_alerts} tracking → ${res.channel || 'webhook'}`
     : 'Nessun tracking oltre soglia.');
 }
 
@@ -1044,8 +1120,8 @@ async function sendHubSlackRecap(hubId){
   });
   if(error){ alert('Errore: '+error.message); return; }
   alert(res?.success
-    ? `✓ Recap inviato (${res.totalCount} tracking).`
-    : `⚠ Invio non riuscito. Response: ${JSON.stringify(res)}`);
+    ? `✓ Recap inviato (${res.totalCount} tracking) → ${res.channel || 'webhook'}`
+    : `⚠ Invio non riuscito: ${res?.error || JSON.stringify(res)}`);
 }
 
 // === CLEANUP DATABASE ===
@@ -1229,6 +1305,7 @@ async function saveNote(){
 function openHubModal(){
   document.getElementById('hubName').value = '';
   document.getElementById('hubStatus').value = 'online';
+  document.getElementById('hubChannel').value = '';
   document.getElementById('hubModal').classList.add('open');
 }
 
@@ -1238,11 +1315,12 @@ async function addHub(){
   const payload = {
     type: document.getElementById('hubType').value,
     name,
-    status: document.getElementById('hubStatus').value || 'online'
+    status: document.getElementById('hubStatus').value || 'online',
+    slack_channel: document.getElementById('hubChannel').value.trim() || null
   };
   const {data: inserted, error} = await sb.from('hubs').insert(payload).select().single();
   if(error){ alert('Errore: '+error.message); return; }
-  data.hubs.push({...inserted, status: inserted.status||'online', rescheduled: inserted.rescheduled||'', tracks: []});
+  data.hubs.push({...inserted, status: inserted.status||'online', rescheduled: inserted.rescheduled||'', slack_channel: inserted.slack_channel||'', tracks: []});
   closeModal('hubModal');
   render();
 }
@@ -1265,9 +1343,9 @@ async function deleteHub(id){
 function csvCell(v){return '"'+String(v??'').replaceAll('"','""')+'"'}
 
 function exportCSV(){
-  const rows = [['Tracking','Area','Tipo punto','Punto operativo','Day attuale','Inserito il','Stato','Contattato','Nota']];
-  data.main.forEach(t => rows.push([t.code,'Home','','',dayOf(t),new Date(t.created).toLocaleString('it-IT'),t.status,t.contacted,t.note]));
-  data.hubs.forEach(h => h.tracks.forEach(t => rows.push([t.code,'Locker/Hub',h.type,h.name,dayOf(t),new Date(t.created).toLocaleString('it-IT'),t.status,t.contacted,t.note])));
+  const rows = [['Tracking','Area','Tipo punto','Punto operativo','Canale Slack','Day attuale','Inserito il','Stato','Contattato','Nota']];
+  data.main.forEach(t => rows.push([t.code,'Home','','','',dayOf(t),new Date(t.created).toLocaleString('it-IT'),t.status,t.contacted,t.note]));
+  data.hubs.forEach(h => h.tracks.forEach(t => rows.push([t.code,'Locker/Hub',h.type,h.name,h.slack_channel||'',dayOf(t),new Date(t.created).toLocaleString('it-IT'),t.status,t.contacted,t.note])));
   const csv = '\ufeff'+rows.map(r => r.map(csvCell).join(';')).join('\r\n');
   const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
   const url = URL.createObjectURL(blob);
