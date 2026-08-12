@@ -30,7 +30,6 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 8% 0%,#263d7
 .button.secondary{background:#1b3158;color:#c5d2ff;border-color:#536d9e60;box-shadow:none}
 .button.danger{background:#43213a;color:#ff9aab;box-shadow:none}
 .button.success{background:linear-gradient(135deg,#35d8bd,#1fa38e);color:#0b1a34;border-color:#35d8bd60}
-
 .gear-wrap{position:relative}
 .gear-btn{border:1px solid #ffffff18;background:#0b1932a8;color:#c5d2ff;border-radius:11px;width:42px;height:42px;font-size:18px;cursor:pointer;display:grid;place-items:center;transition:.22s;backdrop-filter:blur(12px)}
 .gear-btn:hover{background:#253b69;transform:rotate(30deg)}
@@ -44,7 +43,6 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 8% 0%,#263d7
 .gear-item .desc{font-size:11px;color:#aebcda;font-weight:500;margin-top:2px}
 .gear-item .txt{flex:1}
 .gear-divider{height:1px;background:#ffffff10;margin:4px 6px}
-
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:20px}
 .card,.panel{background:linear-gradient(145deg,rgba(31,52,93,.86),rgba(11,24,47,.78));border:1px solid var(--line);box-shadow:var(--shadow);border-radius:17px;backdrop-filter:blur(14px)}
 .stat{padding:18px;position:relative;overflow:hidden;isolation:isolate;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
@@ -95,7 +93,17 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 8% 0%,#263d7
 .track-table tr{transition:background .15s}
 .track-table tr:hover{background:#839cff0b}
 .track-table tr:last-child td{border-bottom:0}
-.tracking{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:750;color:#d7e1ff;white-space:nowrap}
+.tracking-wrap{display:inline-flex;align-items:center;gap:6px}
+.tracking{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;font-weight:750;color:#d7e1ff;white-space:nowrap;text-decoration:none;transition:.15s;padding:2px 4px;border-radius:4px;margin:-2px -4px}
+a.tracking{cursor:pointer;position:relative}
+a.tracking:hover{color:#8ba9ff;background:#8ba9ff18;text-decoration:underline;text-decoration-color:#8ba9ff60;text-underline-offset:3px}
+a.tracking:active{color:#35d8bd}
+.tracking-copy{border:0;background:transparent;color:#5d6e8f;cursor:pointer;padding:2px 4px;font-size:11px;border-radius:4px;transition:.15s;opacity:0;line-height:1}
+.tracking-wrap:hover .tracking-copy{opacity:.85}
+.tracking-copy:hover{background:#6f8cff33;color:#8ba9ff;opacity:1!important}
+.tracking-copy.copied{color:#35d8bd;opacity:1!important;background:#35d8bd22}
+.copy-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a4a3e,#0f2f2a);border:1px solid #35d8bd60;color:#75eee0;padding:10px 20px;border-radius:12px;font-weight:700;font-size:13px;box-shadow:0 15px 40px #000a;z-index:100;animation:toastIn .3s ease;display:flex;align-items:center;gap:10px}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
 .age{font-size:10px;color:#8495b3;margin-top:3px}
 select,input[type=date]{border:1px solid #ffffff18;background:#0b1a34;color:#d9e4ff;border-radius:8px;padding:7px 8px;font:inherit;max-width:125px}
 input[type=date]{width:116px;color-scheme:dark}
@@ -199,7 +207,6 @@ input[type=date]{width:116px;color-scheme:dark}
 .slack-mode-toggle .hint{margin:0}
 .app-footer{position:fixed;bottom:16px;left:16px;font-size:11px;color:#7d8caa;background:#0b1a34cc;border:1px solid var(--line);padding:7px 12px;border-radius:20px;backdrop-filter:blur(10px);z-index:10;font-weight:600;letter-spacing:.2px;pointer-events:none;user-select:none}
 .app-footer b{color:#c5d2ff;font-weight:700}
-
 .cage-mode-tabs{display:flex;gap:4px;background:#09182f;border:1px solid #ffffff18;border-radius:10px;padding:4px;margin-bottom:14px}
 .cage-mode-tab{flex:1;background:transparent;border:0;color:#8999b8;padding:9px 12px;font-weight:700;cursor:pointer;border-radius:7px;font-size:12px;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px}
 .cage-mode-tab.active{background:linear-gradient(135deg,#35d8bd,#1fa38e);color:#0b1a34;box-shadow:0 4px 12px #35d8bd33}
@@ -208,7 +215,6 @@ input[type=date]{width:116px;color-scheme:dark}
 .cage-input-block label{font-size:11px;font-weight:700;color:#aebcda;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:8px}
 .cage-input-block textarea{width:100%;min-height:120px;background:#09182f;border:1px solid #ffffff18;color:#e3ebff;border-radius:9px;padding:10px;font:inherit;font-family:ui-monospace,Menlo,monospace;font-size:12px;resize:vertical;max-width:none}
 .cage-input-block textarea:focus{border-color:#6f8cff;outline:none;box-shadow:0 0 0 2px #6f8cff33}
-
 .scanner-block{background:linear-gradient(145deg,#0a2f2a,#0b1a34);border:2px solid #35d8bd60;border-radius:14px;padding:18px;position:relative;margin-bottom:14px}
 .scanner-block.listening{animation:scannerPulse 2s ease-in-out infinite}
 @keyframes scannerPulse{0%,100%{border-color:#35d8bd60;box-shadow:0 0 0 0 #35d8bd00}50%{border-color:#35d8bd;box-shadow:0 0 0 4px #35d8bd22}}
@@ -238,7 +244,6 @@ input[type=date]{width:116px;color-scheme:dark}
 .scanner-config{display:flex;gap:12px;margin-top:10px;font-size:11px;color:#aebcda;flex-wrap:wrap;align-items:center}
 .scanner-config label{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
 .scanner-config input[type=checkbox]{width:14px;height:14px}
-
 .cage-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
 .cage-stat{background:#0b1a34aa;border:1px solid #ffffff10;border-radius:10px;padding:12px}
 .cage-stat .val{font:800 26px Outfit,sans-serif;letter-spacing:-.8px;line-height:1}
@@ -280,7 +285,6 @@ input[type=date]{width:116px;color-scheme:dark}
 .cage-tab.active{color:#fff;border-bottom-color:#6f8cff}
 .cage-content{display:none}
 .cage-content.active{display:block}
-
 @media(max-width:1050px){.charts{grid-template-columns:1fr}.hub-grid{grid-template-columns:1fr}.fc-row{grid-template-columns:1fr}.cage-header{grid-template-columns:1fr}.cage-summary{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:650px){
   .app{padding:16px;padding-bottom:70px}
@@ -301,6 +305,7 @@ input[type=date]{width:116px;color-scheme:dark}
   .hub-channel{max-width:100px}
   .gear-menu{right:auto;left:0}
   .scanner-input{font-size:16px;padding:12px}
+  .tracking-copy{opacity:.6}
   .status-legend{padding:10px 12px;gap:6px}
   .status-legend-title{width:100%;margin-bottom:4px;margin-right:0}
   .status-legend-group{padding-right:0}
@@ -333,6 +338,11 @@ input[type=date]{width:116px;color-scheme:dark}
             <span class="txt">Esporta CSV<div class="desc">Scarica report completo</div></span>
           </button>
           <div class="gear-divider"></div>
+          <button class="gear-item" onclick="manualDedup();closeGearMenu()">
+            <span class="ico">🔍</span>
+            <span class="txt">Controlla duplicati<div class="desc">Scansione e pulizia manuale</div></span>
+          </button>
+          <div class="gear-divider"></div>
           <button class="gear-item" onclick="openSlackModal();closeGearMenu()">
             <span class="ico">🔔</span>
             <span class="txt">Notifiche Slack<div class="desc">Recap e aging alert</div></span>
@@ -362,7 +372,7 @@ input[type=date]{width:116px;color-scheme:dark}
     <div class="toolbar">
       <div>
         <h2>Gestione tracking</h2>
-        <div class="sub">I tracking avanzano automaticamente ogni 24 ore dall'inserimento.</div>
+        <div class="sub">Clicca un tracking per aprirlo · icona 📋 per copiare</div>
       </div>
       <div class="actions">
         <input id="searchHome" class="search" placeholder="Cerca tracking...">
@@ -410,19 +420,15 @@ input[type=date]{width:116px;color-scheme:dark}
       <span>🔎 Cage Check <span style="font-size:12px;color:#8999b8;font-weight:600;margin-left:8px">Verifica fisica</span></span>
       <span style="font-size:11px;color:#8999b8;font-weight:600">v2.8</span>
     </h3>
-
     <div class="cage-tabs">
       <button class="cage-tab active" data-cage-tab="audit" onclick="switchCageTab('audit')">🔎 Nuovo check</button>
       <button class="cage-tab" data-cage-tab="history" onclick="switchCageTab('history')">📊 Storico</button>
     </div>
-
     <div id="cage-content-audit" class="cage-content active">
-
       <div class="cage-mode-tabs">
         <button class="cage-mode-tab active" data-input-mode="scanner" onclick="switchInputMode('scanner')">📡 Scanner barcode</button>
         <button class="cage-mode-tab" data-input-mode="manual" onclick="switchInputMode('manual')">⌨️ Inserimento manuale</button>
       </div>
-
       <div id="scanner-mode" class="scanner-block listening">
         <div class="scanner-status">
           <span class="indicator" id="scannerIndicator"></span>
@@ -439,7 +445,6 @@ input[type=date]{width:116px;color-scheme:dark}
         </div>
         <div class="scanner-log" id="scannerLog"></div>
       </div>
-
       <div id="manual-mode" style="display:none">
         <div class="cage-header">
           <div class="cage-input-block">
@@ -463,19 +468,16 @@ input[type=date]{width:116px;color-scheme:dark}
           </div>
         </div>
       </div>
-
       <div class="field" style="margin:14px 0">
         <label>Operatore (facoltativo)</label>
         <input id="cageOperator" placeholder="Nome operatore" style="max-width:none">
       </div>
-
       <div class="cage-summary">
         <div class="cage-stat total"><div class="val" id="cageTotalExpected">0</div><div class="lbl">Attesi</div></div>
         <div class="cage-stat ok"><div class="val" id="cageTotalMatched">0</div><div class="lbl">✅ Presenti</div></div>
         <div class="cage-stat missing"><div class="val" id="cageTotalMissing">0</div><div class="lbl">❌ Mancanti</div></div>
         <div class="cage-stat untracked"><div class="val" id="cageTotalUntracked">0</div><div class="lbl">🟠 Non tracciati</div></div>
       </div>
-
       <div id="cageReport" class="cage-report" style="display:none">
         <div class="title">✅ Cage Accuracy Report</div>
         <div class="big" id="cageAccuracyBig">0%</div>
@@ -485,29 +487,15 @@ input[type=date]{width:116px;color-scheme:dark}
           <div class="metric"><b id="cageCoverage">0%</b><span>Coverage fisica</span></div>
         </div>
       </div>
-
-      <div class="cage-section">
-        <h4>🟢 Presenti e tracciati <span class="badge" id="cageMatchedBadge">0</span></h4>
-        <div id="cageMatchedList" class="cage-list"></div>
-      </div>
-
-      <div class="cage-section">
-        <h4>🔴 Tracciati ma non presenti <span class="badge" id="cageMissingBadge">0</span></h4>
-        <div id="cageMissingList" class="cage-list"></div>
-      </div>
-
-      <div class="cage-section">
-        <h4>🟠 Presenti ma non tracciati <span class="badge" id="cageUntrackedBadge">0</span></h4>
-        <div id="cageUntrackedList" class="cage-list"></div>
-      </div>
-
+      <div class="cage-section"><h4>🟢 Presenti e tracciati <span class="badge" id="cageMatchedBadge">0</span></h4><div id="cageMatchedList" class="cage-list"></div></div>
+      <div class="cage-section"><h4>🔴 Tracciati ma non presenti <span class="badge" id="cageMissingBadge">0</span></h4><div id="cageMissingList" class="cage-list"></div></div>
+      <div class="cage-section"><h4>🟠 Presenti ma non tracciati <span class="badge" id="cageUntrackedBadge">0</span></h4><div id="cageUntrackedList" class="cage-list"></div></div>
       <div class="modal-actions">
         <button class="button secondary" onclick="closeCageModal()">Chiudi</button>
         <button class="button secondary" onclick="exportCageCSV()" id="cageExportBtn" disabled>⇩ Esporta CSV</button>
         <button class="button success" onclick="finishCageCheck()" id="cageFinishBtn" disabled>✅ Fine controllo & salva</button>
       </div>
     </div>
-
     <div id="cage-content-history" class="cage-content">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
         <div style="font-size:12px;color:#aebcda">Ultimi 50 check.</div>
@@ -574,6 +562,7 @@ input[type=date]{width:116px;color-scheme:dark}
 
 <div id="bulkBar" style="display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a3159,#0e1d38);border:1px solid #a0b6ff40;padding:10px 16px;border-radius:14px;box-shadow:0 15px 40px #000a;z-index:9;align-items:center;gap:12px;backdrop-filter:blur(10px);flex-wrap:wrap;max-width:calc(100vw - 32px)">
   <span style="color:#cdd8ff;font-weight:700;font-size:13px"><span id="bulkCount">0</span> selezionati</span>
+  <button class="button success" onclick="copySelectedTrackings()" id="bulkCopyBtn" style="padding:8px 14px;font-size:12px">📋 Copia selezionati</button>
   <div style="display:flex;align-items:center;gap:6px">
     <select id="bulkStatusSelect" style="max-width:150px;font-size:12px;padding:8px"><option value="">Cambia stato...</option><option>In attesa</option><option>Rifiutato</option><option>Rimborsato</option><option>Consegnato</option><option>In consegna</option><option>Reindirizzo</option><option>Rischedulato</option></select>
     <button class="button" onclick="bulkUpdateStatus()" style="padding:8px 12px;font-size:12px">✓ Applica</button>
@@ -591,6 +580,7 @@ const SUPABASE_ANON_KEY = 'sb_publishable_VIzmKHLRsDN3p1Jzdekn5A_HiE3XeYf';
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const STATUSES = ['In attesa','Rifiutato','Rimborsato','Consegnato','In consegna','Reindirizzo','Rischedulato'];
+const TRACKING_URL = code => `https://logistics.amazon.it/station/dashboard/search?shareableLink=detailPage/${encodeURIComponent(code)}`;
 
 let data = {main:[], hubs:[], problems:[]};
 let currentTarget = 'main', noteTarget = null, ticketTarget = null;
@@ -605,6 +595,40 @@ let audioCtx = null;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const setSync = (txt) => { const el=document.getElementById('syncStatus'); if(el) el.textContent = txt; };
 const normCode = s => String(s||'').trim().toUpperCase();
+
+function showToast(msg, ms=1600){
+  document.querySelectorAll('.copy-toast').forEach(t => t.remove());
+  const el = document.createElement('div');
+  el.className = 'copy-toast';
+  el.innerHTML = msg;
+  document.body.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translate(-50%,10px)'; el.style.transition = 'all .25s'; }, ms - 250);
+  setTimeout(() => el.remove(), ms);
+}
+
+function copyOneTracking(code, btn){
+  const text = code;
+  const done = () => {
+    if(btn){
+      const orig = btn.innerHTML;
+      btn.classList.add('copied');
+      btn.innerHTML = '✓';
+      setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 1400);
+    }
+    showToast(`✅ Copiato <b>${esc(code)}</b>`);
+  };
+  if(navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+  else fallbackCopy(text, done);
+}
+
+function renderTracking(code){
+  const url = TRACKING_URL(code);
+  const codeEsc = esc(code);
+  return `<span class="tracking-wrap">
+    <a href="${url}" target="_blank" rel="noopener noreferrer" class="tracking" title="Apri in Amazon Logistics">${codeEsc}</a>
+    <button class="tracking-copy" title="Copia tracking" onclick="event.preventDefault();event.stopPropagation();copyOneTracking('${codeEsc}',this)">📋</button>
+  </span>`;
+}
 
 function toggleGearMenu(ev){
   if(ev) ev.stopPropagation();
@@ -622,9 +646,7 @@ document.addEventListener('click', (e) => {
   if(!e.target.closest('.gear-wrap')) closeGearMenu();
   closeAllStatusMenus();
 });
-document.addEventListener('keydown', (e) => {
-  if(e.key === 'Escape'){ closeGearMenu(); }
-});
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape'){ closeGearMenu(); } });
 
 async function loadData(){
   setSync('Caricamento...');
@@ -642,6 +664,48 @@ async function loadData(){
     tracks: nonProblem.filter(t => t.hub_id === h.id)
   }));
   setSync('Sync attivo');
+}
+
+async function dedupTrackings(){
+  const allT = [...allTracks(), ...data.problems];
+  const byCode = new Map();
+  const duplicates = [];
+  allT.forEach(t => {
+    const key = normCode(t.code);
+    if(!byCode.has(key)) byCode.set(key, []);
+    byCode.get(key).push(t);
+  });
+  byCode.forEach((tracks, code) => {
+    if(tracks.length > 1){
+      tracks.sort((a,b) => a.created - b.created);
+      const toDelete = tracks.slice(1);
+      duplicates.push({ code, keep: tracks[0], remove: toDelete });
+    }
+  });
+  if(!duplicates.length) return { removed: 0, codes: [] };
+  const idsToRemove = duplicates.flatMap(d => d.remove.map(t => t.id));
+  const {error} = await sb.from('trackings').delete().in('id', idsToRemove);
+  if(error){ console.error('Dedup error:', error); return { removed: 0, codes: [] }; }
+  for(const list of [data.main, data.problems, ...data.hubs.map(h => h.tracks)]){
+    for(let i = list.length - 1; i >= 0; i--){
+      if(idsToRemove.includes(list[i].id)) list.splice(i, 1);
+    }
+  }
+  return { removed: idsToRemove.length, codes: duplicates.map(d => d.code) };
+}
+
+function checkDuplicate(code, excludeId = null){
+  const key = normCode(code);
+  const all = [...allTracks(), ...data.problems];
+  return all.find(t => normCode(t.code) === key && t.id !== excludeId) || null;
+}
+
+async function manualDedup(){
+  if(!confirm('Cerca e rimuovi eventuali tracking duplicati?\n\nVerrà mantenuto il più vecchio per ogni codice.')) return;
+  const dedup = await dedupTrackings();
+  if(dedup.removed === 0){ alert('✓ Nessun duplicato trovato.'); return; }
+  alert(`🧹 Rimossi ${dedup.removed} duplicati.\n\nCodici:\n${dedup.codes.slice(0,15).join('\n')}${dedup.codes.length>15?`\n...e altri ${dedup.codes.length-15}`:''}`);
+  render();
 }
 
 async function loadRetention(){
@@ -717,7 +781,7 @@ function trackingRow(t){
   const selChecked = selectedIds.has(t.id) ? 'checked' : '';
   return `<tr class="${altClass.trim()}" draggable="true" ondragstart="dragStart(event,'${id}')" ondragend="dragEnd(event)">
     <td><input type="checkbox" class="row-select" ${selChecked} onchange="toggleSelect('${id}',this.checked)" onclick="event.stopPropagation()"></td>
-    <td><span class="drag-handle">⠿</span><span class="tracking">${esc(t.code)}</span><div class="age">${fmtAge(t)} · Day ${dayOf(t)}</div>${scheduleControl}</td>
+    <td><span class="drag-handle">⠿</span>${renderTracking(t.code)}<div class="age">${fmtAge(t)} · Day ${dayOf(t)}</div>${scheduleControl}</td>
     <td><select onchange="updateT('${id}','status',this.value)">${opts(STATUSES,t.status)}</select></td>
     <td><select onchange="updateT('${id}','contacted',this.value)">${opts(['0','1','2','3','4'],t.contacted)}</select></td>
     <td><input type="checkbox" ${swaChecked} onchange="updateT('${id}','swa',this.checked?'1':'0')"></td>
@@ -733,8 +797,10 @@ function fcRow(t){
     const hub = data.hubs.find(h => h.id === t.hub_id);
     if(hub){ const cls = hub.type === 'Hub' ? 'hub' : 'locker'; const icon = hub.type === 'Hub' ? '🏢' : '🔒'; originBadge = `<div class="origin-badge ${cls}">${icon} ${esc(hub.name)}</div>`; }
   } else originBadge = `<div class="origin-badge held">🏠 HELD</div>`;
+  const selChecked = selectedIds.has(t.id) ? 'checked' : '';
   return `<tr>
-    <td><span class="tracking">${esc(t.code)}</span><div class="age">${fmtAge(t)} · ${esc(t.status)}</div>${originBadge}</td>
+    <td style="width:32px"><input type="checkbox" class="row-select" ${selChecked} onchange="toggleSelect('${id}',this.checked)" onclick="event.stopPropagation()"></td>
+    <td>${renderTracking(t.code)}<div class="age">${fmtAge(t)} · ${esc(t.status)}</div>${originBadge}</td>
     <td style="text-align:right;width:40px"><button class="icon-btn" title="Elimina tracking" onclick="deleteT('${id}')">×</button></td>
   </tr>`;
 }
@@ -746,7 +812,7 @@ function problemRow(t){
   const selChecked = selectedIds.has(t.id) ? 'checked' : '';
   return `<tr>
     <td><input type="checkbox" class="row-select" ${selChecked} onchange="toggleSelect('${id}',this.checked)" onclick="event.stopPropagation()"></td>
-    <td><span class="tracking">${esc(t.code)}</span><div class="age">${fmtAge(t)}</div></td>
+    <td>${renderTracking(t.code)}<div class="age">${fmtAge(t)}</div></td>
     <td><textarea class="problem-textarea" placeholder="Descrivi il problema..." onchange="updateT('${id}','problem_text',this.value)">${esc(problemText)}</textarea></td>
     <td><div style="display:flex;gap:4px;align-items:center">
       <select onchange="updateT('${id}','ticket_status',this.value)" style="max-width:70px"><option ${ticketStatus==='NO'?'selected':''}>NO</option><option ${ticketStatus==='SI'?'selected':''}>SI</option></select>
@@ -766,7 +832,10 @@ function table(items){
 
 function fcTable(items){
   if(!items.length) return '<div class="empty">Nessun tracking FC.</div>';
-  return `<div class="table-wrap"><table class="track-table" style="min-width:auto"><thead><tr><th>Tracking</th><th></th></tr></thead><tbody>${items.map(fcRow).join('')}</tbody></table></div>`;
+  const allIds = items.map(x => x.id);
+  const allSelected = allIds.length && allIds.every(id => selectedIds.has(id));
+  const headCheck = `<input type="checkbox" ${allSelected?'checked':''} onchange="toggleSelectAll(this.checked, ${JSON.stringify(allIds).replace(/"/g,'&quot;')})">`;
+  return `<div class="table-wrap"><table class="track-table" style="min-width:auto"><thead><tr><th style="width:32px">${headCheck}</th><th>Tracking</th><th></th></tr></thead><tbody>${items.map(fcRow).join('')}</tbody></table></div>`;
 }
 
 function problemTable(items){
@@ -975,6 +1044,16 @@ async function bulkUpdateStatus(){
   document.getElementById('bulkStatusSelect').value = ''; render();
 }
 
+function copySelectedTrackings(){
+  if(!selectedIds.size) return alert('Nessun tracking selezionato.');
+  const codes = [];
+  for(const list of [data.main, data.problems, ...data.hubs.map(h => h.tracks)]){
+    list.forEach(t => { if(selectedIds.has(t.id)) codes.push(t.code); });
+  }
+  if(!codes.length) return alert('Nessun tracking trovato.');
+  copyTrackings(codes, 'bulkCopyBtn');
+}
+
 function updateBulkBar(){
   const bar = document.getElementById('bulkBar'); if(!bar) return;
   if(selectedIds.size){ bar.style.display = 'flex'; document.getElementById('bulkCount').textContent = selectedIds.size; }
@@ -987,6 +1066,7 @@ function copyTrackings(codes, btnId){
   const done = () => {
     const btn = document.getElementById(btnId);
     if(btn){ const orig = btn.dataset.origText || btn.textContent; btn.dataset.origText = orig; btn.textContent = `✓ Copiati ${codes.length}`; setTimeout(() => { btn.textContent = orig; }, 1800); }
+    showToast(`✅ Copiati <b>${codes.length}</b> tracking`);
   };
   if(navigator.clipboard?.writeText){ navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done)); }
   else fallbackCopy(text, done);
@@ -1016,7 +1096,6 @@ function copyHubTrackings(hubId){
   copyTrackings(hub.tracks.map(t => t.code), `copyHub${hubId}Btn`);
 }
 
-// CAGE CHECK
 function beep(type='ok'){
   if(!document.getElementById('scannerBeep')?.checked) return;
   try {
@@ -1026,18 +1105,13 @@ function beep(type='ok'){
     osc.connect(gain); gain.connect(audioCtx.destination);
     const freq = type === 'ok' ? 1200 : type === 'warn' ? 800 : 400;
     const dur = type === 'err' ? 0.25 : 0.1;
-    osc.frequency.value = freq;
-    osc.type = 'sine';
+    osc.frequency.value = freq; osc.type = 'sine';
     gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
     osc.start(); osc.stop(audioCtx.currentTime + dur);
   } catch(e){}
 }
-
-function vibrate(pattern){
-  if(!document.getElementById('scannerVibrate')?.checked) return;
-  if(navigator.vibrate) navigator.vibrate(pattern);
-}
+function vibrate(pattern){ if(!document.getElementById('scannerVibrate')?.checked) return; if(navigator.vibrate) navigator.vibrate(pattern); }
 
 function openCageCheck(){
   cageState = { physical: new Set(), matched: [], missing: [], untracked: [], resolved: new Set(), scanCount: 0, mode: 'scanner', logEntries: [] };
@@ -1056,11 +1130,7 @@ function openCageCheck(){
   startAutoFocus();
 }
 
-function closeCageModal(){
-  stopAutoFocus();
-  closeModal('cageModal');
-}
-
+function closeCageModal(){ stopAutoFocus(); closeModal('cageModal'); }
 function startAutoFocus(){
   stopAutoFocus();
   cageAutoFocusInterval = setInterval(() => {
@@ -1073,17 +1143,13 @@ function startAutoFocus(){
     if(!inField && document.activeElement !== scanner){ scanner.focus(); }
   }, 500);
 }
-
-function stopAutoFocus(){
-  if(cageAutoFocusInterval){ clearInterval(cageAutoFocusInterval); cageAutoFocusInterval = null; }
-}
+function stopAutoFocus(){ if(cageAutoFocusInterval){ clearInterval(cageAutoFocusInterval); cageAutoFocusInterval = null; } }
 
 function switchCageTab(tab){
   document.querySelectorAll('.cage-tab').forEach(t => t.classList.toggle('active', t.dataset.cageTab === tab));
   document.querySelectorAll('.cage-content').forEach(c => c.classList.toggle('active', c.id === 'cage-content-' + tab));
   if(tab === 'history') loadCageHistory();
 }
-
 function switchInputMode(mode){
   cageState.mode = mode;
   document.querySelectorAll('.cage-mode-tab').forEach(t => t.classList.toggle('active', t.dataset.inputMode === mode));
@@ -1094,10 +1160,7 @@ function switchInputMode(mode){
   if(mode === 'manual') syncScannerToTextarea();
   recomputeCage();
 }
-
-function syncScannerToTextarea(){
-  document.getElementById('cagePhysicalInput').value = Array.from(cageState.physical).join('\n');
-}
+function syncScannerToTextarea(){ document.getElementById('cagePhysicalInput').value = Array.from(cageState.physical).join('\n'); }
 
 function flashScanner(cls){
   const inp = document.getElementById('scannerInput');
@@ -1106,21 +1169,16 @@ function flashScanner(cls){
   inp.classList.add(cls);
   setTimeout(() => inp.classList.remove(cls), 500);
 }
-
 function addScannerLog(code, type){
   const time = new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
   const tag = type === 'matched' ? '✅ MATCH' : type === 'untracked' ? '🟠 NUOVO' : '⚠ DUPLICATO';
   cageState.logEntries.unshift({ code, type, time, tag });
   if(cageState.logEntries.length > 50) cageState.logEntries.length = 50;
-  const container = document.getElementById('scannerLog');
-  container.innerHTML = cageState.logEntries.map(e => `<div class="scanner-log-item ${e.type}"><span class="tag">${e.tag}</span><span class="code">${esc(e.code)}</span><span class="time">${e.time}</span></div>`).join('');
+  document.getElementById('scannerLog').innerHTML = cageState.logEntries.map(e => `<div class="scanner-log-item ${e.type}"><span class="tag">${e.tag}</span><span class="code">${esc(e.code)}</span><span class="time">${e.time}</span></div>`).join('');
 }
-
 function processScan(rawCode){
-  const code = normCode(rawCode);
-  if(!code) return;
-  const alreadyScanned = cageState.physical.has(code);
-  if(alreadyScanned){
+  const code = normCode(rawCode); if(!code) return;
+  if(cageState.physical.has(code)){
     flashScanner('flash-err'); beep('err'); vibrate([50,50,50]);
     addScannerLog(code, 'duplicate');
     setScannerStatus('Duplicato — già scansionato', false);
@@ -1142,7 +1200,6 @@ function processScan(rawCode){
   document.getElementById('scannerCount').textContent = cageState.scanCount;
   recomputeCage();
 }
-
 function setScannerStatus(msg, ok){
   const label = document.getElementById('scannerLabel');
   label.textContent = msg;
@@ -1154,73 +1211,51 @@ function setScannerStatus(msg, ok){
     }
   }, 2000);
 }
-
 function clearCageInput(){
   document.getElementById('cagePhysicalInput').value = '';
-  cageState.physical = new Set();
-  cageState.logEntries = [];
+  cageState.physical = new Set(); cageState.logEntries = [];
   document.getElementById('scannerLog').innerHTML = '';
   cageState.scanCount = 0;
   document.getElementById('scannerCount').textContent = '0';
   recomputeCage();
 }
-
 async function loadFromClipboard(){
-  try {
-    const text = await navigator.clipboard.readText();
-    document.getElementById('cagePhysicalInput').value = text;
-    recomputeCage();
-  } catch(e){ alert('Impossibile leggere clipboard.'); }
+  try { const text = await navigator.clipboard.readText(); document.getElementById('cagePhysicalInput').value = text; recomputeCage(); }
+  catch(e){ alert('Impossibile leggere clipboard.'); }
 }
-
 function parsePhysicalInput(){
   if(cageState.mode === 'scanner') return cageState.physical;
   const raw = document.getElementById('cagePhysicalInput').value;
-  const codes = raw.split(/[\s,;]+/).map(x => normCode(x)).filter(Boolean);
-  return new Set(codes);
+  return new Set(raw.split(/[\s,;]+/).map(x => normCode(x)).filter(Boolean));
 }
-
 function getExpectedTracks(){
   const includeHubs = document.getElementById('cageIncludeHubs')?.checked ?? true;
   return includeHubs ? allTracks() : data.main;
 }
-
 function recomputeCage(){
   const physical = parsePhysicalInput();
   cageState.physical = physical;
   const expectedTracks = getExpectedTracks();
   const expectedMap = new Map();
   expectedTracks.forEach(t => expectedMap.set(normCode(t.code), t));
-
   const matched = [], missing = [];
-  expectedTracks.forEach(t => {
-    if(physical.has(normCode(t.code))) matched.push(t);
-    else missing.push(t);
-  });
+  expectedTracks.forEach(t => { if(physical.has(normCode(t.code))) matched.push(t); else missing.push(t); });
   const untracked = [];
   physical.forEach(code => { if(!expectedMap.has(code)) untracked.push(code); });
-
-  cageState.matched = matched;
-  cageState.missing = missing;
-  cageState.untracked = untracked;
-
+  cageState.matched = matched; cageState.missing = missing; cageState.untracked = untracked;
   const expEl = document.getElementById('cageExpectedManual');
   if(expEl) expEl.textContent = expectedTracks.length;
   document.getElementById('cageTotalExpected').textContent = expectedTracks.length;
   document.getElementById('cageTotalMatched').textContent = matched.length;
   document.getElementById('cageTotalMissing').textContent = missing.length;
   document.getElementById('cageTotalUntracked').textContent = untracked.length;
-
   renderCageLists();
-
   const hasWork = physical.size > 0 || expectedTracks.length > 0;
   document.getElementById('cageFinishBtn').disabled = !hasWork;
   document.getElementById('cageExportBtn').disabled = !hasWork;
 }
-
 function renderCageLists(){
   const { matched, missing, untracked, resolved } = cageState;
-
   document.getElementById('cageMatchedBadge').textContent = matched.length;
   document.getElementById('cageMatchedList').innerHTML = matched.length
     ? matched.map(t => {
@@ -1228,8 +1263,7 @@ function renderCageLists(){
         if(t.hub_id){ const h = data.hubs.find(x => x.id === t.hub_id); if(h) loc = (h.type === 'Hub' ? '🏢 ' : '🔒 ') + h.name; }
         return `<div class="cage-item"><span style="color:#35d8bd;font-size:14px">✅</span><span class="code">${esc(t.code)}</span><span class="meta">${loc} · ${esc(t.status)}</span></div>`;
       }).join('')
-    : '<div class="empty">Nessun tracking corrispondente ancora.</div>';
-
+    : '<div class="empty">Nessun tracking corrispondente.</div>';
   document.getElementById('cageMissingBadge').textContent = missing.length;
   document.getElementById('cageMissingList').innerHTML = missing.length
     ? missing.map(t => {
@@ -1243,7 +1277,6 @@ function renderCageLists(){
         </div></div>`;
       }).join('')
     : '<div class="empty">✨ Nessuno mancante.</div>';
-
   document.getElementById('cageUntrackedBadge').textContent = untracked.length;
   document.getElementById('cageUntrackedList').innerHTML = untracked.length
     ? untracked.map(code => {
@@ -1257,17 +1290,10 @@ function renderCageLists(){
       }).join('')
     : '<div class="empty">✨ Nessun tracking sconosciuto.</div>';
 }
-
-function markFound(code){
-  cageState.physical.add(normCode(code));
-  if(cageState.mode === 'manual') syncScannerToTextarea();
-  recomputeCage();
-}
-
+function markFound(code){ cageState.physical.add(normCode(code)); if(cageState.mode === 'manual') syncScannerToTextarea(); recomputeCage(); }
 function markRecheck(id){ cageState.resolved.add(id); renderCageLists(); }
-
 async function markMissing(id, code){
-  if(!confirm(`Marcare ${code} come mancante?\n\nAggiungerà nota "[MANCANTE ${new Date().toLocaleDateString('it-IT')}]".`)) return;
+  if(!confirm(`Marcare ${code} come mancante?`)) return;
   const t = findT(id); if(!t) return;
   const noteData = parseNote(t.note);
   const stamp = `[MANCANTE ${new Date().toLocaleString('it-IT')}]`;
@@ -1278,8 +1304,15 @@ async function markMissing(id, code){
   cageState.resolved.add(id);
   renderCageLists(); render();
 }
-
 async function addUntracked(code){
+  const existing = checkDuplicate(code);
+  if(existing){
+    let loc = 'HELD';
+    if(existing.problematic) loc = 'Pacchi Problematici';
+    else if(existing.hub_id){ const h = data.hubs.find(x => x.id === existing.hub_id); if(h) loc = h.type+': '+h.name; }
+    alert(`⚠ Tracking "${code}" già presente in: ${loc}`);
+    return;
+  }
   const dest = document.getElementById('dest-' + code).value;
   const status = document.getElementById('stat-' + code).value;
   const payload = { code, status, contacted: '0', scheduled: '', swa: '0', note: '', created: now(), hub_id: dest === 'main' ? null : dest, problematic: false };
@@ -1289,7 +1322,6 @@ async function addUntracked(code){
   else { const h = data.hubs.find(x => x.id === dest); if(h) h.tracks.unshift(inserted); }
   recomputeCage(); render();
 }
-
 function calcAccuracy(){
   const expected = cageState.matched.length + cageState.missing.length;
   const physical = cageState.matched.length + cageState.untracked.length;
@@ -1299,17 +1331,11 @@ function calcAccuracy(){
   const overall = total > 0 ? (cageState.matched.length / total * 100) : 0;
   return { expected, physical, total, accTracking, coverage, overall };
 }
-
 async function finishCageCheck(){
   const { expected, physical, accTracking, coverage, overall } = calcAccuracy();
   if(!confirm(`Salvare snapshot?\n\nAttesi: ${expected}\nFisici: ${physical}\nMatch: ${cageState.matched.length}\nAccuratezza: ${overall.toFixed(1)}%`)) return;
   const operator = document.getElementById('cageOperator').value.trim() || null;
-  const detail = {
-    matched: cageState.matched.map(t => t.code),
-    missing: cageState.missing.map(t => t.code),
-    untracked: cageState.untracked,
-    resolved: Array.from(cageState.resolved)
-  };
+  const detail = { matched: cageState.matched.map(t => t.code), missing: cageState.missing.map(t => t.code), untracked: cageState.untracked, resolved: Array.from(cageState.resolved) };
   const {error} = await sb.from('cage_audits').insert({
     operator, expected_count: expected, physical_count: physical,
     matched_count: cageState.matched.length, missing_count: cageState.missing.length,
@@ -1318,7 +1344,7 @@ async function finishCageCheck(){
     coverage_pct: Number(coverage.toFixed(2)),
     detail
   });
-  if(error){ alert('Errore salvataggio: '+error.message + '\n\nHai creato la tabella cage_audits?'); return; }
+  if(error){ alert('Errore: '+error.message); return; }
   document.getElementById('cageAccuracyBig').textContent = overall.toFixed(1) + '%';
   document.getElementById('cageAccTracking').textContent = accTracking.toFixed(1) + '%';
   document.getElementById('cageCoverage').textContent = coverage.toFixed(1) + '%';
@@ -1326,7 +1352,6 @@ async function finishCageCheck(){
   document.getElementById('cageReport').scrollIntoView({behavior:'smooth', block:'start'});
   alert('✓ Snapshot salvato.');
 }
-
 function exportCageCSV(){
   const rows = [['Tracking','Stato','Categoria','Posizione','Note']];
   cageState.matched.forEach(t => {
@@ -1344,7 +1369,6 @@ function exportCageCSV(){
   const a = document.createElement('a'); a.href = url; a.download = 'CageCheck_'+new Date().toISOString().slice(0,16).replace(/[:T]/g,'-')+'.csv'; a.click();
   setTimeout(() => URL.revokeObjectURL(url), 500);
 }
-
 async function loadCageHistory(){
   const list = document.getElementById('cageHistoryList');
   const trend = document.getElementById('cageTrend');
@@ -1367,11 +1391,7 @@ async function loadCageHistory(){
   if(last10.length >= 2){
     const max = 100, min = Math.min(...last10.map(a => Number(a.accuracy_pct||0)), 70);
     const w = 100, h = 60;
-    const points = last10.map((a,i) => {
-      const x = (i / (last10.length-1)) * w;
-      const y = h - ((Number(a.accuracy_pct||0) - min) / (max - min)) * h;
-      return `${x},${y}`;
-    }).join(' ');
+    const points = last10.map((a,i) => { const x = (i / (last10.length-1)) * w; const y = h - ((Number(a.accuracy_pct||0) - min) / (max - min)) * h; return `${x},${y}`; }).join(' ');
     const avg = (last10.reduce((s,a) => s + Number(a.accuracy_pct||0), 0) / last10.length).toFixed(1);
     trend.innerHTML = `<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap"><div style="flex:1;min-width:200px"><div style="font-size:11px;color:#8999b8;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Trend (ultimi ${last10.length})</div><svg viewBox="0 0 ${w} ${h}" style="width:100%;height:80px;overflow:visible"><polyline points="${points}" fill="none" stroke="#35d8bd" stroke-width="1.5" vector-effect="non-scaling-stroke"/>${last10.map((a,i) => { const x = (i / (last10.length-1)) * w; const y = h - ((Number(a.accuracy_pct||0) - min) / (max - min)) * h; return `<circle cx="${x}" cy="${y}" r="1.5" fill="#35d8bd"/>`; }).join('')}</svg></div><div style="text-align:right"><div style="font:800 28px Outfit,sans-serif;color:#35d8bd;letter-spacing:-1px">${avg}%</div><div style="font-size:10px;color:#aebcda;text-transform:uppercase;font-weight:700">Media ${last10.length}</div></div></div>`;
   }
@@ -1382,13 +1402,11 @@ const SLACK_STATUSES = [
   {key:'Rimborsato', label:'💰 Rimborsato'},{key:'Consegnato', label:'✅ Consegnato'},
   {key:'Reindirizzo', label:'↪️ Reindirizzo'},{key:'Rischedulato', label:'📅 Rischedulato'}
 ];
-
 function toggleSlackMode(){
   const useBotApi = document.getElementById('slackUseBotApi').checked;
   document.getElementById('slackBotSection').style.display = useBotApi ? 'block' : 'none';
   document.getElementById('slackWebhookSection').style.display = useBotApi ? 'none' : 'block';
 }
-
 async function openSlackModal(){
   const {data: s, error} = await sb.from('notification_settings').select('*').eq('id',1).maybeSingle();
   if(error){ alert('Errore: '+error.message); return; }
@@ -1409,7 +1427,6 @@ async function openSlackModal(){
   toggleSlackMode();
   document.getElementById('slackModal').classList.add('open');
 }
-
 async function saveSlackSettings(){
   const times = document.getElementById('slackTimes').value.split('\n').map(x => x.trim()).filter(x => /^\d{2}:\d{2}$/.test(x));
   const statuses = Array.from(document.querySelectorAll('.slack-st:checked')).map(x => x.value);
@@ -1434,14 +1451,12 @@ async function saveSlackSettings(){
   if(error){ alert('❌ Errore: ' + error.message); return; }
   alert('✓ Salvato.'); closeModal('slackModal');
 }
-
 async function testSlackNow(){
   if(!confirm('Inviare recap di test?')) return;
   const {data: res, error} = await sb.functions.invoke('slack-recap', { body: { mode: 'recap', force: true }, headers: {'x-trigger': 'manual'} });
   if(error){ alert('Errore: '+error.message); return; }
   alert(res?.success ? `✓ Inviato (${res.totalCount})` : `⚠ ${res?.error || 'errore'}`);
 }
-
 async function testAlertNow(){
   if(!confirm('Forza aging alert?')) return;
   await sb.from('trackings').update({fc_notified_at: null}).not('fc_notified_at','is',null);
@@ -1449,7 +1464,6 @@ async function testAlertNow(){
   if(error){ alert('Errore: '+error.message); return; }
   alert(res?.new_alerts ? `✓ Alert per ${res.new_alerts}` : 'Nessun tracking oltre soglia.');
 }
-
 async function sendHubSlackRecap(hubId){
   const hub = data.hubs.find(h => h.id === hubId); if(!hub) return;
   if(!confirm(`Inviare recap per "${hub.name}"?`)) return;
@@ -1501,7 +1515,7 @@ async function runManualCleanup(){
 function openBulkTrackingModal(target = 'main'){
   currentTarget = target;
   document.getElementById('bulkTrackingList').value = '';
-  let msg = target === 'main' ? 'Verranno aggiunti a HELD.' : target === 'problem' ? '⚠ Verranno inseriti nel panel "Pacchi Problematici".' : `Verranno aggiunti a ${data.hubs.find(h => h.id === target)?.name || 'punto'}.`;
+  let msg = target === 'main' ? 'Verranno aggiunti a HELD.' : target === 'problem' ? '⚠ Verranno inseriti in "Pacchi Problematici".' : `Verranno aggiunti a ${data.hubs.find(h => h.id === target)?.name || 'punto'}.`;
   document.getElementById('bulkTrackingTarget').textContent = msg;
   document.getElementById('bulkTrackingModal').classList.add('open');
   setTimeout(() => document.getElementById('bulkTrackingList').focus(), 50);
@@ -1512,8 +1526,19 @@ async function addBulkTracking(){
   if(!raw) return alert('Inserisci almeno un Tracking ID.');
   const existing = new Set([...allTracks(), ...data.problems].map(t => normCode(t.code)));
   const seen = new Set();
-  const codes = raw.split(/[\s,;]+/).map(x => x.trim()).filter(Boolean).filter(code => { const key = normCode(code); if(existing.has(key) || seen.has(key)) return false; seen.add(key); return true; });
-  if(!codes.length) return alert('Nessun nuovo Tracking ID.');
+  const skipped = [];
+  const codes = raw.split(/[\s,;]+/).map(x => x.trim()).filter(Boolean).filter(code => {
+    const key = normCode(code);
+    if(existing.has(key)){ skipped.push(code + ' (già presente)'); return false; }
+    if(seen.has(key)){ skipped.push(code + ' (duplicato nell\'elenco)'); return false; }
+    seen.add(key);
+    return true;
+  });
+  if(!codes.length){
+    let msg = 'Nessun nuovo Tracking ID da inserire.';
+    if(skipped.length) msg += `\n\nIgnorati (${skipped.length}):\n` + skipped.slice(0,10).join('\n') + (skipped.length>10?`\n...e altri ${skipped.length-10}`:'');
+    return alert(msg);
+  }
   const timestamp = now();
   const isProblem = currentTarget === 'problem';
   const payload = codes.map((code, index) => ({
@@ -1531,12 +1556,21 @@ async function addBulkTracking(){
   else if(currentTarget === 'main') data.main.unshift(...inserted);
   else { const hub = data.hubs.find(h => h.id === currentTarget); if(hub) hub.tracks.unshift(...inserted); }
   closeModal('bulkTrackingModal'); render();
-  alert(inserted.length + ' tracking inseriti.');
+  let msg = `✓ ${inserted.length} tracking inseriti.`;
+  if(skipped.length) msg += `\n\n⚠ Ignorati ${skipped.length} duplicati:\n` + skipped.slice(0,10).join('\n') + (skipped.length>10?`\n...e altri ${skipped.length-10}`:'');
+  alert(msg);
 }
 
 async function addTracking(){
   const code = document.getElementById('newTracking').value.trim();
   if(!code) return alert('Inserisci Tracking ID.');
+  const existing = checkDuplicate(code);
+  if(existing){
+    let loc = 'HELD';
+    if(existing.problematic) loc = 'Pacchi Problematici';
+    else if(existing.hub_id){ const h = data.hubs.find(x => x.id === existing.hub_id); if(h) loc = h.type+': '+h.name; }
+    return alert(`⚠ Tracking "${code}" già presente in: ${loc}`);
+  }
   const payload = { code, status: 'In attesa', contacted: '0', scheduled: '', swa: '0', note: '', created: now(), hub_id: currentTarget === 'main' ? null : currentTarget, problematic: false };
   const {data: inserted, error} = await sb.from('trackings').insert(payload).select().single();
   if(error){ alert('Errore: '+error.message); return; }
@@ -1678,6 +1712,12 @@ sb.channel('rtscage-sync')
 (async () => {
   await loadData();
   await loadRetention();
+  const dedup = await dedupTrackings();
+  if(dedup.removed > 0){
+    setTimeout(() => {
+      alert(`🧹 Pulizia automatica duplicati:\n\n${dedup.removed} tracking più recenti eliminati\n(mantenuto il più vecchio per ogni codice)\n\nCodici deduplicati:\n${dedup.codes.slice(0,15).join('\n')}${dedup.codes.length>15?`\n...e altri ${dedup.codes.length-15}`:''}`);
+    }, 500);
+  }
   render();
   setInterval(render, 60000);
 })();
