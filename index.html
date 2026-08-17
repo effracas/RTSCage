@@ -35,8 +35,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 8% 0%,#263d7
 .gear-btn:hover{background:#253b69;transform:rotate(30deg)}
 .gear-btn.open{background:#253b69;color:#fff;transform:rotate(90deg)}
 .gear-menu{display:none;position:absolute;top:calc(100% + 8px);right:0;background:linear-gradient(145deg,#1a3159,#0e1d38);border:1px solid #a0b6ff2b;border-radius:12px;padding:6px;box-shadow:0 20px 50px #000b;min-width:230px;z-index:20;animation:gearFade .22s ease}
-.gear-menu.open{display:block}
-@keyframes gearFade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.gear-menu.open{display:block}@keyframes gearFade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .gear-item{display:flex;align-items:center;gap:10px;width:100%;background:transparent;border:0;color:#e3ebff;padding:10px 12px;border-radius:8px;cursor:pointer;font:600 13px 'DM Sans',sans-serif;text-align:left;transition:background .18s}
 .gear-item:hover{background:#253b69}
 .gear-item .ico{font-size:16px;width:22px;text-align:center;flex-shrink:0}
@@ -80,8 +79,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 8% 0%,#263d7
 .track-table tr[draggable=true]{cursor:grab}
 .track-table tr[draggable=true]:active{cursor:grabbing}
 .track-table tr.dragging{opacity:.38}
-.drag-handle{color:#7e91b6;font-size:16px;cursor:grab;padding-right:7px;user-select:none}
-.day:hover,.hub-card:hover{transform:translateY(-4px);border-color:#859cff70;box-shadow:0 25px 60px #02071388}
+.drag-handle{color:#7e91b6;font-size:16px;cursor:grab;padding-right:7px;user-select:none}.day:hover,.hub-card:hover{transform:translateY(-4px);border-color:#859cff70;box-shadow:0 25px 60px #02071388}
 .day-head{padding:15px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
 .day-head h3{margin:0;font:700 15px Outfit,sans-serif}
 .counter{background:#253b68;color:#cdd8ff;border-radius:20px;padding:4px 9px;font-size:11px;font-weight:750}
@@ -121,8 +119,9 @@ input[type=date]{width:116px;color-scheme:dark}
 .problem-textarea:focus{border-color:#ffbf5b;outline:none;box-shadow:0 0 0 2px #ffbf5b33}
 .origin-badge{display:inline-block;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:2px 6px;border-radius:4px;margin-top:4px}
 .origin-badge.held{background:#1b3158;color:#c5d2ff}
-.origin-badge.hub{background:#16494b;color:#75eee0}
-.origin-badge.locker{background:#233a6c;color:#b8c9ff}
+.origin-badge.hub{background:#16494b;color:#75eee0}.origin-badge.locker{background:#233a6c;color:#b8c9ff}
+.scaduto-badge{display:inline-block;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:4px;margin-top:4px;margin-left:5px;background:linear-gradient(135deg,#ff627d,#c9314f);color:#fff;box-shadow:0 0 8px #ff627d80;animation:scadutoPulse 1.8s ease-in-out infinite}
+@keyframes scadutoPulse{0%,100%{box-shadow:0 0 8px #ff627d80;transform:scale(1)}50%{box-shadow:0 0 14px #ff627dcc,0 0 4px #ff627d;transform:scale(1.05)}}
 .empty{padding:30px 15px;color:#8595b2;text-align:center;font-size:12px}
 .hub-grid{display:grid;grid-template-columns:1fr;gap:16px}
 .hub-card{transition:transform .2s,border-color .2s}
@@ -160,8 +159,7 @@ input[type=date]{width:116px;color-scheme:dark}
 .status-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;cursor:pointer;box-shadow:0 0 8px currentColor;position:relative}
 .status-dot:hover{transform:scale(1.15)}
 .status-menu{display:none;position:absolute;top:100%;left:0;z-index:20;margin-top:6px;background:#0e1d38;border:1px solid var(--line);border-radius:10px;padding:6px;box-shadow:0 12px 30px #0008;min-width:130px}
-.status-menu.open{display:block}
-.status-menu button{display:block;width:100%;text-align:left;border:0;background:transparent;color:#cdd8ff;padding:7px 10px;border-radius:7px;cursor:pointer;font:600 12px 'DM Sans',sans-serif}
+.status-menu.open{display:block}.status-menu button{display:block;width:100%;text-align:left;border:0;background:transparent;color:#cdd8ff;padding:7px 10px;border-radius:7px;cursor:pointer;font:600 12px 'DM Sans',sans-serif}
 .status-menu button:hover{background:#1a2d50}
 .status-wrap{position:relative;display:inline-flex;align-items:center}
 .track-table tr.has-alt-address{background:#43213a22;box-shadow:inset 3px 0 0 #ff9aab}
@@ -196,8 +194,7 @@ input[type=date]{width:116px;color-scheme:dark}
 .hub-summary-stat{background:#0b1a34aa;border-radius:8px;padding:8px 10px}
 .hub-summary-stat .val{font:800 20px Outfit,sans-serif;line-height:1;letter-spacing:-.5px}
 .hub-summary-stat .lbl{font-size:9px;color:#8999b8;text-transform:uppercase;margin-top:3px;font-weight:700;letter-spacing:.4px}
-.hub-summary-stat.fc .val{color:#ff9aab}
-.hub-summary-stat.fc{background:#43213a55}
+.hub-summary-stat.fc .val{color:#ff9aab}.hub-summary-stat.fc{background:#43213a55}
 .hub-summary-resched{font-size:10px;color:#aebcda;margin-top:8px;padding-top:8px;border-top:1px solid #ffffff10}
 .hub-summary-resched b{color:#ffd070;font-weight:700}
 @keyframes hubHighlight{0%,100%{box-shadow:0 25px 60px #02071388}30%,70%{box-shadow:0 0 0 3px #6f8cff,0 25px 60px #02071388}}
@@ -231,8 +228,7 @@ input[type=date]{width:116px;color-scheme:dark}
 .scanner-input.flash-err{background:#3d1520;border-color:#ff627d}
 .scanner-log{max-height:180px;overflow-y:auto;margin-top:12px;display:grid;gap:4px}
 .scanner-log-item{display:flex;align-items:center;gap:8px;padding:6px 10px;background:#09182fcc;border:1px solid #ffffff0d;border-radius:7px;font-size:12px;animation:logSlide .3s ease}
-@keyframes logSlide{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
-.scanner-log-item.matched{border-color:#35d8bd40;background:#0a2a26}
+@keyframes logSlide{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}.scanner-log-item.matched{border-color:#35d8bd40;background:#0a2a26}
 .scanner-log-item.untracked{border-color:#ffbf5b40;background:#2a2410}
 .scanner-log-item.duplicate{border-color:#ff627d40;background:#2a1520;opacity:.7}
 .scanner-log-item .code{font-family:ui-monospace,Menlo,monospace;font-weight:700;color:#e3ebff;flex:1;overflow:hidden;text-overflow:ellipsis}
@@ -270,8 +266,7 @@ input[type=date]{width:116px;color-scheme:dark}
 .cage-report{background:linear-gradient(135deg,#0f2f2a,#0b1a34);border:2px solid #35d8bd60;border-radius:14px;padding:20px;text-align:center;margin-bottom:14px}
 .cage-report .title{font:800 14px Outfit,sans-serif;color:#75eee0;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
 .cage-report .big{font:900 48px Outfit,sans-serif;color:#35d8bd;letter-spacing:-2px;line-height:1}
-.cage-report .big-lbl{font-size:11px;color:#aebcda;text-transform:uppercase;font-weight:700;letter-spacing:.6px;margin-top:6px}
-.cage-report .metrics{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;padding-top:14px;border-top:1px solid #ffffff18}
+.cage-report .big-lbl{font-size:11px;color:#aebcda;text-transform:uppercase;font-weight:700;letter-spacing:.6px;margin-top:6px}.cage-report .metrics{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;padding-top:14px;border-top:1px solid #ffffff18}
 .cage-report .metric b{color:#e3ebff;font:800 22px Outfit,sans-serif;display:block;letter-spacing:-.5px}
 .cage-report .metric span{font-size:10px;color:#aebcda;text-transform:uppercase;font-weight:700}
 .cage-history{max-height:250px;overflow-y:auto;display:grid;gap:6px}
@@ -336,8 +331,7 @@ input[type=date]{width:116px;color-scheme:dark}
           <button class="gear-item" onclick="exportCSV();closeGearMenu()">
             <span class="ico">⇩</span>
             <span class="txt">Esporta CSV<div class="desc">Scarica report completo</div></span>
-          </button>
-          <div class="gear-divider"></div>
+          </button><div class="gear-divider"></div>
           <button class="gear-item" onclick="manualDedup();closeGearMenu()">
             <span class="ico">🔍</span>
             <span class="txt">Controlla duplicati<div class="desc">Scansione e pulizia manuale</div></span>
@@ -355,9 +349,7 @@ input[type=date]{width:116px;color-scheme:dark}
         </div>
       </div>
     </div>
-  </header>
-
-  <section id="home" class="page active">
+  </header><section id="home" class="page active">
     <div id="stats" class="stats"></div>
     <div class="charts">
       <section class="panel"><h2>Stati spedizioni</h2><div id="bars"></div></section>
@@ -412,9 +404,7 @@ input[type=date]{width:116px;color-scheme:dark}
     <div id="hubsSummary" class="hub-summary"></div>
     <div id="hubs" class="hub-grid"></div>
   </section>
-</main>
-
-<div id="cageModal" class="modal">
+</main><div id="cageModal" class="modal">
   <div class="modal-box wide">
     <h3 style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
       <span>🔎 Cage Check <span style="font-size:12px;color:#8999b8;font-weight:600;margin-left:8px">Verifica fisica</span></span>
@@ -473,8 +463,7 @@ input[type=date]{width:116px;color-scheme:dark}
         <input id="cageOperator" placeholder="Nome operatore" style="max-width:none">
       </div>
       <div class="cage-summary">
-        <div class="cage-stat total"><div class="val" id="cageTotalExpected">0</div><div class="lbl">Attesi</div></div>
-        <div class="cage-stat ok"><div class="val" id="cageTotalMatched">0</div><div class="lbl">✅ Presenti</div></div>
+        <div class="cage-stat total"><div class="val" id="cageTotalExpected">0</div><div class="lbl">Attesi</div></div><div class="cage-stat ok"><div class="val" id="cageTotalMatched">0</div><div class="lbl">✅ Presenti</div></div>
         <div class="cage-stat missing"><div class="val" id="cageTotalMissing">0</div><div class="lbl">❌ Mancanti</div></div>
         <div class="cage-stat untracked"><div class="val" id="cageTotalUntracked">0</div><div class="lbl">🟠 Non tracciati</div></div>
       </div>
@@ -505,9 +494,7 @@ input[type=date]{width:116px;color-scheme:dark}
       <div id="cageHistoryList" class="cage-history"></div>
     </div>
   </div>
-</div>
-
-<div id="trackingModal" class="modal"><div class="modal-box"><h3>Nuovo tracking</h3><p id="trackingTarget" class="hint"></p><div class="field"><label>Tracking ID</label><input id="newTracking" autocomplete="off"></div><div class="modal-actions"><button class="button secondary" onclick="closeModal('trackingModal')">Annulla</button><button class="button" onclick="addTracking()">Inserisci</button></div></div></div>
+</div><div id="trackingModal" class="modal"><div class="modal-box"><h3>Nuovo tracking</h3><p id="trackingTarget" class="hint"></p><div class="field"><label>Tracking ID</label><input id="newTracking" autocomplete="off"></div><div class="modal-actions"><button class="button secondary" onclick="closeModal('trackingModal')">Annulla</button><button class="button" onclick="addTracking()">Inserisci</button></div></div></div>
 
 <div id="bulkTrackingModal" class="modal"><div class="modal-box"><h3>Aggiungi tracking</h3><p id="bulkTrackingTarget" class="hint"></p><div class="field"><label>Tracking ID</label><textarea id="bulkTrackingList" placeholder="Uno per riga o separati da virgola/spazio"></textarea></div><p class="hint">Duplicati ignorati.</p><div class="modal-actions"><button class="button secondary" onclick="closeModal('bulkTrackingModal')">Annulla</button><button class="button" onclick="addBulkTracking()">Inserisci tutti</button></div></div></div>
 
@@ -515,9 +502,7 @@ input[type=date]{width:116px;color-scheme:dark}
 
 <div id="ticketLinkModal" class="modal"><div class="modal-box"><h3>Link ticket</h3><div class="field"><label id="ticketTracking"></label></div><div class="field"><label>URL / Numero ticket</label><input id="ticketLinkInput" autocomplete="off"></div><div class="modal-actions"><button class="button secondary" onclick="closeModal('ticketLinkModal')">Annulla</button><button class="button danger" onclick="clearTicketLink()" style="background:#43213a;color:#ff9aab">Rimuovi</button><button class="button" onclick="saveTicketLink()">Salva</button></div></div></div>
 
-<div id="hubModal" class="modal"><div class="modal-box"><h3>Nuovo punto operativo</h3><div class="field"><label>Tipo</label><select id="hubType"><option>Locker</option><option>Hub</option></select></div><div class="field"><label>Nome</label><input id="hubName" placeholder="Es. Locker Centro"></div><div class="field"><label>Stato</label><select id="hubStatus"><option value="online">Online</option><option value="offline">Offline</option><option value="ferie">Ferie</option><option value="dismesso">Dismesso</option></select></div><div class="field"><label>Canale Slack (opzionale)</label><input id="hubChannel" placeholder="#nome-canale"></div><div class="modal-actions"><button class="button secondary" onclick="closeModal('hubModal')">Annulla</button><button class="button" onclick="addHub()">Crea</button></div></div></div>
-
-<div id="slackModal" class="modal">
+<div id="hubModal" class="modal"><div class="modal-box"><h3>Nuovo punto operativo</h3><div class="field"><label>Tipo</label><select id="hubType"><option>Locker</option><option>Hub</option></select></div><div class="field"><label>Nome</label><input id="hubName" placeholder="Es. Locker Centro"></div><div class="field"><label>Stato</label><select id="hubStatus"><option value="online">Online</option><option value="offline">Offline</option><option value="ferie">Ferie</option><option value="dismesso">Dismesso</option></select></div><div class="field"><label>Canale Slack (opzionale)</label><input id="hubChannel" placeholder="#nome-canale"></div><div class="modal-actions"><button class="button secondary" onclick="closeModal('hubModal')">Annulla</button><button class="button" onclick="addHub()">Crea</button></div></div></div><div id="slackModal" class="modal">
   <div class="modal-box" style="width:min(560px,100%)">
     <h3>🔔 Notifiche Slack</h3>
     <div class="slack-mode-toggle"><label><input type="checkbox" id="slackUseBotApi" style="width:16px;height:16px" onchange="toggleSlackMode()"><span><b>🤖 Usa Slack App (Bot API)</b></span></label><p class="hint">Attiva per canali dedicati.</p></div>
@@ -558,9 +543,7 @@ input[type=date]{width:116px;color-scheme:dark}
     <p class="hint" style="color:#ffbf5b">⚠ Locker/Hub non toccati.</p>
     <div class="modal-actions"><button class="button secondary" onclick="closeModal('cleanupModal')">Chiudi</button><button class="button danger" onclick="runManualCleanup()" style="background:#ff627d;color:#fff">Esegui pulizia</button></div>
   </div>
-</div>
-
-<div id="bulkBar" style="display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a3159,#0e1d38);border:1px solid #a0b6ff40;padding:10px 16px;border-radius:14px;box-shadow:0 15px 40px #000a;z-index:9;align-items:center;gap:12px;backdrop-filter:blur(10px);flex-wrap:wrap;max-width:calc(100vw - 32px)">
+</div><div id="bulkBar" style="display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a3159,#0e1d38);border:1px solid #a0b6ff40;padding:10px 16px;border-radius:14px;box-shadow:0 15px 40px #000a;z-index:9;align-items:center;gap:12px;backdrop-filter:blur(10px);flex-wrap:wrap;max-width:calc(100vw - 32px)">
   <span style="color:#cdd8ff;font-weight:700;font-size:13px"><span id="bulkCount">0</span> selezionati</span>
   <button class="button success" onclick="copySelectedTrackings()" id="bulkCopyBtn" style="padding:8px 14px;font-size:12px">📋 Copia selezionati</button>
   <div style="display:flex;align-items:center;gap:6px">
@@ -571,7 +554,7 @@ input[type=date]{width:116px;color-scheme:dark}
   <button class="button secondary" onclick="clearSelection()" style="padding:8px 14px;font-size:12px">Annulla</button>
 </div>
 
-<div class="app-footer">RTSCage <b>v2.8</b> · by <b>effracas</b></div>
+<div class="app-footer">RTSCage <b>v2.9</b> · by <b>effracas</b></div>
 <div class="sync-badge"><span class="dot-live"></span><span id="syncStatus">Sync attivo</span></div>
 
 <script>
@@ -580,6 +563,7 @@ const SUPABASE_ANON_KEY = 'sb_publishable_VIzmKHLRsDN3p1Jzdekn5A_HiE3XeYf';
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const STATUSES = ['In attesa','Rifiutato','Rimborsato','Consegnato','In consegna','Reindirizzo','Rischedulato'];
+const FC_STATUSES = ['Rifiutato','Rimborsato','Consegnato'];
 const TRACKING_URL = code => `https://logistics.amazon.it/station/dashboard/search?shareableLink=detailPage/${encodeURIComponent(code)}`;
 
 let data = {main:[], hubs:[], problems:[]};
@@ -619,9 +603,7 @@ function copyOneTracking(code, btn){
   };
   if(navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
   else fallbackCopy(text, done);
-}
-
-function renderTracking(code){
+}function renderTracking(code){
   const url = TRACKING_URL(code);
   const codeEsc = esc(code);
   return `<span class="tracking-wrap">
@@ -711,13 +693,12 @@ async function manualDedup(){
 async function loadRetention(){
   const {data: s} = await sb.from('app_settings').select('*').eq('key','retention_days').maybeSingle();
   if(s?.value) retentionDays = parseInt(s.value, 10) || 90;
-}
-
-function closeModal(id){document.getElementById(id).classList.remove('open')}
+}function closeModal(id){document.getElementById(id).classList.remove('open')}
 function now(){return Date.now()}
 function ageHours(t){return Math.max(0,(now()-t.created)/36e5)}
 function dayOf(t){return Math.min(4,Math.floor(ageHours(t)/24)+1)}
-function fc(t){return ['Rifiutato','Rimborsato','Consegnato'].includes(t.status)}
+function fc(t){return FC_STATUSES.includes(t.status) || (!t.hub_id && dayOf(t) >= 4)}
+function isExpired(t){return !t.hub_id && dayOf(t) >= 4 && !FC_STATUSES.includes(t.status)}
 function fmtAge(t){let h=Math.floor(ageHours(t));return h<24?`${h}h fa`:`${Math.floor(h/24)}g fa`}
 function opts(list,value){return list.map(x=>`<option ${x==value?'selected':''}>${x}</option>`).join('')}
 
@@ -755,9 +736,7 @@ function getFilteredHubs(){
 }
 function toggleStatusFilter(key){ hubFilters.status = hubFilters.status === key ? null : key; render(); }
 function toggleTypeFilter(key){ hubFilters.type = hubFilters.type === key ? null : key; render(); }
-function resetHubFilters(){ hubFilters = { status: null, type: null }; render(); }
-
-function renderStatusLegend(){
+function resetHubFilters(){ hubFilters = { status: null, type: null }; render(); }function renderStatusLegend(){
   const container = document.getElementById('statusLegend'); if(!container) return;
   const statusList = [{key:'online',label:'Online',color:'#35d8bd'},{key:'offline',label:'Offline',color:'#ffbf5b'},{key:'ferie',label:'Ferie',color:'#6f8cff'},{key:'dismesso',label:'Dismesso',color:'#ff627d'}];
   const typeList = [{key:'Locker',label:'Locker',icon:'🔒',color:'#b8c9ff'},{key:'Hub',label:'Hub',icon:'🏢',color:'#75eee0'}];
@@ -788,19 +767,18 @@ function trackingRow(t){
     <td><button class="icon-btn ${hasNote?'has-note':''}" onclick="openNote('${id}')">${hasNote?'⚠':'📝'}</button></td>
     <td><button class="icon-btn" onclick="deleteT('${id}')">×</button></td>
   </tr>`;
-}
-
-function fcRow(t){
+}function fcRow(t){
   const id = esc(t.id);
   let originBadge = '';
   if(t.hub_id){
     const hub = data.hubs.find(h => h.id === t.hub_id);
     if(hub){ const cls = hub.type === 'Hub' ? 'hub' : 'locker'; const icon = hub.type === 'Hub' ? '🏢' : '🔒'; originBadge = `<div class="origin-badge ${cls}">${icon} ${esc(hub.name)}</div>`; }
   } else originBadge = `<div class="origin-badge held">🏠 HELD</div>`;
+  const expiredBadge = isExpired(t) ? `<span class="scaduto-badge" title="Pacco Day 4+ — oltre 3 giorni">🚨 SCADUTO</span>` : '';
   const selChecked = selectedIds.has(t.id) ? 'checked' : '';
   return `<tr>
     <td style="width:32px"><input type="checkbox" class="row-select" ${selChecked} onchange="toggleSelect('${id}',this.checked)" onclick="event.stopPropagation()"></td>
-    <td>${renderTracking(t.code)}<div class="age">${fmtAge(t)} · ${esc(t.status)}</div>${originBadge}</td>
+    <td>${renderTracking(t.code)}${expiredBadge}<div class="age">${fmtAge(t)} · ${esc(t.status)}</div>${originBadge}</td>
     <td style="text-align:right;width:40px"><button class="icon-btn" title="Elimina tracking" onclick="deleteT('${id}')">×</button></td>
   </tr>`;
 }
@@ -836,9 +814,7 @@ function fcTable(items){
   const allSelected = allIds.length && allIds.every(id => selectedIds.has(id));
   const headCheck = `<input type="checkbox" ${allSelected?'checked':''} onchange="toggleSelectAll(this.checked, ${JSON.stringify(allIds).replace(/"/g,'&quot;')})">`;
   return `<div class="table-wrap"><table class="track-table" style="min-width:auto"><thead><tr><th style="width:32px">${headCheck}</th><th>Tracking</th><th></th></tr></thead><tbody>${items.map(fcRow).join('')}</tbody></table></div>`;
-}
-
-function problemTable(items){
+}function problemTable(items){
   if(!items.length) return '<div class="empty">Nessun problematico.</div>';
   const allIds = items.map(x => x.id);
   const allSelected = allIds.length && allIds.every(id => selectedIds.has(id));
@@ -873,14 +849,13 @@ function renderHome(){
   }).join('');
   const fcList = allTracks().filter(fc).filter(t => !q || t.code.toLowerCase().includes(q));
   document.getElementById('fcTable').innerHTML = fcTable(fcList);
-  document.getElementById('fcCount').textContent = `${fcList.length} tracking`;
+  const expiredCount = fcList.filter(isExpired).length;
+  document.getElementById('fcCount').textContent = expiredCount > 0 ? `${fcList.length} tracking · ${expiredCount} scaduti` : `${fcList.length} tracking`;
   const problemList = data.problems.filter(t => !q || t.code.toLowerCase().includes(q));
   document.getElementById('problemTable').innerHTML = problemTable(problemList);
   document.getElementById('problemCount').textContent = `${problemList.length} tracking`;
   renderStats();
-}
-
-function renderStats(){
+}function renderStats(){
   const a = allTracks();
   const counts = Object.fromEntries(STATUSES.map(s => [s, a.filter(t => t.status === s).length]));
   const alerts = a.filter(fc).length;
@@ -913,9 +888,7 @@ function updateHubTabBadge(){
   else badge.classList.remove('visible');
 }
 
-function goToLockerTab(){ const tab = document.querySelector('.tab[data-page="locker"]'); if(tab) tab.click(); }
-
-function renderHubsSummary(){
+function goToLockerTab(){ const tab = document.querySelector('.tab[data-page="locker"]'); if(tab) tab.click(); }function renderHubsSummary(){
   const container = document.getElementById('hubsSummary'); if(!container) return;
   const filteredHubs = getFilteredHubs();
   if(!filteredHubs.length){
@@ -940,9 +913,7 @@ function scrollToHub(hubId){
     el.classList.remove('highlight'); void el.offsetWidth; el.classList.add('highlight');
     setTimeout(() => el.classList.remove('highlight'), 2000);
   }, 100);
-}
-
-function renderHubs(){
+}function renderHubs(){
   const container = document.getElementById('hubs');
   const filteredHubs = getFilteredHubs();
   if(!data.hubs.length){ container.innerHTML = '<div class="panel empty">Nessun Locker o Hub.</div>'; return; }
@@ -1002,9 +973,7 @@ async function updateT(id, key, v){
   if(error){ alert('Errore'); return; }
   const t = findT(id); if(t) t[key] = v;
   render();
-}
-
-async function deleteT(id){
+}async function deleteT(id){
   if(!confirm('Eliminare questo tracking?')) return;
   const {error} = await sb.from('trackings').delete().eq('id', id);
   if(error){ alert('Errore'); return; }
@@ -1058,9 +1027,7 @@ function updateBulkBar(){
   const bar = document.getElementById('bulkBar'); if(!bar) return;
   if(selectedIds.size){ bar.style.display = 'flex'; document.getElementById('bulkCount').textContent = selectedIds.size; }
   else bar.style.display = 'none';
-}
-
-function copyTrackings(codes, btnId){
+}function copyTrackings(codes, btnId){
   if(!codes?.length) return alert('Nessun tracking.');
   const text = codes.join('\n');
   const done = () => {
@@ -1128,9 +1095,7 @@ function openCageCheck(){
   document.getElementById('cageModal').classList.add('open');
   setTimeout(() => document.getElementById('scannerInput').focus(), 150);
   startAutoFocus();
-}
-
-function closeCageModal(){ stopAutoFocus(); closeModal('cageModal'); }
+}function closeCageModal(){ stopAutoFocus(); closeModal('cageModal'); }
 function startAutoFocus(){
   stopAutoFocus();
   cageAutoFocusInterval = setInterval(() => {
@@ -1160,9 +1125,7 @@ function switchInputMode(mode){
   if(mode === 'manual') syncScannerToTextarea();
   recomputeCage();
 }
-function syncScannerToTextarea(){ document.getElementById('cagePhysicalInput').value = Array.from(cageState.physical).join('\n'); }
-
-function flashScanner(cls){
+function syncScannerToTextarea(){ document.getElementById('cagePhysicalInput').value = Array.from(cageState.physical).join('\n'); }function flashScanner(cls){
   const inp = document.getElementById('scannerInput');
   inp.classList.remove('flash-ok','flash-warn','flash-err');
   void inp.offsetWidth;
@@ -1245,8 +1208,7 @@ function recomputeCage(){
   cageState.matched = matched; cageState.missing = missing; cageState.untracked = untracked;
   const expEl = document.getElementById('cageExpectedManual');
   if(expEl) expEl.textContent = expectedTracks.length;
-  document.getElementById('cageTotalExpected').textContent = expectedTracks.length;
-  document.getElementById('cageTotalMatched').textContent = matched.length;
+  document.getElementById('cageTotalExpected').textContent = expectedTracks.length;document.getElementById('cageTotalMatched').textContent = matched.length;
   document.getElementById('cageTotalMissing').textContent = missing.length;
   document.getElementById('cageTotalUntracked').textContent = untracked.length;
   renderCageLists();
@@ -1307,8 +1269,7 @@ async function markMissing(id, code){
 async function addUntracked(code){
   const existing = checkDuplicate(code);
   if(existing){
-    let loc = 'HELD';
-    if(existing.problematic) loc = 'Pacchi Problematici';
+    let loc = 'HELD';if(existing.problematic) loc = 'Pacchi Problematici';
     else if(existing.hub_id){ const h = data.hubs.find(x => x.id === existing.hub_id); if(h) loc = h.type+': '+h.name; }
     alert(`⚠ Tracking "${code}" già presente in: ${loc}`);
     return;
@@ -1369,8 +1330,7 @@ function exportCageCSV(){
   const a = document.createElement('a'); a.href = url; a.download = 'CageCheck_'+new Date().toISOString().slice(0,16).replace(/[:T]/g,'-')+'.csv'; a.click();
   setTimeout(() => URL.revokeObjectURL(url), 500);
 }
-async function loadCageHistory(){
-  const list = document.getElementById('cageHistoryList');
+async function loadCageHistory(){const list = document.getElementById('cageHistoryList');
   const trend = document.getElementById('cageTrend');
   list.innerHTML = '<div class="empty">Caricamento...</div>';
   trend.innerHTML = '';
@@ -1395,9 +1355,7 @@ async function loadCageHistory(){
     const avg = (last10.reduce((s,a) => s + Number(a.accuracy_pct||0), 0) / last10.length).toFixed(1);
     trend.innerHTML = `<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap"><div style="flex:1;min-width:200px"><div style="font-size:11px;color:#8999b8;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Trend (ultimi ${last10.length})</div><svg viewBox="0 0 ${w} ${h}" style="width:100%;height:80px;overflow:visible"><polyline points="${points}" fill="none" stroke="#35d8bd" stroke-width="1.5" vector-effect="non-scaling-stroke"/>${last10.map((a,i) => { const x = (i / (last10.length-1)) * w; const y = h - ((Number(a.accuracy_pct||0) - min) / (max - min)) * h; return `<circle cx="${x}" cy="${y}" r="1.5" fill="#35d8bd"/>`; }).join('')}</svg></div><div style="text-align:right"><div style="font:800 28px Outfit,sans-serif;color:#35d8bd;letter-spacing:-1px">${avg}%</div><div style="font-size:10px;color:#aebcda;text-transform:uppercase;font-weight:700">Media ${last10.length}</div></div></div>`;
   }
-}
-
-const SLACK_STATUSES = [
+}const SLACK_STATUSES = [
   {key:'mandare_fc', label:'🚨 Mandare FC'},{key:'Rifiutato', label:'❌ Rifiutato'},
   {key:'Rimborsato', label:'💰 Rimborsato'},{key:'Consegnato', label:'✅ Consegnato'},
   {key:'Reindirizzo', label:'↪️ Reindirizzo'},{key:'Rischedulato', label:'📅 Rischedulato'}
@@ -1449,8 +1407,7 @@ async function saveSlackSettings(){
   if(!useBotApi && !payload.slack_webhook_url) return alert('⚠ Webhook richiesto.');
   const {error} = await sb.from('notification_settings').upsert(payload, {onConflict: 'id'});
   if(error){ alert('❌ Errore: ' + error.message); return; }
-  alert('✓ Salvato.'); closeModal('slackModal');
-}
+  alert('✓ Salvato.'); closeModal('slackModal');}
 async function testSlackNow(){
   if(!confirm('Inviare recap di test?')) return;
   const {data: res, error} = await sb.functions.invoke('slack-recap', { body: { mode: 'recap', force: true }, headers: {'x-trigger': 'manual'} });
@@ -1470,9 +1427,7 @@ async function sendHubSlackRecap(hubId){
   const {data: res, error} = await sb.functions.invoke('slack-recap', { body: { mode: 'hub_recap', hub_id: hubId, force: true }, headers: {'x-trigger': 'manual'} });
   if(error){ alert('Errore: '+error.message); return; }
   alert(res?.success ? `✓ Inviato (${res.totalCount})` : `⚠ ${res?.error}`);
-}
-
-async function openCleanupModal(){
+}async function openCleanupModal(){
   document.getElementById('cleanupModal').classList.add('open');
   document.getElementById('cleanupInfo').innerHTML = '<div>Caricamento...</div>';
   await loadRetention();
@@ -1519,9 +1474,7 @@ function openBulkTrackingModal(target = 'main'){
   document.getElementById('bulkTrackingTarget').textContent = msg;
   document.getElementById('bulkTrackingModal').classList.add('open');
   setTimeout(() => document.getElementById('bulkTrackingList').focus(), 50);
-}
-
-async function addBulkTracking(){
+}async function addBulkTracking(){
   const raw = document.getElementById('bulkTrackingList').value.trim();
   if(!raw) return alert('Inserisci almeno un Tracking ID.');
   const existing = new Set([...allTracks(), ...data.problems].map(t => normCode(t.code)));
@@ -1577,9 +1530,7 @@ async function addTracking(){
   if(currentTarget === 'main') data.main.unshift(inserted);
   else data.hubs.find(h => h.id === currentTarget).tracks.unshift(inserted);
   closeModal('trackingModal'); render();
-}
-
-function openNote(id){
+}function openNote(id){
   const t = findT(id); noteTarget = id;
   document.getElementById('noteTracking').textContent = t.code;
   const d = parseNote(t.note);
@@ -1650,17 +1601,15 @@ async function renameHub(id, v){
 }
 async function deleteHub(id){
   if(!confirm('Eliminare Locker/Hub e tutti i suoi tracking?')) return;
+  data.hubs = data.hubs.filter(h => h.id !== id); render();
   const {error} = await sb.from('hubs').delete().eq('id', id);
   if(error){ alert('Errore'); return; }
-  data.hubs = data.hubs.filter(h => h.id !== id); render();
-}
-
-function csvCell(v){return '"'+String(v??'').replaceAll('"','""')+'"'}
+}function csvCell(v){return '"'+String(v??'').replaceAll('"','""')+'"'}
 function exportCSV(){
-  const rows = [['Tracking','Area','Tipo punto','Punto operativo','Canale Slack','Day attuale','Inserito il','Stato','Contattato','Nota','Problematico','Problema','Ticket','Link Ticket']];
-  data.main.forEach(t => rows.push([t.code,'Home','','','',dayOf(t),new Date(t.created).toLocaleString('it-IT'),t.status,t.contacted,t.note,'No','','','']));
-  data.hubs.forEach(h => h.tracks.forEach(t => rows.push([t.code,'Locker/Hub',h.type,h.name,h.slack_channel||'',dayOf(t),new Date(t.created).toLocaleString('it-IT'),t.status,t.contacted,t.note,'No','','',''])));
-  data.problems.forEach(t => rows.push([t.code,'Problematici','','','','—',new Date(t.created).toLocaleString('it-IT'),'—','—','','Sì',t.problem_text||'',t.ticket_status||'NO',t.ticket_link||'']));
+  const rows = [['Tracking','Area','Tipo punto','Punto operativo','Canale Slack','Day attuale','Inserito il','Stato','Contattato','Nota','Problematico','Problema','Ticket','Link Ticket','Scaduto']];
+  data.main.forEach(t => rows.push([t.code,'Home','','','',dayOf(t),new Date(t.created).toLocaleString('it-IT'),t.status,t.contacted,t.note,'No','','','',isExpired(t)?'Sì':'No']));
+  data.hubs.forEach(h => h.tracks.forEach(t => rows.push([t.code,'Locker/Hub',h.type,h.name,h.slack_channel||'',dayOf(t),new Date(t.created).toLocaleString('it-IT'),t.status,t.contacted,t.note,'No','','','',isExpired(t)?'Sì':'No'])));
+  data.problems.forEach(t => rows.push([t.code,'Problematici','','','','—',new Date(t.created).toLocaleString('it-IT'),'—','—','','Sì',t.problem_text||'',t.ticket_status||'NO',t.ticket_link||'','No']));
   const csv = '\ufeff'+rows.map(r => r.map(csvCell).join(';')).join('\r\n');
   const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
   const url = URL.createObjectURL(blob);
