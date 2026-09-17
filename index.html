@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RTSCage — Tracking Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://d1hilrkz3ka39e.cloudfront.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
@@ -23,7 +26,7 @@
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
     --shadow: 0 20px 55px rgba(2, 7, 19, 0.4);
-    --font-mono: 'SF Mono', 'Consolas', 'Menlo', ui-monospace, monospace;
+    --font-mono: 'Space Mono', 'SF Mono', 'Consolas', 'Menlo', ui-monospace, monospace;
 }
 
 * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
@@ -39,6 +42,149 @@ body {
     overflow-x: hidden;
 }
 
+/* ============ PRELOADER ============ */
+.preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: radial-gradient(ellipse at center, #0a1220 0%, #050810 70%, #030608 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 32px;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
+}
+.preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.preloader-bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+        linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: perspective(500px) rotateX(60deg) translateY(-100px);
+    animation: gridMove 20s linear infinite;
+    mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+    opacity: 0.6;
+}
+.preloader-orb {
+    position: absolute; border-radius: 50%; filter: blur(90px);
+    opacity: 0.5; pointer-events: none;
+}
+.preloader-orb-1 { width: 500px; height: 500px; background: var(--accent-cyan); top: -150px; left: -150px; animation: preloaderOrb1 6s ease-in-out infinite; }
+.preloader-orb-2 { width: 400px; height: 400px; background: var(--accent-purple); bottom: -100px; right: -100px; animation: preloaderOrb2 8s ease-in-out infinite; }
+@keyframes preloaderOrb1 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(80px, 80px) scale(1.2); } }
+@keyframes preloaderOrb2 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-60px, -60px) scale(1.15); } }
+
+.preloader-logo {
+    height: 130px; width: 130px;
+    display: grid; place-items: center;
+    position: relative;
+    animation: preloaderPulse 2.2s ease-in-out infinite;
+    z-index: 2;
+}
+.preloader-logo::before {
+    content: ''; position: absolute; inset: 4px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 212, 255, 0.25);
+    border-top-color: var(--accent-cyan);
+    border-right-color: rgba(168, 85, 247, 0.7);
+    animation: orbitSpinFast 1.4s linear infinite;
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.35);
+}
+.preloader-logo::after {
+    content: ''; position: absolute; inset: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-purple) 100%);
+    box-shadow:
+        0 0 60px rgba(0, 212, 255, 0.7),
+        inset 0 -6px 14px rgba(0, 0, 0, 0.3),
+        inset 0 4px 8px rgba(255, 255, 255, 0.25);
+    animation: preloaderCoreGlow 2.2s ease-in-out infinite;
+}
+.preloader-logo svg {
+    position: relative; z-index: 3;
+    width: 52px; height: 52px;
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.5));
+}
+@keyframes preloaderPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+}
+@keyframes preloaderCoreGlow {
+    0%, 100% { box-shadow: 0 0 60px rgba(0, 212, 255, 0.7), inset 0 -6px 14px rgba(0, 0, 0, 0.3), inset 0 4px 8px rgba(255, 255, 255, 0.25); }
+    50% { box-shadow: 0 0 80px rgba(168, 85, 247, 0.7), inset 0 -6px 14px rgba(0, 0, 0, 0.3), inset 0 4px 8px rgba(255, 255, 255, 0.3); }
+}
+@keyframes orbitSpinFast { to { transform: rotate(360deg); } }
+
+.preloader-brand {
+    z-index: 2;
+    text-align: center;
+    animation: preloaderFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.preloader-brand-title {
+    font-size: 34px;
+    font-weight: 300;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+    margin: 0;
+    line-height: 1;
+    font-family: -apple-system, 'SF Pro Display', 'Inter', sans-serif;
+}
+.preloader-brand-title b {
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+    filter: drop-shadow(0 0 24px rgba(0, 212, 255, 0.4));
+}
+.preloader-tagline {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    margin-top: 10px;
+    animation: preloaderTaglineBlink 1.5s ease-in-out infinite;
+}
+@keyframes preloaderFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes preloaderTaglineBlink {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+.preloader-progress {
+    z-index: 2;
+    width: 200px; height: 3px;
+    background: rgba(148, 163, 184, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+.preloader-progress::after {
+    content: '';
+    position: absolute; top: 0; left: -30%;
+    width: 30%; height: 100%;
+    background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-purple), transparent);
+    animation: progressSlide 1.5s ease-in-out infinite;
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.6);
+}
+@keyframes progressSlide {
+    0% { left: -30%; }
+    100% { left: 100%; }
+}
+
+/* ============ BACKGROUND ============ */
 .bg-scene {
     position: fixed; inset: 0; z-index: -2;
     background:
@@ -298,6 +444,19 @@ body {
     color: var(--kpi-color, var(--text-primary));
     font-variant-numeric: tabular-nums;
     margin: 6px 0;
+    transition: color 0.3s;
+}
+.stat .value.pulse-up { animation: pulseUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+.stat .value.pulse-down { animation: pulseDown 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes pulseUp {
+    0% { transform: translateY(0); }
+    30% { transform: translateY(-4px); text-shadow: 0 0 20px currentColor; }
+    100% { transform: translateY(0); }
+}
+@keyframes pulseDown {
+    0% { transform: translateY(0); }
+    30% { transform: translateY(4px); opacity: 0.7; }
+    100% { transform: translateY(0); }
 }
 .stat .value small {
     font-family: var(--font-mono);
@@ -351,6 +510,7 @@ body {
     );
     position: relative;
     box-shadow: 0 0 25px rgba(0, 212, 255, 0.25);
+    transition: background 0.6s ease;
 }
 .donut::after {
     content: attr(data-total); position: absolute; inset: 24px;
@@ -1120,7 +1280,7 @@ body {
 }
 .scanner-input::placeholder {
     color: rgba(16, 185, 129, 0.4);
-    font-weight: 500; font-size: 14px;
+    font-weight: 400; font-size: 14px;
     letter-spacing: 0;
 }
 .scanner-input:focus {
@@ -1200,6 +1360,7 @@ body {
     letter-spacing: -0.03em; line-height: 1;
     color: var(--text-primary);
     font-variant-numeric: tabular-nums;
+    transition: color 0.3s;
 }
 .cage-stat .lbl {
     font-size: 10px; color: var(--text-muted);
@@ -1452,6 +1613,9 @@ hr {
     .brand h1 { font-size: 24px; }
     .logo { height: 44px; width: 44px; }
     .logo svg { width: 18px; height: 18px; }
+    .preloader-logo { height: 100px; width: 100px; }
+    .preloader-logo svg { width: 40px; height: 40px; }
+    .preloader-brand-title { font-size: 28px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1464,6 +1628,23 @@ hr {
 </style>
 </head>
 <body>
+
+<!-- ============ PRELOADER ============ -->
+<div class="preloader" id="preloader">
+  <div class="preloader-bg-grid"></div>
+  <div class="preloader-orb preloader-orb-1"></div>
+  <div class="preloader-orb preloader-orb-2"></div>
+  <div class="preloader-logo">
+    <svg viewBox="0 0 24 24" fill="#ffffff" stroke="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.2L18.8 8 12 11.8 5.2 8 12 4.2zM5 9.5l6 3.3v7L5 16.5v-7zm14 0v7l-6 3.3v-7l6-3.3z"/>
+    </svg>
+  </div>
+  <div class="preloader-brand">
+    <h1 class="preloader-brand-title">RTS<b>Cage</b></h1>
+    <div class="preloader-tagline">Initializing system...</div>
+  </div>
+  <div class="preloader-progress"></div>
+</div>
 
 <div class="bg-scene"></div>
 <div class="bg-grid"></div>
@@ -1731,7 +1912,7 @@ hr {
 
 <footer class="app-footer">
   <span class="footer-brand">RTSCage</span>
-  <span class="version">v2.9</span>
+  <span class="version">v3.0</span>
   <span>·</span>
   <span>by <b>effracas</b></span>
 </footer>
@@ -1753,10 +1934,42 @@ let hubFilters = { status: null, type: null };
 let cageState = { physical: new Set(), matched: [], missing: [], untracked: [], resolved: new Set(), scanCount: 0, mode: 'scanner', logEntries: [] };
 let cageAutoFocusInterval = null;
 let audioCtx = null;
+let statsInitialized = false;
+let prevStatValues = {};
 
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const setSync = (txt) => { const el=document.getElementById('syncStatus'); if(el) el.textContent = txt; };
 const normCode = s => String(s||'').trim().toUpperCase();
+
+// ============ COUNTER ANIMATION ============
+function animateCounter(el, from, to, duration = 600, suffix = '') {
+  if(from === to){ el.textContent = to.toLocaleString('it-IT') + suffix; return; }
+  const start = performance.now();
+  const diff = to - from;
+  const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+  function step(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeOutCubic(progress);
+    const current = Math.round(from + diff * eased);
+    el.textContent = current.toLocaleString('it-IT') + suffix;
+    if(progress < 1) requestAnimationFrame(step);
+    else el.textContent = to.toLocaleString('it-IT') + suffix;
+  }
+  requestAnimationFrame(step);
+  // Pulse effect
+  el.classList.remove('pulse-up','pulse-down');
+  void el.offsetWidth;
+  el.classList.add(to > from ? 'pulse-up' : 'pulse-down');
+}
+
+// ============ PRELOADER ============
+function hidePreloader(){
+  const p = document.getElementById('preloader');
+  if(!p) return;
+  p.classList.add('hidden');
+  setTimeout(() => { if(p.parentNode) p.parentNode.removeChild(p); }, 700);
+}
 
 function showToast(msg, ms=1600){
   document.querySelectorAll('.copy-toast').forEach(t => t.remove());
@@ -1866,12 +2079,6 @@ function fmtDayMonth(value){
   if(m) return parseInt(m[3],10)+'/'+parseInt(m[2],10);
   const d = new Date(value); if(Number.isNaN(d.getTime())) return '';
   return d.getDate()+'/'+(d.getMonth()+1);
-}
-function statusColor(status){
-  if(status === 'offline') return 'var(--accent-amber)';
-  if(status === 'ferie') return 'var(--accent-cyan)';
-  if(status === 'dismesso') return 'var(--status-danger)';
-  return 'var(--status-success)';
 }
 function statusColorRaw(status){
   if(status === 'offline') return '#ffb020';
@@ -2033,15 +2240,73 @@ function renderStats(){
   const offlineCount = data.hubs.filter(h => (h.status||'online') !== 'online').length;
   const trendPoints = offlineCount ? `<span style="color:var(--accent-amber)">${offlineCount} non operativi</span>` : `<span style="color:var(--status-success)">Tutti operativi</span>`;
   const problemCount = data.problems.length;
-  document.getElementById('stats').innerHTML = `
-    <div class="stat" style="--kpi-color: var(--accent-cyan)"><div class="label">Pacchi totali</div><div class="value">${a.length}</div><div class="trend">In gestione ora</div></div>
-    <div class="stat" style="--kpi-color: var(--accent-amber)"><div class="label">In attesa</div><div class="value">${counts['In attesa']}</div><div class="trend">Da monitorare</div></div>
-    <div class="stat" style="--kpi-color: var(--status-danger)"><div class="label">Mandare FC</div><div class="value">${alerts}</div><div class="trend" style="color:${alerts?'#ef5466':'var(--status-success)'}">${alerts?'Intervento':'Nessuna criticità'}</div></div>
-    <div class="stat" style="--kpi-color: var(--accent-amber)"><div class="label">Problematici</div><div class="value">${problemCount}</div><div class="trend" style="color:${problemCount?'var(--accent-amber)':'var(--status-success)'}">${problemCount?'Attenzione':'Nessuno'}</div></div>
-    <div class="stat clickable" style="--kpi-color: var(--status-success)" onclick="goToLockerTab()"><div class="label">Locker / Hub</div><div class="value">${totalPoints}<small>totali</small></div><div class="trend">🔒 ${lockerCount} · 🏢 ${hubCount} · ${trendPoints}</div></div>`;
+
+  const newValues = {
+    total: a.length,
+    waiting: counts['In attesa'],
+    alerts: alerts,
+    problems: problemCount,
+    points: totalPoints
+  };
+
+  // First render: create DOM structure
+  if(!statsInitialized){
+    document.getElementById('stats').innerHTML = `
+      <div class="stat" style="--kpi-color: var(--accent-cyan)"><div class="label">Pacchi totali</div><div class="value" data-kpi="total">0</div><div class="trend">In gestione ora</div></div>
+      <div class="stat" style="--kpi-color: var(--accent-amber)"><div class="label">In attesa</div><div class="value" data-kpi="waiting">0</div><div class="trend">Da monitorare</div></div>
+      <div class="stat" style="--kpi-color: var(--status-danger)"><div class="label">Mandare FC</div><div class="value" data-kpi="alerts">0</div><div class="trend" id="trend-alerts">Caricamento...</div></div>
+      <div class="stat" style="--kpi-color: var(--accent-amber)"><div class="label">Problematici</div><div class="value" data-kpi="problems">0</div><div class="trend" id="trend-problems">Caricamento...</div></div>
+      <div class="stat clickable" style="--kpi-color: var(--status-success)" onclick="goToLockerTab()"><div class="label">Locker / Hub</div><div class="value" data-kpi="points">0<small>totali</small></div><div class="trend" id="trend-points">Caricamento...</div></div>`;
+    statsInitialized = true;
+    prevStatValues = { total: 0, waiting: 0, alerts: 0, problems: 0, points: 0 };
+  }
+
+  // Animate counters
+  const totalEl = document.querySelector('[data-kpi="total"]');
+  const waitingEl = document.querySelector('[data-kpi="waiting"]');
+  const alertsEl = document.querySelector('[data-kpi="alerts"]');
+  const problemsEl = document.querySelector('[data-kpi="problems"]');
+  const pointsEl = document.querySelector('[data-kpi="points"]');
+
+  if(totalEl && prevStatValues.total !== newValues.total) animateCounter(totalEl, prevStatValues.total, newValues.total);
+  if(waitingEl && prevStatValues.waiting !== newValues.waiting) animateCounter(waitingEl, prevStatValues.waiting, newValues.waiting);
+  if(alertsEl && prevStatValues.alerts !== newValues.alerts) animateCounter(alertsEl, prevStatValues.alerts, newValues.alerts);
+  if(problemsEl && prevStatValues.problems !== newValues.problems) animateCounter(problemsEl, prevStatValues.problems, newValues.problems);
+  if(pointsEl && prevStatValues.points !== newValues.points){
+    // Special: points has <small> element
+    const start = performance.now();
+    const from = prevStatValues.points, to = newValues.points;
+    const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+    function stepPoints(now){
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / 600, 1);
+      const eased = easeOutCubic(progress);
+      const current = Math.round(from + (to - from) * eased);
+      pointsEl.innerHTML = `${current.toLocaleString('it-IT')}<small>totali</small>`;
+      if(progress < 1) requestAnimationFrame(stepPoints);
+    }
+    requestAnimationFrame(stepPoints);
+    pointsEl.classList.remove('pulse-up','pulse-down');
+    void pointsEl.offsetWidth;
+    pointsEl.classList.add(to > from ? 'pulse-up' : 'pulse-down');
+  }
+
+  // Update trends (text only, no animation needed)
+  const trendAlerts = document.getElementById('trend-alerts');
+  if(trendAlerts) trendAlerts.innerHTML = `<span style="color:${alerts?'#ef5466':'var(--status-success)'}">${alerts?'Intervento':'Nessuna criticità'}</span>`;
+  const trendProblems = document.getElementById('trend-problems');
+  if(trendProblems) trendProblems.innerHTML = `<span style="color:${problemCount?'var(--accent-amber)':'var(--status-success)'}">${problemCount?'Attenzione':'Nessuno'}</span>`;
+  const trendPointsEl = document.getElementById('trend-points');
+  if(trendPointsEl) trendPointsEl.innerHTML = `🔒 ${lockerCount} · 🏢 ${hubCount} · ${trendPoints}`;
+
+  prevStatValues = newValues;
+
+  // Bar chart
   const max = Math.max(1, ...Object.values(counts));
   const colors = ['#00d4ff','#ef4444','#a855f7','#10b981','#ffb020','#0891b2','#64748b'];
   document.getElementById('bars').innerHTML = STATUSES.map((s,i) => `<div class="bar-row"><span>${s}</span><div class="bar"><i style="width:${counts[s]/max*100}%;background:${colors[i]};color:${colors[i]}"></i></div><b>${counts[s]}</b></div>`).join('');
+
+  // Donut
   const w = counts['In attesa'], d = counts['In consegna'], o = a.length - w - d;
   const p1 = a.length ? w/a.length*100 : 0, p2 = a.length ? (w+d)/a.length*100 : 0;
   const donut = document.getElementById('donut');
@@ -2833,13 +3098,20 @@ sb.channel('rtscage-sync')
   .subscribe();
 
 (async () => {
-  await loadData();
-  await loadRetention();
-  const dedup = await dedupTrackings();
-  if(dedup.removed > 0){
-    setTimeout(() => { alert(`🧹 Pulizia automatica duplicati:\n\n${dedup.removed} eliminati\n\nCodici:\n${dedup.codes.slice(0,15).join('\n')}${dedup.codes.length>15?`\n...e altri ${dedup.codes.length-15}`:''}`); }, 500);
-  }
-  render();
+  const preloaderMinTime = new Promise(r => setTimeout(r, 1200));
+  await Promise.all([
+    (async () => {
+      await loadData();
+      await loadRetention();
+      const dedup = await dedupTrackings();
+      if(dedup.removed > 0){
+        setTimeout(() => { alert(`🧹 Pulizia automatica duplicati:\n\n${dedup.removed} eliminati\n\nCodici:\n${dedup.codes.slice(0,15).join('\n')}${dedup.codes.length>15?`\n...e altri ${dedup.codes.length-15}`:''}`); }, 800);
+      }
+      render();
+    })(),
+    preloaderMinTime
+  ]);
+  hidePreloader();
   setInterval(render, 60000);
 })();
 </script>
